@@ -10,14 +10,22 @@
         <el-col :span="4">
           <div style="float: right">
             <el-button type="text" style="color: red">
-              <i class="el-icon-edit"></i>编辑详情
+              <i class="el-icon-edit" />编辑详情
             </el-button>
             <el-divider direction="vertical" />
-            <el-button v-if="folding" type="text" @click="toggleFolding()"
-              >收起<i class="el-icon-arrow-up el-icon--right"
+            <el-button
+              v-if="folding"
+              type="text"
+              @click="toggleFolding()"
+            >收起<i
+              class="el-icon-arrow-up el-icon--right"
             /></el-button>
-            <el-button v-else type="text" @click="toggleFolding()"
-              >展开<i class="el-icon-arrow-down el-icon--right"
+            <el-button
+              v-else
+              type="text"
+              @click="toggleFolding()"
+            >展开<i
+              class="el-icon-arrow-down el-icon--right"
             /></el-button>
           </div>
         </el-col>
@@ -36,10 +44,10 @@
             </div>
           </el-col>
           <el-col :span="6">
-            <div class="grid-content"></div>
+            <div class="grid-content" />
           </el-col>
           <el-col :span="6">
-            <div class="grid-content"></div>
+            <div class="grid-content" />
           </el-col>
         </el-row>
 
@@ -60,7 +68,7 @@
             </div>
           </el-col>
           <el-col :span="6">
-            <div class="grid-content"></div>
+            <div class="grid-content" />
           </el-col>
           <!-- <el-col :span="18">
           <div class="grid-content">
@@ -113,37 +121,38 @@
                 <el-col :span="8" :offset="6">
                   <div class="grid-content">
                     <el-form
+                      ref="ruleForm"
                       :model="ruleForm"
                       :rules="rules"
-                      ref="ruleForm"
                       label-width="100px"
                     >
                       <el-form-item label="当前密码" prop="password">
                         <el-input
-                          type="password"
                           v-model="ruleForm.password"
+                          type="password"
                           clearable
-                        ></el-input>
+                        />
                       </el-form-item>
                       <el-form-item label="新密码" prop="newPassword">
                         <el-input
-                          type="password"
                           v-model="ruleForm.newPassword"
+                          type="password"
                           clearable
-                        ></el-input>
+                        />
                       </el-form-item>
                       <el-form-item label="确认密码" prop="newPassword2">
                         <el-input
-                          type="password"
                           v-model="ruleForm.newPassword2"
+                          type="password"
                           clearable
-                        ></el-input>
+                        />
                       </el-form-item>
                     </el-form>
                     <div class="horizontal-center">
-                      <el-button type="primary" @click="submitForm('ruleForm')"
-                        >确认修改</el-button
-                      >
+                      <el-button
+                        type="primary"
+                        @click="submitForm('ruleForm')"
+                      >确认修改</el-button>
                       <el-button @click="resetForm('ruleForm')">重置</el-button>
                     </div>
                   </div>
@@ -213,87 +222,88 @@
 </style>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 
 const validatePassword = (rule, value, callback) => {
   // 手机正则验证
-  if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,20}$/.test(value) === false) {
-    callback(new Error("密码中至少包含大写、小写字母和数字"));
+  if (
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,20}$/.test(value) === false
+  ) {
+    callback(new Error('密码中至少包含大写、小写字母和数字'))
   } else {
-    callback();
+    callback()
   }
-};
+}
 export default {
   data() {
     var validatePass2 = (rule, value, callback) => {
       if (value !== this.ruleForm.newPassword) {
-        callback(new Error("两次输入密码不一致"));
+        callback(new Error('两次输入密码不一致'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
 
     return {
       ruleForm: {
-        password: "",
-        newPassword: "",
-        newPassword2: "",
+        password: '',
+        newPassword: '',
+        newPassword2: ''
       },
       rules: {
         password: [
-          { required: true, message: "请输入密码", trigger: "blur" },
-          { validator: validatePassword, trigger: "blur", },
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { validator: validatePassword, trigger: 'blur' }
         ],
         newPassword: [
-          { required: true, message: "请输入新密码", trigger: "blur" },
-          { validator: validatePassword, trigger: "blur", },
+          { required: true, message: '请输入新密码', trigger: 'blur' },
+          { validator: validatePassword, trigger: 'blur' }
         ],
         newPassword2: [
           { validator: validatePass2 },
-          { required: true, message: "再次确认密码", trigger: "blur" }
-        ],
+          { required: true, message: '再次确认密码', trigger: 'blur' }
+        ]
       },
-      activeName: "second",
+      activeName: 'second',
       folding: false,
       /* active: 0, */
       defaultHeight: {
-        height: "",
-      },
-    };
+        height: ''
+      }
+    }
   },
   computed: {
-    ...mapGetters(["name", "roles"]),
+    ...mapGetters(['name', 'roles'])
   },
   /* 创建height，然后返回给defaultHeight */
   created() {
-    window.addEventListener("resize", this.getHeight);
-    this.getHeight();
+    window.addEventListener('resize', this.getHeight)
+    this.getHeight()
   },
   methods: {
     /* 自适应高度 */
     getHeight() {
-      this.defaultHeight.height = window.innerHeight - 90 + "px";
+      this.defaultHeight.height = window.innerHeight - 90 + 'px'
     },
     toggleFolding() {
-      this.folding = !this.folding;
+      this.folding = !this.folding
     },
     goBack() {
-      this.$router.go(-1);
+      this.$router.go(-1)
     },
     submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(valid => {
         if (valid) {
-          alert("submit!");
+          alert('submit!')
         } else {
-          console.log("error submit!!");
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
+      })
     },
     resetForm(formName) {
-      this.$refs[formName].resetFields();
-    },
-  },
-};
+      this.$refs[formName].resetFields()
+    }
+  }
+}
 </script>
-

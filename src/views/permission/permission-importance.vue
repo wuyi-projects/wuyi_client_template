@@ -22,18 +22,27 @@
         <el-col :span="8">
           <el-form-item style="float: right" label-width="0">
             <el-button @click="resetForm('searchForm')">重 置</el-button>
-            <el-button type="primary" @click="submitForm('searchForm')"
-              >查 询</el-button
-            >
-            <el-button v-if="folding" type="text" @click="toggleFolding()"
-              >收起<i class="el-icon-arrow-up el-icon--right"
+            <el-button
+              type="primary"
+              @click="submitForm('searchForm')"
+            >查 询</el-button>
+            <el-button
+              v-if="folding"
+              type="text"
+              @click="toggleFolding()"
+            >收起<i
+              class="el-icon-arrow-up el-icon--right"
             /></el-button>
-            <el-button v-else type="text" @click="toggleFolding()"
-              >展开<i class="el-icon-arrow-down el-icon--right"
+            <el-button
+              v-else
+              type="text"
+              @click="toggleFolding()"
+            >展开<i
+              class="el-icon-arrow-down el-icon--right"
             /></el-button>
           </el-form-item>
         </el-col>
-        <el-col :span="8" v-if="folding">
+        <el-col v-if="folding" :span="8">
           <el-form-item label="起止时间">
             <!-- <el-date-picker
               class="date"
@@ -126,9 +135,9 @@
 </style>
 
 <script>
-import formatTableSize from "@/utils/size";
+import formatTableSize from '@/utils/size'
 
-import { listImportancelog } from "@/api/importance-log";
+import { listImportancelog } from '@/api/importance-log'
 
 export default {
   data() {
@@ -140,67 +149,67 @@ export default {
       folding: false,
       dialogFormVisible: false,
       loadingSubmitButton: false,
-      submitButtonText: "提交",
+      submitButtonText: '提交',
       allPermissionGroup: [],
       searchFormData: {
-        id: "",
-        startTime: "",
-        endTime: "",
-        loginIp: "",
+        id: '',
+        startTime: '',
+        endTime: '',
+        loginIp: ''
       },
       rules: {
         permission: [
-          { required: true, message: "请输入权限名称", trigger: "blur" },
-          { min: 5, message: "长度大于 5 个字符", trigger: "blur" },
-        ],
+          { required: true, message: '请输入权限名称', trigger: 'blur' },
+          { min: 5, message: '长度大于 5 个字符', trigger: 'blur' }
+        ]
       },
       temp: {
         id: null,
-        permission: "",
-        description: "",
+        permission: '',
+        description: '',
         permissionGroupInfoId: null,
         available: 1,
-        version: 0,
+        version: 0
       },
       initCreateData: {
         id: null,
-        permission: "",
-        description: "",
+        permission: '',
+        description: '',
         permissionGroupInfoId: null,
         available: 1,
-        version: 0,
+        version: 0
       },
       pickerOptions: {
         disabledDate(time) {
-          return time.getTime() > Date.now();
+          return time.getTime() > Date.now()
         },
         shortcuts: [
           {
-            text: "今天",
+            text: '今天',
             onClick(picker) {
-              picker.$emit("pick", new Date());
-            },
+              picker.$emit('pick', new Date())
+            }
           },
           {
-            text: "昨天",
+            text: '昨天',
             onClick(picker) {
-              const date = new Date();
-              date.setTime(date.getTime() - 3600 * 1000 * 24);
-              picker.$emit("pick", date);
-            },
+              const date = new Date()
+              date.setTime(date.getTime() - 3600 * 1000 * 24)
+              picker.$emit('pick', date)
+            }
           },
           {
-            text: "一周前",
+            text: '一周前',
             onClick(picker) {
-              const date = new Date();
-              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit("pick", date);
-            },
-          },
-        ],
+              const date = new Date()
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', date)
+            }
+          }
+        ]
       },
       gridOptions: {
-        border: "default",
+        border: 'default',
         size: formatTableSize(),
         resizable: true,
         autoResize: true,
@@ -210,53 +219,53 @@ export default {
         highlightHoverColumn: true,
         highlightCurrentColumn: true,
         keepSource: true,
-        id: "full_edit_1",
-        rowId: "id",
-        headerAlign: "center",
+        id: 'full_edit_1',
+        rowId: 'id',
+        headerAlign: 'center',
         scrollY: { gt: -1 },
         printConfig: {
           columns: [
-            { field: "id" },
-            { field: "permission" },
-            { field: "description" },
-            { field: "available" },
-          ],
+            { field: 'id' },
+            { field: 'permission' },
+            { field: 'description' },
+            { field: 'available' }
+          ]
         },
         sortConfig: {
-          trigger: "cell",
+          trigger: 'cell',
           defaultSort: {
-            field: "name",
-            order: "desc",
-          },
+            field: 'name',
+            order: 'desc'
+          }
         },
         filterConfig: {
-          remote: true,
+          remote: true
         },
         pagerConfig: {
           autoHidden: true,
           pageSize: 10,
           pageSizes: [10, 20, 50, 80, 100],
           layouts: [
-            "Total",
-            "Sizes",
-            "PrevJump",
-            "PrevPage",
-            "Number",
-            "NextPage",
-            "NextJump",
-            "FullJump",
-          ],
+            'Total',
+            'Sizes',
+            'PrevJump',
+            'PrevPage',
+            'Number',
+            'NextPage',
+            'NextJump',
+            'FullJump'
+          ]
         },
         toolbar: {
           refresh: true,
           print: true,
           zoom: true,
-          custom: true,
+          custom: true
         },
         radioConfig: {
           range: true,
           reserve: true,
-          highlight: true,
+          highlight: true
         },
         proxyConfig: {
           seq: true, // 启用动态序号代理
@@ -264,133 +273,133 @@ export default {
           filter: true, // 启用筛选代理
           form: true, // 启用表单代理
           props: {
-            result: "rows",
-            total: "total",
+            result: 'rows',
+            total: 'total'
           },
           ajax: {
             query: ({ page, sort, filters }) => {
               // 查询条件
-              const searchData = {};
-              const searchFormData = this.searchFormData;
+              const searchData = {}
+              const searchFormData = this.searchFormData
               for (var key in searchFormData) {
-                const value = searchFormData[key];
+                const value = searchFormData[key]
                 if (
                   !(
-                    typeof value === "undefined" ||
+                    typeof value === 'undefined' ||
                     value === null ||
-                    value === ""
+                    value === ''
                   )
                 ) {
-                  searchData[key] = value;
+                  searchData[key] = value
                 }
               }
 
               // 处理排序条件
               const sortParams = Object.assign({
                 sort: sort.property,
-                order: sort.order,
-              });
+                order: sort.order
+              })
               // 处理筛选条件
               filters.forEach(({ property, values, column }) => {
                 if (values) {
                   if (column.filterMultiple) {
-                    sortParams[property] = values;
+                    sortParams[property] = values
                   } else {
-                    sortParams[property] = values[0];
+                    sortParams[property] = values[0]
                   }
                 }
-              });
+              })
               const pageData = Object.assign({
                 offset:
                   page.currentPage >= 0
                     ? (page.currentPage - 1) * page.pageSize
                     : 0,
-                limit: page.pageSize,
-              });
-              const result = Object.assign(pageData, searchData, sortParams);
-              return listImportancelog(result);
-            },
-          },
+                limit: page.pageSize
+              })
+              const result = Object.assign(pageData, searchData, sortParams)
+              return listImportancelog(result)
+            }
+          }
         },
         columns: [
-          { type: "checkbox", width: 40, align: "center" },
+          { type: 'checkbox', width: 40, align: 'center' },
           {
-            field: "operateType",
-            title: "操作类型",
+            field: 'operateType',
+            title: '操作类型',
             width: 140,
-            align: "center",
-            headerAlign: "center",
-            visible: false,
+            align: 'center',
+            headerAlign: 'center',
+            visible: false
           },
           {
-            field: "username",
-            title: "用户名",
+            field: 'username',
+            title: '用户名',
             width: 200,
-            align: "center",
-            headerAlign: "center",
+            align: 'center',
+            headerAlign: 'center'
           },
           {
-            field: "operateTime",
-            title: "操作时间",
-            align: "center",
-            headerAlign: "center",
+            field: 'operateTime',
+            title: '操作时间',
+            align: 'center',
+            headerAlign: 'center',
+            minWidth: 200
+          },
+          {
+            field: 'id',
+            title: '用户IP',
             minWidth: 200,
+            align: 'center',
+            headerAlign: 'center'
           },
           {
-            field: "id",
-            title: "用户IP",
-            minWidth: 200,
-            align: "center",
-            headerAlign: "center",
-          },
-          {
-            field: "result",
-            title: "操作结果",
+            field: 'result',
+            title: '操作结果',
             width: 120,
-            align: "center",
-            headerAlign: "center",
+            align: 'center',
+            headerAlign: 'center',
             filters: [
-              { label: "已通过", value: 1 },
-              { label: "未通过", value: 0 },
+              { label: '已通过', value: 1 },
+              { label: '未通过', value: 0 }
             ],
             filterMultiple: false,
-            slots: { default: "available_default" },
-          },
+            slots: { default: 'available_default' }
+          }
         ],
         importConfig: {
           remote: true,
           importMethod: this.importMethod,
-          types: ["xlsx"],
-          modes: ["insert"],
+          types: ['xlsx'],
+          modes: ['insert']
         },
         exportConfig: {
           // 默认选中类型
-          type: "csv",
+          type: 'csv',
           // 局部自定义类型
-          types: ["xlsx", "csv", "html", "xml", "txt"],
+          types: ['xlsx', 'csv', 'html', 'xml', 'txt'],
           // 自定义数据量列表
-          modes: ["current", "all"],
+          modes: ['current', 'all']
         },
         checkboxConfig: {
           reserve: true,
           highlight: true,
-          range: true,
+          range: true
         },
         editRules: {
           name: [
-            { required: true, message: "app.body.valid.rName" },
-            { min: 3, max: 20, message: "名称长度在 3 到 20 个字符" },
+            { required: true, message: 'app.body.valid.rName' },
+            { min: 3, max: 20, message: '名称长度在 3 到 20 个字符' }
           ],
-          email: [{ required: true, message: "邮件必须填写" }],
-          role: [{ required: true, message: "角色必须填写" }],
+          email: [{ required: true, message: '邮件必须填写' }],
+          role: [{ required: true, message: '角色必须填写' }]
         },
         editConfig: {
-          trigger: "click",
-          mode: "row",
-          showStatus: true,
-        },
-      },
-    };
+          trigger: 'click',
+          mode: 'row',
+          showStatus: true
+        }
+      }
+    }
   },
   computed: {},
 
@@ -434,60 +443,60 @@ export default {
       }
     }, */
     checkColumnMethod({ column }) {
-      if (["nickname", "role"].includes(column.property)) {
-        return false;
+      if (['nickname', 'role'].includes(column.property)) {
+        return false
       }
-      return true;
+      return true
     },
     importMethod({ file }) {
-      return false;
+      return false
     },
     exportMethod({ options }) {
-      return false;
+      return false
     },
     toggleFolding() {
-      this.folding = !this.folding;
+      this.folding = !this.folding
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$refs.dataGrid.commitProxy("reload");
+          this.$refs.dataGrid.commitProxy('reload')
         } else {
-          console.log("error submit!!");
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
+      })
     },
     /* 重置 */
     resetForm(formName) {
-      this.$refs[formName].resetFields();
+      this.$refs[formName].resetFields()
     },
 
     viewRow(row) {
-      this.temp = Object.assign({}, row);
-      this.dialogStatus = "detail";
-      this.dialogFormVisible = true;
+      this.temp = Object.assign({}, row)
+      this.dialogStatus = 'detail'
+      this.dialogFormVisible = true
       this.$nextTick(() => {
-        this.$refs["dataForm"].clearValidate();
-      });
+        this.$refs['dataForm'].clearValidate()
+      })
     },
     beforeHandleCommand(command, row) {
       return {
         command: command,
-        row: row,
-      };
+        row: row
+      }
     },
     handleCommand(command) {
       switch (command.command) {
-        case "handleDelete":
-          this.handleDelete(command.row);
-          break;
-        case "viewRow":
-          this.viewRow(command.row);
-          break;
+        case 'handleDelete':
+          this.handleDelete(command.row)
+          break
+        case 'viewRow':
+          this.viewRow(command.row)
+          break
         default:
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>

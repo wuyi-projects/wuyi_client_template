@@ -1,4 +1,4 @@
-import request from "@/utils/request";
+import request from '@/utils/request'
 
 export function listPlatformProduct(data) {
   return request({
@@ -42,26 +42,26 @@ export function batchDeletePlatformProduct(data) {
 
 export function listAllPlatformProduct(data) {
   return request({
-    url: "/wuyi_uas/v1/platformProduct/listAll.json",
-    method: "post",
+    url: '/wuyi_uas/v1/platformProduct/listAll.json',
+    method: 'post',
     data
-  });
+  })
 }
 
 export function listAllAccountType4Product(data) {
   return request({
-    url: "/wuyi_uas/v1/productAccountType/listAll4Product.json",
-    method: "post",
+    url: '/wuyi_uas/v1/productAccountType/listAll4Product.json',
+    method: 'post',
     data
-  });
+  })
 }
 
 export function listAccountType4Product(data) {
   return request({
-    url: "/wuyi_uas/v1/productAccountType/list4Product.json",
-    method: "post",
+    url: '/wuyi_uas/v1/productAccountType/list4Product.json',
+    method: 'post',
     data
-  });
+  })
 }
 
 export function saveAccountType(data) {
