@@ -70,23 +70,26 @@
     </el-card>
 
     <!--数据展示-->
-    <el-card class="box-card" shadow="never">
+    <el-card class="box-card" shadow="never" :style="{height: defaultHeight}">
       <vxe-grid
         ref="dataGrid"
         class="custom-table-scrollbar"
         v-bind="gridOptions"
+        auto-resize
+        :height="tableHeight"
       >
         <!--工具栏按钮-->
         <!-- <template v-slot:buttons>
           <el-button-group>
-            <el-button @click.native.prevent="handleCreate()">新增</el-button>
-            <el-button
-              type="primary"
-              @click.native.prevent="handleBatchDelete()"
-              >批量删除</el-button
-            >
-          </el-button-group>
-        </template> -->
+            <el-button @click.native.prevent="
+        handle-create-
+      >新增</el-button>
+        <el-button
+          type="primary"
+          @click.native.prevent="handleBatchDelete()"
+        >批量删除</el-button>
+        </el-button-group>
+      </vxe-grid></el-card></div></el-card></vxe-grid></template> -->
 
         <!--是否可用展示-->
         <!--  <template v-slot:available_default="{ row }">
@@ -173,22 +176,23 @@
 import formatTableSize from '@/utils/size'
 
 import {
-  listPermission,
-  savePermission,
-  deletePermission,
-  updatePermission,
-  listAllPermissionGroupInfo
+  listFileInfo,
+  saveFileInfo,
+  deleteFileInfo,
+  updateFileInfo
 } from '@/api/file-mangement'
 
 export default {
   data() {
     return {
-      permissionGroupInfoOptions: [],
+      FileInfoGroupInfoOptions: [],
+      defaultHeight: '500px',
+      tableHeight: '460px',
       folding: false,
       dialogFormVisible: false,
       loadingSubmitButton: false,
       submitButtonText: '提交',
-      allPermissionGroup: [],
+      allFileInfoGroup: [],
       textMap: {
         update: '编辑',
         create: '创建',
@@ -205,24 +209,24 @@ export default {
         desc: ''
       },
       rules: {
-        permission: [
+        FileInfo: [
           { required: true, message: '请输入权限名称', trigger: 'blur' },
           { min: 5, message: '长度大于 5 个字符', trigger: 'blur' }
         ]
       },
       temp: {
         id: null,
-        permission: '',
+        FileInfo: '',
         description: '',
-        permissionGroupInfoId: null,
+        FileInfoGroupInfoId: null,
         available: 1,
         version: 0
       },
       initCreateData: {
         id: null,
-        permission: '',
+        FileInfo: '',
         description: '',
-        permissionGroupInfoId: null,
+        FileInfoGroupInfoId: null,
         available: 1,
         version: 0
       },
@@ -259,7 +263,6 @@ export default {
         border: 'default',
         size: formatTableSize(),
         resizable: true,
-        autoResize: true,
         showHeaderOverflow: true,
         showOverflow: true,
         highlightHoverRow: true,
@@ -273,7 +276,7 @@ export default {
         printConfig: {
           columns: [
             { field: 'id' },
-            { field: 'permission' },
+            { field: 'FileInfo' },
             { field: 'description' },
             { field: 'available' }
           ]
@@ -289,7 +292,7 @@ export default {
           remote: true
         },
         pagerConfig: {
-          autoHidden: true,
+          autoHidden: false,
           pageSize: 10,
           pageSizes: [10, 20, 50, 80, 100],
           layouts: [
@@ -364,7 +367,7 @@ export default {
                 limit: page.pageSize
               })
               const result = Object.assign(pageData, searchData, sortParams)
-              return listPermission(result)
+              return listFileInfo(result)
             }
           }
         },
@@ -375,8 +378,7 @@ export default {
             title: 'bucket',
             width: 200,
             align: 'center',
-            headerAlign: 'center',
-            visible: false
+            headerAlign: 'center'
           },
           {
             field: 'etag',
@@ -509,10 +511,15 @@ export default {
   },
   computed: {},
   created() {
-    this.handleListAllPermissionGroupInfo()
+    window.addEventListener('resize', this.getHeight)
+    this.getHeight()
   },
 
   methods: {
+    getHeight() {
+      this.defaultHeight = window.innerHeight - 180 + 'px'
+      this.tableHeight = (window.innerHeight - 180 - 40) + 'px'
+    },
     checkColumnMethod({ column }) {
       if (['nickname', 'role'].includes(column.property)) {
         return false
@@ -580,7 +587,7 @@ export default {
               };
               batchDeleteData.push(temp);
             }
-            batchDeletePermission(batchDeleteData)
+            batchDeleteFileInfo(batchDeleteData)
               .then((response) => {
                 const result = response.data;
                 if (result) {
@@ -628,7 +635,7 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.temp)
-          savePermission(tempData)
+          saveFileInfo(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -657,7 +664,7 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.temp)
-          updatePermission(tempData)
+          updateFileInfo(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -693,7 +700,7 @@ export default {
             id: id,
             version: version
           })
-          deletePermission(tempData)
+          deleteFileInfo(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -741,16 +748,6 @@ export default {
           break
         default:
       }
-    },
-    handleListAllPermissionGroupInfo() {
-      listAllPermissionGroupInfo()
-        .then(response => {
-          const data = response.data
-          this.permissionGroupInfoOptions = data
-        })
-        .catch(e => {
-          this.loading = false
-        })
     }
   }
 }

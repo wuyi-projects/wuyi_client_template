@@ -70,11 +70,13 @@
     </el-card>
 
     <!--数据展示-->
-    <el-card class="box-card" shadow="never">
+    <el-card class="box-card" shadow="never" :style="{height: defaultHeight}">
       <vxe-grid
         ref="dataGrid"
         class="custom-table-scrollbar"
         v-bind="gridOptions"
+        auto-resize
+        :height="tableHeight"
       >
         <!--工具栏按钮-->
         <template v-slot:buttons>
@@ -230,6 +232,8 @@ import { listPermission, savePermission, deletePermission, batchDeletePermission
 export default {
   data() {
     return {
+      defaultHeight: '500px',
+      tableHeight: '460px',
       permissionGroupInfoOptions: [],
       folding: false,
       dialogFormVisible: false,
@@ -499,10 +503,16 @@ export default {
   computed: {
   },
   created() {
+    window.addEventListener('resize', this.getHeight)
+    this.getHeight()
     this.handleListAllPermissionGroupInfo()
   },
 
   methods: {
+    getHeight() {
+      this.defaultHeight = window.innerHeight - 180 + 'px'
+      this.tableHeight = (window.innerHeight - 180 - 40) + 'px'
+    },
     checkColumnMethod({ column }) {
       if (['nickname', 'role'].includes(column.property)) {
         return false
