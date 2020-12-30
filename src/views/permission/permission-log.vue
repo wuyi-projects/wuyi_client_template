@@ -75,11 +75,12 @@
     </el-card>
 
     <!--数据展示-->
-    <el-card class="box-card" shadow="never">
+    <el-card class="box-card" shadow="never" :style="{height:defaultHeight}">
       <vxe-grid
         ref="dataGrid"
         class="custom-table-scrollbar"
         v-bind="gridOptions"
+        :height="tableHeight"
       >
         <!--工具栏按钮-->
         <!-- <template v-slot:buttons>
@@ -160,6 +161,8 @@ import { listLoginLog } from '@/api/login-log'
 export default {
   data() {
     return {
+      defaultHeight: '500px',
+      tableHeight: '460px',
       dialogStatus: '',
       permissionGroupInfoOptions: [],
       folding: false,
@@ -167,9 +170,6 @@ export default {
       loadingSubmitButton: false,
       submitButtonText: '提交',
       allPermissionGroup: [],
-      defaultHeight: {
-        height: ''
-      },
       defaultTableHeight: 500,
       searchFormData: {
         username: '',
@@ -373,17 +373,15 @@ export default {
   },
   computed: {},
   /*  */
-  created() {
+   created() {
     window.addEventListener('resize', this.getHeight)
     this.getHeight()
   },
-
   methods: {
     /* 自适应高度 */
     getHeight() {
-      // this.defaultHeight.height = window.innerHeight - 180 + "px";
-      this.defaultTableHeight = window.innerHeight - 500
-      console.log('this.defaultTableHeight' + this.defaultTableHeight)
+      this.defaultHeight = window.innerHeight - 180+"px"
+      this.tableHeight=window.innerHeight-220+'px'
     },
     checkColumnMethod({ column }) {
       if (['nickname', 'role'].includes(column.property)) {

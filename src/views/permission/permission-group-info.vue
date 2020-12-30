@@ -56,11 +56,12 @@
     </el-card>
 
     <!--数据展示-->
-    <el-card class="box-card" shadow="never">
+    <el-card class="box-card" shadow="never" :style="{height:defaultHeight}">
       <vxe-grid
         ref="dataGrid"
         class="custom-table-scrollbar"
         v-bind="gridOptions"
+        :height="tableHeight"
       >
         <!--工具栏按钮-->
         <template v-slot:buttons>
@@ -301,6 +302,8 @@ export default {
         user: '',
         region: ''
       },
+      defaultHeight:'500px',
+      tableHeight:'460px',
       permissionGroupDetailDrawer: false,
       dialogFormVisible: false,
       loadingSubmitButton: false,
@@ -707,8 +710,14 @@ export default {
   computed: {
   },
   created() {
+    window.addEventListener('resize',this.getHeight)
+    this.getHeight()
   },
   methods: {
+    getHeight(){
+      this.defaultHeight=window.innerHeight-180+'px'
+      this.tableHeight=window.innerHeight-220+'px'
+    },
     checkColumnMethod({ column }) {
       if (['nickname', 'role'].includes(column.property)) {
         return false

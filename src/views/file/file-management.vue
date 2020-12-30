@@ -101,6 +101,17 @@
           </template>
         </template> -->
 
+        <!--文件类型转换-->
+        <template v-slot:mimeType_default="{ row }">
+          <template v-if="row.mimeType === 'application/pdf'">
+            <el-tag type="success" effect="dark">PDF</el-tag>
+          </template>
+          <template v-else-if="row.mimeType.substring(0, 6) == 'image/'">
+            <el-tag type="danger" effect="dark">图片</el-tag>
+          </template>
+          <template v-else />
+        </template>
+
         <!--数据行操作-->
         <template v-slot:operate="{ row }">
           <!-- <el-button type="text" @click="handleUpdate(row)">修改</el-button> -->
@@ -112,7 +123,7 @@
             删除
           </el-button>
           <el-divider direction="vertical" />
-          <el-button type="text" :command="beforeHandleCommand('viewRow', row)">
+          <el-button type="text" @click="handleViewDetail(row)">
             详情
           </el-button>
           <!-- <el-dropdown  divided @command="handleCommand">
@@ -158,98 +169,159 @@
 
     <!-- 侧边栏 -->
     <el-drawer
-      v-if="permissionGroupDetailDrawer"
-      :title="currentGroupInfo.groupName"
-      :visible.sync="permissionGroupDetailDrawer"
+      v-if="fileInfoDetailDrawerVisable"
+      title="文件信息"
+      :visible.sync="fileInfoDetailDrawerVisable"
       direction="rtl"
       size="50%"
     >
-      <el-row>
-        <el-col :span="24" style="padding:0 20px 20px;">
-          <el-row>
-            <el-col :span="24">
-              <span style="font-size:16px;font-weight:bold;">权限列表</span>
-              <el-button
-                v-if="currentGroupAllPermissions.length > 0"
-                type="text"
-                style="margin-left:10px;"
-                @click="test()"
-              >[清除全部]</el-button>
-            </el-col>
-            <el-col
-              v-if="currentGroupAllPermissions.length < 1"
-              :span="24"
-              style="margin-top: 10px"
-            >
-              <el-alert title="暂无下属权限" type="info" :closable="false" />
-            </el-col>
-            <el-col
-              v-for="permission in currentGroupAllPermissions"
-              :key="permission.id"
-              :span="8"
-              style="margin-top: 10px"
-            >
-              <el-tag closable @close="handleClearGroupInfo(permission)">{{
-                permission.description
-              }}</el-tag>
-            </el-col>
-          </el-row>
-          <el-row style="margin-top:20px;">
-            <el-col :span="24">
-              <vxe-grid
-                ref="permissionGrid"
-                class="custom-table-scrollbar"
-                v-bind="permissionGridOptions"
-              >
-                <!--工具栏按钮-->
-                <template v-slot:toolbar_buttons>
-                  <el-button
-                    type="primary"
-                    @click="handleBatchSetGroupInfo"
-                  >批量加入分组</el-button>
-                </template>
-
-                <template v-slot:tools>
-                  <el-form
-                    ref="permissionForm"
-                    :inline="true"
-                    :model="formInline"
-                    class="demo-form-inline"
-                  >
-                    <el-form-item style="margin-bottom: 0;">
-                      <el-input
-                        v-model="searchPermissionFormData.permission"
-                        placeholder="输入权限名或代码模糊查询"
-                        clearable
-                      />
-                    </el-form-item>
-                    <el-form-item style="margin-bottom: 0;">
-                      <el-button
-                        type="primary"
-                        @click="submitPermissionForm('permissionForm')"
-                      >查询</el-button>
-                    </el-form-item>
-                  </el-form>
-                </template>
-
-                <!--数据行操作-->
-                <template v-slot:operate="{ row }">
-                  <el-button
-                    type="text"
-                    @click="handleSetGroupInfo(row)"
-                  >加入分组</el-button>
-                </template>
-                <!--自定义空数据模板-->
-                <template v-slot:empty>
-                  <span>
-                    <p>没有找到匹配的记录</p>
-                  </span>
-                </template>
-              </vxe-grid>
-            </el-col>
-          </el-row>
-        </el-col>
+      <!-- <el-row :gutter="20">
+        <el-col :span="4"><div class="grid-content" /></el-col>
+        <el-col
+          :span="16"
+        ><div class="grid-content">
+          <pdf ref="pdf" :src="currentFileUrl" /></div></el-col>
+        <el-col :span="4"><div class="grid-content" /></el-col>
       </el-row>
+       -->
+      <el-container>
+        <el-main>
+          <el-row>
+            <el-col>
+              <template v-if="currentGroupInfo.mimeType === 'application/pdf'">
+                <pdf ref="pdf" :src="currentFileUrl" />
+              </template>
+              <template
+                v-else-if="
+                  currentGroupInfo.mimeType.substring(0, 6) == 'image/'
+                "
+              >
+                <el-image :src="currentFileUrl" fit="fill" />
+              </template>
+              <templet v-else>
+                <el-image>
+                  <div slot="error" class="image-slot">
+                    <i class="el-icon-picture-outline" />
+                  </div>
+                </el-image>
+              </templet>
+            </el-col>
+          </el-row>
+          <el-row>
+            <div style="height:40px;color:#72767b">
+              <el-row :span="4">
+                <span style="font-weight:bold">文件详情</span>
+              </el-row>
+            </div>
+            <div style="padding:0 40px;">
+              <el-row style="height:30px;">
+                <el-col :span="4">
+                  <span style="font-weight:bold;">bucket</span>
+                </el-col>
+                <el-col :span="20">
+                  {{ currentFileInfo.bucket }}
+                </el-col>
+              </el-row>
+              <el-row style="height:30px;">
+                <el-col :span="4">
+                  <span style="font-weight:bold;">etag</span>
+                </el-col>
+                <el-col :span="20">
+                  {{ currentFileInfo.etag }}
+                </el-col>
+              </el-row>
+              <el-row style="height:30px;">
+                <el-col :span="4">
+                  <span style="font-weight:bold;">文件名</span>
+                </el-col>
+                <el-col :span="20">
+                  {{ currentFileInfo.filename }}
+                </el-col>
+              </el-row>
+              <el-row style="height:30px;">
+                <el-col :span="4">
+                  <span style="font-weight:bold;">文件大小</span>
+                </el-col>
+                <el-col :span="20">
+                  {{ currentFileInfo.size }}
+                </el-col>
+              </el-row>
+              <el-row style="height:30px;">
+                <el-col :span="4">
+                  <span style="font-weight:bold;">mimeType</span>
+                </el-col>
+                <el-col :span="20">
+                  {{ currentFileInfo.mimeType }}
+                </el-col>
+              </el-row>
+              <el-row style="height:30px;">
+                <el-col :span="4">
+                  <span style="font-weight:bold;">format</span>
+                </el-col>
+                <el-col :span="20">
+                  {{ currentFileInfo.format }}
+                </el-col>
+              </el-row>
+              <el-row style="height:30px;">
+                <el-col :span="4">
+                  <span style="font-weight:bold;">高度</span>
+                </el-col>
+                <el-col :span="20">
+                  {{ currentFileInfo.height }}
+                </el-col>
+              </el-row>
+              <el-row style="height:30px;">
+                <el-col :span="4">
+                  <span style="font-weight:bold;">宽度</span>
+                </el-col>
+                <el-col :span="20">
+                  {{ currentFileInfo.width }}
+                </el-col>
+              </el-row>
+              <el-row style="height:30px;">
+                <el-col :span="4">
+                  <span style="font-weight:bold;">OpenID</span>
+                </el-col>
+                <el-col :span="20">
+                  {{ currentFileInfo.openId }}
+                </el-col>
+              </el-row>
+              <el-row style="height:30px;">
+                <el-col :span="4">
+                  <span style="font-weight:bold;">产品代码</span>
+                </el-col>
+                <el-col :span="20">
+                  {{ currentFileInfo.productCode }}
+                </el-col>
+              </el-row>
+              <el-row style="height:30px;">
+                <el-col :span="4">
+                  <span style="font-weight:bold;">渠道编号</span>
+                </el-col>
+                <el-col :span="20">
+                  {{ currentFileInfo.channelId }}
+                </el-col>
+              </el-row>
+              <el-row style="height:30px;">
+                <el-col :span="4">
+                  <span style="font-weight:bold;">类型编号</span>
+                </el-col>
+                <el-col :span="20">
+                  {{ currentFileInfo.typeId }}
+                </el-col>
+              </el-row>
+              <el-row style="height:30px;">
+                <el-col :span="4">
+                  <span style="font-weight:bold;">子类型编号</span>
+                </el-col>
+                <el-col :span="20">
+                  {{ currentFileInfo.subtypeId }}
+                </el-col>
+              </el-row>
+            </div>
+          </el-row>
+        </el-main>
+      </el-container>
     </el-drawer>
   </div>
 </template>
@@ -266,10 +338,14 @@
   margin-top: 10px;
   margin-right: 5px;
 }
+.el-drawer.rtl {
+  overflow: scroll;
+}
 </style>
 
 <script>
 import formatTableSize from '@/utils/size'
+import pdf from 'vue-pdf'
 
 import {
   listFileInfo,
@@ -277,14 +353,21 @@ import {
   deleteFileInfo,
   updateFileInfo
 } from '@/api/file-mangement'
+import Templet from '../templet/templet.vue'
 
 export default {
+  components: {
+    pdf
+  },
   data() {
     return {
       FileInfoGroupInfoOptions: [],
       defaultHeight: '500px',
       tableHeight: '460px',
       folding: false,
+      currentFileInfo: null,
+      fileInfoDetailDrawerVisable: false,
+      currentFileUrl: '',
       dialogFormVisible: false,
       loadingSubmitButton: false,
       submitButtonText: '提交',
@@ -294,6 +377,7 @@ export default {
         create: '创建',
         detail: '详情'
       },
+      currentGroupInfo: {},
       searchFormData: {
         id: '',
         name: '',
@@ -470,6 +554,13 @@ export default {
         columns: [
           { type: 'checkbox', width: 40, align: 'center' },
           {
+            title: '文件类型',
+            width: 200,
+            align: 'center',
+            headerAlign: 'center',
+            slots: { default: 'mimeType_default' }
+          },
+          {
             field: 'bucket',
             title: 'bucket',
             width: 200,
@@ -502,7 +593,7 @@ export default {
             field: 'mimeType',
             title: 'mimeType',
             width: 200,
-            align: 'center',
+            align: 'left',
             headerAlign: 'center'
           },
           {
@@ -758,6 +849,16 @@ export default {
         row: row
       }
     },
+    handleViewDetail(row) {
+      this.currentGroupInfo = row
+      this.currentFileInfo = row
+      this.currentFileUrl =
+        'https://' +
+        row.bucket +
+        '.oss-cn-hangzhou.aliyuncs.com/' +
+        row.filename
+      this.fileInfoDetailDrawerVisable = true
+    },
     handleCommand(command) {
       switch (command.command) {
         case 'handleDelete':
@@ -768,6 +869,23 @@ export default {
           break
         default:
       }
+    },
+    mimeTypeFormatter({ cellValue, row, column }) {
+      let result
+      if (
+        !(typeof cellValue === '' || cellValue === null || cellValue === '')
+      ) {
+        if (cellValue == 'application/pdf') {
+          result = 'PDF'
+        } else if (cellValue.substring(0, 6) == 'image/') {
+          result = '图片'
+        } else {
+          result = '--'
+        }
+      } else {
+        result = '--'
+      }
+      return result
     }
   }
 }

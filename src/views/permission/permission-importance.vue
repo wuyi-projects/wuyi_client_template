@@ -93,11 +93,12 @@
     </el-card>
 
     <!--数据展示-->
-    <el-card class="box-card" shadow="never">
+    <el-card class="box-card" shadow="never" :style="{ height: defaultHeight }">
       <vxe-grid
         ref="dataGrid"
         class="custom-table-scrollbar"
         v-bind="gridOptions"
+        :height="tableHeight"
       >
         <!--是否可用展示-->
         <template v-slot:available_default="{ row }">
@@ -144,7 +145,9 @@ export default {
     return {
       /* range: [],
       startDatePicker: this.beginDate(),
-      endDatePicker: this.processDate(), */
+      endDatePicker: this.processDate(), */      
+      defaultHeight: '500px',
+      tableHeight: '460px',
       permissionGroupInfoOptions: [],
       folding: false,
       dialogFormVisible: false,
@@ -402,8 +405,16 @@ export default {
     }
   },
   computed: {},
+  created(){
+    window:addEventListener('resize',this.getHeight)
+    this.getHeight()
+  },
 
   methods: {
+    getHeight(){
+      this.defaultHeight=window.innerHeight-180+'px'
+      this.tableHeight=window.innerHeight-200+'px'
+    },
     /* beginDate() {
       const self = this;
       return {
@@ -458,7 +469,7 @@ export default {
       this.folding = !this.folding
     },
     submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(valid => {
         if (valid) {
           this.$refs.dataGrid.commitProxy('reload')
         } else {

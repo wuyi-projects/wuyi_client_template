@@ -50,13 +50,7 @@ const permissionRouter = {
             name: 'permission-importance',
             meta: { title: '重要操作日志', roles: ['PermissionAdministrator'] }
         },
-        {
-            path: 'file-management',
-            component: () =>
-                import ('@/views/permission/file-management'),
-            name: 'permission-importance',
-            meta: { title: '文件管理', roles: ['PermissionAdministrator'] }
-        },
+
         {
             path: 'basics',
             component: () =>
