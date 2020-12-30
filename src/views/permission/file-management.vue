@@ -70,7 +70,7 @@
     </el-card>
 
     <!--数据展示-->
-    <el-card class="box-card" shadow="never" :style="{height: defaultHeight}">
+    <el-card class="box-card" shadow="never" :style="{ height: defaultHeight }">
       <vxe-grid
         ref="dataGrid"
         class="custom-table-scrollbar"
@@ -104,25 +104,25 @@
         <!--数据行操作-->
         <template v-slot:operate="{ row }">
           <!-- <el-button type="text" @click="handleUpdate(row)">修改</el-button> -->
-          <!-- <el-divider direction="vertical" /> -->
-          <el-dropdown @command="handleCommand">
+
+          <el-button
+            type="text"
+            :command="beforeHandleCommand('handleDelete', row)"
+          >
+            删除
+          </el-button>
+          <el-divider direction="vertical" />
+          <el-button type="text" :command="beforeHandleCommand('viewRow', row)">
+            详情
+          </el-button>
+          <!-- <el-dropdown  divided @command="handleCommand">
             <span class="el-dropdown-link">
               更多<i class="el-icon-arrow-down" />
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item
-                :command="beforeHandleCommand('handleDelete', row)"
-              >
-                删除
-              </el-dropdown-item>
-              <el-dropdown-item
-                :command="beforeHandleCommand('viewRow', row)"
-                divided
-              >
-                详情
-              </el-dropdown-item>
+
             </el-dropdown-menu>
-          </el-dropdown>
+          </el-dropdown> -->
         </template>
         <!--自定义空数据模板-->
         <template v-slot:empty>
@@ -155,6 +155,102 @@
         </template>
       </div>
     </el-dialog>
+
+    <!-- 侧边栏 -->
+    <el-drawer
+      v-if="permissionGroupDetailDrawer"
+      :title="currentGroupInfo.groupName"
+      :visible.sync="permissionGroupDetailDrawer"
+      direction="rtl"
+      size="50%"
+    >
+      <el-row>
+        <el-col :span="24" style="padding:0 20px 20px;">
+          <el-row>
+            <el-col :span="24">
+              <span style="font-size:16px;font-weight:bold;">权限列表</span>
+              <el-button
+                v-if="currentGroupAllPermissions.length > 0"
+                type="text"
+                style="margin-left:10px;"
+                @click="test()"
+              >[清除全部]</el-button>
+            </el-col>
+            <el-col
+              v-if="currentGroupAllPermissions.length < 1"
+              :span="24"
+              style="margin-top: 10px"
+            >
+              <el-alert title="暂无下属权限" type="info" :closable="false" />
+            </el-col>
+            <el-col
+              v-for="permission in currentGroupAllPermissions"
+              :key="permission.id"
+              :span="8"
+              style="margin-top: 10px"
+            >
+              <el-tag closable @close="handleClearGroupInfo(permission)">{{
+                permission.description
+              }}</el-tag>
+            </el-col>
+          </el-row>
+          <el-row style="margin-top:20px;">
+            <el-col :span="24">
+              <vxe-grid
+                ref="permissionGrid"
+                class="custom-table-scrollbar"
+                v-bind="permissionGridOptions"
+              >
+                <!--工具栏按钮-->
+                <template v-slot:toolbar_buttons>
+                  <el-button
+                    type="primary"
+                    @click="handleBatchSetGroupInfo"
+                  >批量加入分组</el-button>
+                </template>
+
+                <template v-slot:tools>
+                  <el-form
+                    ref="permissionForm"
+                    :inline="true"
+                    :model="formInline"
+                    class="demo-form-inline"
+                  >
+                    <el-form-item style="margin-bottom: 0;">
+                      <el-input
+                        v-model="searchPermissionFormData.permission"
+                        placeholder="输入权限名或代码模糊查询"
+                        clearable
+                      />
+                    </el-form-item>
+                    <el-form-item style="margin-bottom: 0;">
+                      <el-button
+                        type="primary"
+                        @click="submitPermissionForm('permissionForm')"
+                      >查询</el-button>
+                    </el-form-item>
+                  </el-form>
+                </template>
+
+                <!--数据行操作-->
+                <template v-slot:operate="{ row }">
+                  <el-button
+                    type="text"
+                    @click="handleSetGroupInfo(row)"
+                  >加入分组</el-button>
+                </template>
+                <!--自定义空数据模板-->
+                <template v-slot:empty>
+                  <span>
+                    <p>没有找到匹配的记录</p>
+                  </span>
+                </template>
+              </vxe-grid>
+            </el-col>
+          </el-row>
+        </el-col>
+      </el-row>
+    </el-drawer>
   </div>
 </template>
 
@@ -518,7 +614,7 @@ export default {
   methods: {
     getHeight() {
       this.defaultHeight = window.innerHeight - 180 + 'px'
-      this.tableHeight = (window.innerHeight - 180 - 40) + 'px'
+      this.tableHeight = window.innerHeight - 180 - 40 + 'px'
     },
     checkColumnMethod({ column }) {
       if (['nickname', 'role'].includes(column.property)) {
@@ -548,83 +644,7 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields()
     },
-    /* handleCreate() {
-      this.temp = Object.assign({}, this.initCreateData);
-      this.dialogStatus = "create";
-      this.dialogFormVisible = true;
-      this.$nextTick(() => {
-        this.$refs["dataForm"].clearValidate();
-      });
-    }, */
-    /*  handleBatchDelete() {
-      const selectRecords = this.$refs.dataGrid.getCheckboxRecords();
-      const batchDeleteData = [];
-      if (
-        !(
-          typeof selectRecords === "undefined" ||
-          selectRecords === null ||
-          selectRecords === "" ||
-          selectRecords.length === 0
-        )
-      ) {
-        this.$confirm("永久删除记录吗, 是否继续?", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          dangerouslyUseHTMLString: true,
-          type: "warning",
-        })
-          .then(() => {
-            for (
-              let index = 0, len = selectRecords.length;
-              index < len;
-              index++
-            ) {
-              const id = selectRecords[index]["id"];
-              const version = selectRecords[index]["version"];
-              const temp = {
-                id: id,
-                version: version,
-              };
-              batchDeleteData.push(temp);
-            }
-            batchDeleteFileInfo(batchDeleteData)
-              .then((response) => {
-                const result = response.data;
-                if (result) {
-                  this.$message({
-                    type: "success",
-                    message: "删除成功",
-                  });
-                } else {
-                  this.$message.error("删除失败");
-                }
-                this.$refs.dataGrid.commitProxy("reload");
-              })
-              .catch((e) => {
-                this.loading = false;
-              });
-          })
-          .catch(() => {
-            this.$message({
-              type: "info",
-              message: "已取消删除",
-            });
-          });
-      } else {
-        this.$message({
-          showClose: true,
-          message: "请先选择需要删除的记录",
-        });
-      }
-    }, */
-    /*  handleUpdate(row) {
-      this.temp = Object.assign({}, row);
-      this.dialogStatus = "update";
-      this.dialogFormVisible = true;
-      this.$nextTick(() => {
-        this.$refs["dataForm"].clearValidate();
-      });
-    }, */
+
     initFormSafeSubmitConfig() {
       this.loadingSubmitButton = false
       this.submitButtonText = '提交'
