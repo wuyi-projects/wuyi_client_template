@@ -30,7 +30,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="8" v-if="folding">
+        <el-col v-if="folding" :span="8">
           <el-form-item label="用户类型" prop="type">
             <el-select
               v-model="searchFormData.type"
@@ -46,7 +46,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="8" v-if="folding">
+        <el-col v-if="folding" :span="8">
           <el-form-item label="账户状态" prop="locked">
             <el-select
               v-model="searchFormData.locked"
@@ -91,14 +91,23 @@
         <el-col :span="8">
           <el-form-item style="float: right;" label-width="0">
             <el-button @click="resetForm('searchForm')">重 置</el-button>
-            <el-button type="primary" @click="submitForm('searchForm')"
-              >查 询</el-button
-            >
-            <el-button v-if="folding" type="text" @click="toggleFolding()"
-              >收起<i class="el-icon-arrow-up el-icon--right"
+            <el-button
+              type="primary"
+              @click="submitForm('searchForm')"
+            >查 询</el-button>
+            <el-button
+              v-if="folding"
+              type="text"
+              @click="toggleFolding()"
+            >收起<i
+              class="el-icon-arrow-up el-icon--right"
             /></el-button>
-            <el-button v-else type="text" @click="toggleFolding()"
-              >展开<i class="el-icon-arrow-down el-icon--right"
+            <el-button
+              v-else
+              type="text"
+              @click="toggleFolding()"
+            >展开<i
+              class="el-icon-arrow-down el-icon--right"
             /></el-button>
           </el-form-item>
         </el-col>
@@ -187,64 +196,64 @@
 </style>
 
 <script>
-import formatTableSize from "@/utils/size";
+import formatTableSize from '@/utils/size'
 
-import { listUser } from "@/api/user";
+import { listUser } from '@/api/user'
 import {
   listAllPlatformProduct,
   listAllAccountType4Product
-} from "@/api/platform-product";
+} from '@/api/platform-product'
 
 export default {
   data() {
     return {
-      tabPosition: "add",
+      tabPosition: 'add',
       defaultMinHeight: {
-        minHeight: ""
+        minHeight: ''
       },
       folding: false,
       searchFormData: {
-        id: "",
-        accout: "",
-        type: "",
+        id: '',
+        accout: '',
+        type: '',
         productId: null,
-        start: "",
-        end: ""
+        start: '',
+        end: ''
       },
       platformProductOptionData: [],
       accountTypeOptionData: [],
       rules: {},
       pickerOptions: {
         disabledDate(time) {
-          return time.getTime() > Date.now();
+          return time.getTime() > Date.now()
         },
         shortcuts: [
           {
-            text: "今天",
+            text: '今天',
             onClick(picker) {
-              picker.$emit("pick", new Date());
+              picker.$emit('pick', new Date())
             }
           },
           {
-            text: "昨天",
+            text: '昨天',
             onClick(picker) {
-              const date = new Date();
-              date.setTime(date.getTime() - 3600 * 1000 * 24);
-              picker.$emit("pick", date);
+              const date = new Date()
+              date.setTime(date.getTime() - 3600 * 1000 * 24)
+              picker.$emit('pick', date)
             }
           },
           {
-            text: "一周前",
+            text: '一周前',
             onClick(picker) {
-              const date = new Date();
-              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit("pick", date);
+              const date = new Date()
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', date)
             }
           }
         ]
       },
       gridOptions: {
-        border: "default",
+        border: 'default',
         size: formatTableSize(),
         resizable: true,
         autoResize: true,
@@ -254,23 +263,23 @@ export default {
         highlightHoverColumn: true,
         highlightCurrentColumn: true,
         keepSource: true,
-        id: "full_edit_1",
-        rowId: "id",
-        headerAlign: "center",
+        id: 'full_edit_1',
+        rowId: 'id',
+        headerAlign: 'center',
         scrollY: { gt: -1 },
         printConfig: {
           columns: [
-            { field: "id" },
-            { field: "role" },
-            { field: "description" },
-            { field: "available" }
+            { field: 'id' },
+            { field: 'role' },
+            { field: 'description' },
+            { field: 'available' }
           ]
         },
         sortConfig: {
-          trigger: "cell",
+          trigger: 'cell',
           defaultSort: {
-            field: "name",
-            order: "desc"
+            field: 'name',
+            order: 'desc'
           }
         },
         filterConfig: {
@@ -281,14 +290,14 @@ export default {
           pageSize: 10,
           pageSizes: [10, 20, 50, 80, 100],
           layouts: [
-            "Total",
-            "Sizes",
-            "PrevJump",
-            "PrevPage",
-            "Number",
-            "NextPage",
-            "NextJump",
-            "FullJump"
+            'Total',
+            'Sizes',
+            'PrevJump',
+            'PrevPage',
+            'Number',
+            'NextPage',
+            'NextJump',
+            'FullJump'
           ]
         },
         toolbar: {
@@ -308,24 +317,24 @@ export default {
           filter: true, // 启用筛选代理
           form: true, // 启用表单代理
           props: {
-            result: "rows",
-            total: "total"
+            result: 'rows',
+            total: 'total'
           },
           ajax: {
             query: ({ page, sort, filters }) => {
               // 查询条件
-              const searchData = {};
-              const searchFormData = this.searchFormData;
+              const searchData = {}
+              const searchFormData = this.searchFormData
               for (var key in searchFormData) {
-                const value = searchFormData[key];
+                const value = searchFormData[key]
                 if (
                   !(
-                    typeof value === "undefined" ||
+                    typeof value === 'undefined' ||
                     value === null ||
-                    value === ""
+                    value === ''
                   )
                 ) {
-                  searchData[key] = value;
+                  searchData[key] = value
                 }
               }
 
@@ -333,136 +342,136 @@ export default {
               const sortParams = Object.assign({
                 sort: sort.property,
                 order: sort.order
-              });
+              })
               // 处理筛选条件
               filters.forEach(({ property, values, column }) => {
                 if (values) {
                   if (column.filterMultiple) {
-                    sortParams[property] = values;
+                    sortParams[property] = values
                   } else {
-                    sortParams[property] = values[0];
+                    sortParams[property] = values[0]
                   }
                 }
-              });
+              })
               const pageData = Object.assign({
                 offset:
                   page.currentPage >= 0
                     ? (page.currentPage - 1) * page.pageSize
                     : 0,
                 limit: page.pageSize
-              });
-              const result = Object.assign(pageData, searchData, sortParams);
-              return listUser(result);
+              })
+              const result = Object.assign(pageData, searchData, sortParams)
+              return listUser(result)
             }
           }
         },
         columns: [
-          { type: "checkbox", width: 40, align: "center" },
+          { type: 'checkbox', width: 40, align: 'center' },
           {
-            field: "id",
-            title: "编号",
+            field: 'id',
+            title: '编号',
             width: 140,
-            align: "center",
-            headerAlign: "center",
+            align: 'center',
+            headerAlign: 'center',
             visible: false
           },
           {
-            field: "productId",
-            title: "产品编号",
+            field: 'productId',
+            title: '产品编号',
             minWidth: 140,
-            align: "center",
-            headerAlign: "center",
+            align: 'center',
+            headerAlign: 'center',
             visible: false
           },
           {
-            field: "productName",
-            title: "产品名称",
+            field: 'productName',
+            title: '产品名称',
             minWidth: 240,
-            align: "left",
-            headerAlign: "center"
+            align: 'left',
+            headerAlign: 'center'
           },
           {
-            field: "productCode",
-            title: "产品代号",
+            field: 'productCode',
+            title: '产品代号',
             minWidth: 120,
-            align: "center",
-            headerAlign: "center",
+            align: 'center',
+            headerAlign: 'center',
             visible: false
           },
           {
-            field: "phone",
-            title: "登录账号",
+            field: 'phone',
+            title: '登录账号',
             minWidth: 120,
-            align: "center",
-            headerAlign: "center"
+            align: 'center',
+            headerAlign: 'center'
           },
           {
-            field: "platformFlag",
-            title: "平台产品标识",
+            field: 'platformFlag',
+            title: '平台产品标识',
             minWidth: 120,
-            align: "center",
-            headerAlign: "center",
-            slots: { default: "platformFlag_default" }
+            align: 'center',
+            headerAlign: 'center',
+            slots: { default: 'platformFlag_default' }
           },
           {
-            field: "typeName",
-            title: "账户类型名称",
+            field: 'typeName',
+            title: '账户类型名称',
             minWidth: 120,
-            align: "center",
-            headerAlign: "center"
+            align: 'center',
+            headerAlign: 'center'
           },
           {
-            field: "typeCode",
-            title: "账户类型代码",
+            field: 'typeCode',
+            title: '账户类型代码',
             minWidth: 120,
-            align: "center",
-            headerAlign: "center",
+            align: 'center',
+            headerAlign: 'center',
             visible: false
           },
           {
-            field: "type",
-            title: "用户类型",
+            field: 'type',
+            title: '用户类型',
             minWidth: 80,
-            align: "center",
-            headerAlign: "center",
+            align: 'center',
+            headerAlign: 'center',
             visible: false
           },
           {
-            field: "lockedState",
-            title: "是否锁定",
+            field: 'lockedState',
+            title: '是否锁定',
             width: 80,
-            align: "center",
-            headerAlign: "center",
-            slots: { default: "locked_default" }
+            align: 'center',
+            headerAlign: 'center',
+            slots: { default: 'locked_default' }
           },
           {
-            field: "createTime",
-            title: "注册时间",
+            field: 'createTime',
+            title: '注册时间',
             minWidth: 160,
-            align: "center",
-            headerAlign: "center"
+            align: 'center',
+            headerAlign: 'center'
           },
           {
-            title: "操作",
+            title: '操作',
             width: 140,
-            align: "center",
-            fixed: "right",
-            slots: { default: "operate" }
+            align: 'center',
+            fixed: 'right',
+            slots: { default: 'operate' }
           }
         ],
         importConfig: {
           remote: true,
           importMethod: this.importMethod,
-          types: ["xlsx"],
-          modes: ["insert"]
+          types: ['xlsx'],
+          modes: ['insert']
         },
         exportConfig: {
           // 默认选中类型
-          type: "csv",
+          type: 'csv',
           // 局部自定义类型
-          types: ["xlsx", "csv", "html", "xml", "txt"],
+          types: ['xlsx', 'csv', 'html', 'xml', 'txt'],
           // 自定义数据量列表
-          modes: ["current", "all"]
+          modes: ['current', 'all']
         },
         checkboxConfig: {
           reserve: true,
@@ -471,158 +480,158 @@ export default {
         },
         editRules: {
           name: [
-            { required: true, message: "app.body.valid.rName" },
-            { min: 3, max: 50, message: "名称长度在 3 到 50 个字符" }
+            { required: true, message: 'app.body.valid.rName' },
+            { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
           ],
-          email: [{ required: true, message: "邮件必须填写" }],
-          role: [{ required: true, message: "角色必须填写" }]
+          email: [{ required: true, message: '邮件必须填写' }],
+          role: [{ required: true, message: '角色必须填写' }]
         },
         editConfig: {
-          trigger: "click",
-          mode: "row",
+          trigger: 'click',
+          mode: 'row',
           showStatus: true
         }
       }
-    };
+    }
   },
   computed: {},
   created() {
-    window.addEventListener("resize", this.getMinHeight);
-    this.getMinHeight();
-    this.listAllPlatformProduct();
+    window.addEventListener('resize', this.getMinHeight)
+    this.getMinHeight()
+    this.listAllPlatformProduct()
   },
   methods: {
     getMinHeight() {
-      this.defaultMinHeight.minHeight = window.innerHeight - 210 + "px";
+      this.defaultMinHeight.minHeight = window.innerHeight - 210 + 'px'
     },
     checkColumnMethod({ column }) {
-      if (["nickname", "role"].includes(column.property)) {
-        return false;
+      if (['nickname', 'role'].includes(column.property)) {
+        return false
       }
-      return true;
+      return true
     },
     importMethod({ file }) {
-      return false;
+      return false
     },
     exportMethod({ options }) {
-      return false;
+      return false
     },
     toggleFolding() {
-      this.folding = !this.folding;
+      this.folding = !this.folding
     },
     typeFormatter({ cellValue, row, column }) {
-      let result;
+      let result
       if (
         !(
-          typeof cellValue === "undefined" ||
+          typeof cellValue === 'undefined' ||
           cellValue === null ||
-          cellValue === ""
+          cellValue === ''
         )
       ) {
         switch (cellValue) {
           case 0:
-            result = "普通用户";
-            break;
+            result = '普通用户'
+            break
           case 5:
-            result = "平台管理";
-            break;
+            result = '平台管理'
+            break
           default:
-            result = "--";
+            result = '--'
         }
       } else {
-        result = "--";
+        result = '--'
       }
-      return result;
+      return result
     },
     platformFlagFormatter({ cellValue, row, column }) {
-      let result;
+      let result
       if (
         !(
-          typeof cellValue === "undefined" ||
+          typeof cellValue === 'undefined' ||
           cellValue === null ||
-          cellValue === ""
+          cellValue === ''
         )
       ) {
         switch (cellValue) {
           case 0:
-            result = "其他产品";
-            break;
+            result = '其他产品'
+            break
           case 1:
-            result = "平台产品";
-            break;
+            result = '平台产品'
+            break
           default:
-            result = "--";
+            result = '--'
         }
       } else {
-        result = "--";
+        result = '--'
       }
-      return result;
+      return result
     },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$refs.dataGrid.commitProxy("reload");
+          this.$refs.dataGrid.commitProxy('reload')
         } else {
-          console.log("error submit!!");
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
+      })
     },
     resetForm(formName) {
-      this.$refs[formName].resetFields();
+      this.$refs[formName].resetFields()
     },
     handleUpdate(row) {
-      alert("编辑" + JSON.stringify(row));
+      alert('编辑' + JSON.stringify(row))
     },
     handleDelete(row) {
-      alert("删除" + JSON.stringify(row));
+      alert('删除' + JSON.stringify(row))
     },
     viewRow(row) {
-      alert("查看" + JSON.stringify(row));
+      alert('查看' + JSON.stringify(row))
     },
     beforeHandleCommand(command, row) {
       return {
         command: command,
         row: row
-      };
+      }
     },
     handleCommand(command) {
       switch (command.command) {
-        case "handleDelete":
-          this.handleDelete(command.row);
-          break;
-        case "viewRow":
-          this.viewRow(command.row);
-          break;
+        case 'handleDelete':
+          this.handleDelete(command.row)
+          break
+        case 'viewRow':
+          this.viewRow(command.row)
+          break
         default:
       }
     },
     listAllPlatformProduct() {
-      let that = this;
+      const that = this
       listAllPlatformProduct({})
         .then(response => {
-          const data = response.data;
-          that.platformProductOptionData = data;
+          const data = response.data
+          that.platformProductOptionData = data
         })
         .catch(e => {
-          this.loading = false;
-        });
+          this.loading = false
+        })
     },
     listAllAccountType4Product(val) {
-      let that = this;
+      const that = this
       listAllAccountType4Product({
         productId: val
       })
         .then(response => {
-          const data = response.data;
-          that.accountTypeOptionData = data;
+          const data = response.data
+          that.accountTypeOptionData = data
         })
         .catch(e => {
-          that.loading = false;
-        });
+          that.loading = false
+        })
     },
     handleChangePlatformProduct(val) {
-      this.listAllAccountType4Product(val);
+      this.listAllAccountType4Product(val)
     },
     handleDisable(row) {
       this.$confirm('停用[ <span style="color:red;font-weight:bold;">' + row.productName + '(' + row.phone + ')' + '</span> ]账号吗, 是否继续?', '提示', {
@@ -681,7 +690,7 @@ export default {
         .catch(e => {
           this.loading = false
         })
-    },
+    }
   }
-};
+}
 </script>

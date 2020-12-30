@@ -73,6 +73,16 @@ const permissionRouter = {
                 import ('@/views/permission/new-test'),
             name: 'new-test',
             meta: { title: '表格', roles: ['PermissionAdministrator'] }
+        },
+        {
+            path: 'pdf',
+            component: () =>
+                import ('@/views/permission/pdf'),
+            name: 'pdf',
+            meta: {
+                title: 'PDF预览',
+                roles: ['PermissionAdministrator', 'PermissionAssignmentAdministrator']
+            }
         }
     ]
 }
