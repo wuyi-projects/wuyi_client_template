@@ -101,6 +101,17 @@
           </template>
         </template> -->
 
+        <!--文件类型转换-->
+        <template v-slot:mimeType_default="{ row }">
+          <template v-if="row.mimeType === 'application/pdf'">
+            <el-tag type="success" effect="dark">PDF</el-tag>
+          </template>
+          <template v-else-if="row.mimeType.substring(0, 6) == 'image/'">
+            <el-tag type="danger" effect="dark">图片</el-tag>
+          </template>
+          <template v-else />
+        </template>
+
         <!--数据行操作-->
         <template v-slot:operate="{ row }">
           <!-- <el-button type="text" @click="handleUpdate(row)">修改</el-button> -->
@@ -120,7 +131,6 @@
               更多<i class="el-icon-arrow-down" />
             </span>
             <el-dropdown-menu slot="dropdown">
-
             </el-dropdown-menu>
           </el-dropdown> -->
         </template>
@@ -335,7 +345,6 @@
 <script>
 import formatTableSize from '@/utils/size'
 import pdf from 'vue-pdf'
-
 import {
   listFileInfo,
   saveFileInfo,
@@ -343,13 +352,9 @@ import {
   updateFileInfo
 } from '@/api/file-mangement'
 import Templet from '../templet/templet.vue'
-import Pdf from '../permission/pdf.vue'
-
 export default {
   components: {
-    pdf,
-    Templet,
-    Pdf
+    pdf
   },
   data() {
     return {
@@ -515,7 +520,6 @@ export default {
                   searchData[key] = value
                 }
               }
-
               // 处理排序条件
               const sortParams = Object.assign({
                 sort: sort.property,
@@ -545,6 +549,13 @@ export default {
         },
         columns: [
           { type: 'checkbox', width: 40, align: 'center' },
+          {
+            title: '文件类型',
+            width: 200,
+            align: 'center',
+            headerAlign: 'center',
+            slots: { default: 'mimeType_default' }
+          },
           {
             field: 'bucket',
             title: 'bucket',
@@ -686,7 +697,6 @@ export default {
     window.addEventListener('resize', this.getHeight)
     this.getHeight()
   },
-
   methods: {
     getHeight() {
       this.defaultHeight = window.innerHeight - 180 + 'px'
@@ -720,7 +730,6 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields()
     },
-
     initFormSafeSubmitConfig() {
       this.loadingSubmitButton = false
       this.submitButtonText = '提交'
@@ -854,6 +863,23 @@ export default {
           break
         default:
       }
+    },
+    mimeTypeFormatter({ cellValue, row, column }) {
+      let result
+      if (
+        !(cellValue === null || cellValue === '')
+      ) {
+        if (cellValue === 'application/pdf') {
+          result = 'PDF'
+        } else if (cellValue.substring(0, 6) === 'image/') {
+          result = '图片'
+        } else {
+          result = '--'
+        }
+      } else {
+        result = '--'
+      }
+      return result
     }
   }
 }
