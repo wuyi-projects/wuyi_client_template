@@ -190,12 +190,15 @@
               <template v-if="currentGroupInfo.mimeType === 'application/pdf'">
                 <pdf ref="pdf" :src="currentFileUrl" />
               </template>
-              <template
-                v-else-if="
-                  currentGroupInfo.mimeType.substring(0, 6) == 'image/'
-                "
-              >
-                <el-image :src="currentFileUrl" fit="fill" />
+              <template v-else-if="currentGroupInfo.mimeType.substring(0, 6) == 'image/'">
+                <el-row>
+                  <el-col>
+                    <el-image
+                      :src="currentFileUrl"
+                      fit="contain" style="width:100%"
+                    />
+                  </el-col>
+                </el-row>
               </template>
               <templet v-else>
                 <el-image>
@@ -866,9 +869,7 @@ export default {
     },
     mimeTypeFormatter({ cellValue, row, column }) {
       let result
-      if (
-        !(cellValue === null || cellValue === '')
-      ) {
+      if (!(cellValue === null || cellValue === '')) {
         if (cellValue === 'application/pdf') {
           result = 'PDF'
         } else if (cellValue.substring(0, 6) === 'image/') {

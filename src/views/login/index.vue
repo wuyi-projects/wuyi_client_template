@@ -102,8 +102,8 @@ export default {
     }
     return {
       loginForm: {
-        phone: '18963961293',
-        password: 'baobao520'
+        phone: '15207146221',
+        password: '$$Wyang123yyy'
       },
       loginRules: {
         phone: [
