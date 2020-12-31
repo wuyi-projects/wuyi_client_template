@@ -190,12 +190,17 @@
               <template v-if="currentGroupInfo.mimeType === 'application/pdf'">
                 <pdf ref="pdf" :src="currentFileUrl" />
               </template>
-              <template v-else-if="currentGroupInfo.mimeType.substring(0, 6) == 'image/'">
+              <template
+                v-else-if="
+                  currentGroupInfo.mimeType.substring(0, 6) == 'image/'
+                "
+              >
                 <el-row>
                   <el-col>
                     <el-image
                       :src="currentFileUrl"
-                      fit="contain" style="width:100%"
+                      fit="contain"
+                      style="width:100%"
                     />
                   </el-col>
                 </el-row>
@@ -847,14 +852,21 @@ export default {
       }
     },
     handleViewDetail(row) {
-      this.currentGroupInfo = row
+      this.$router.push({
+        name: 'fapiao-info',
+        query: {
+          id: row.id
+        }
+      })
+      return
+      /* this.currentGroupInfo = row
       this.currentFileInfo = row
       this.currentFileUrl =
         'https://' +
         row.bucket +
         '.oss-cn-hangzhou.aliyuncs.com/' +
         row.filename
-      this.fileInfoDetailDrawerVisable = true
+      this.fileInfoDetailDrawerVisable = true */
     },
     handleCommand(command) {
       switch (command.command) {
