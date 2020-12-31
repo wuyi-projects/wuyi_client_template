@@ -46,9 +46,10 @@
         <el-col :span="8">
           <el-form-item style="float: right" label-width="0">
             <el-button @click="resetForm('searchForm')">重 置</el-button>
-            <el-button type="primary" @click="submitForm('searchForm')"
-              >查 询</el-button
-            >
+            <el-button
+              type="primary"
+              @click="submitForm('searchForm')"
+            >查 询</el-button>
             <!--<el-button
               v-if="folding"
               type="text"
@@ -155,7 +156,6 @@
       </div>
     </el-dialog>
 
-  
     <!-- 侧边栏 -->
     <el-drawer
       v-if="fileInfoDetailDrawerVisable"
@@ -854,7 +854,7 @@ export default {
           break
         default:
       }
-    },
+    }
   }
 }
 </script>
