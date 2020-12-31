@@ -46,10 +46,9 @@
         <el-col :span="8">
           <el-form-item style="float: right" label-width="0">
             <el-button @click="resetForm('searchForm')">重 置</el-button>
-            <el-button
-              type="primary"
-              @click="submitForm('searchForm')"
-            >查 询</el-button>
+            <el-button type="primary" @click="submitForm('searchForm')"
+              >查 询</el-button
+            >
             <!--<el-button
               v-if="folding"
               type="text"
@@ -100,17 +99,6 @@
             <el-badge is-dot class="item" type="info" />停用
           </template>
         </template> -->
-
-        <!--文件类型转换-->
-        <template v-slot:mimeType_default="{ row }">
-          <template v-if="row.mimeType === 'application/pdf'">
-            <el-tag type="success" effect="dark">PDF</el-tag>
-          </template>
-          <template v-else-if="row.mimeType.substring(0, 6) == 'image/'">
-            <el-tag type="danger" effect="dark">图片</el-tag>
-          </template>
-          <template v-else />
-        </template>
 
         <!--数据行操作-->
         <template v-slot:operate="{ row }">
@@ -167,6 +155,7 @@
       </div>
     </el-dialog>
 
+  
     <!-- 侧边栏 -->
     <el-drawer
       v-if="fileInfoDetailDrawerVisable"
@@ -354,10 +343,13 @@ import {
   updateFileInfo
 } from '@/api/file-mangement'
 import Templet from '../templet/templet.vue'
+import Pdf from '../permission/pdf.vue'
 
 export default {
   components: {
-    pdf
+    pdf,
+    Templet,
+    Pdf
   },
   data() {
     return {
@@ -553,13 +545,6 @@ export default {
         },
         columns: [
           { type: 'checkbox', width: 40, align: 'center' },
-          {
-            title: '文件类型',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center',
-            slots: { default: 'mimeType_default' }
-          },
           {
             field: 'bucket',
             title: 'bucket',
@@ -870,23 +855,6 @@ export default {
         default:
       }
     },
-    mimeTypeFormatter({ cellValue, row, column }) {
-      let result
-      if (
-        !(typeof cellValue === '' || cellValue === null || cellValue === '')
-      ) {
-        if (cellValue == 'application/pdf') {
-          result = 'PDF'
-        } else if (cellValue.substring(0, 6) == 'image/') {
-          result = '图片'
-        } else {
-          result = '--'
-        }
-      } else {
-        result = '--'
-      }
-      return result
-    }
   }
 }
 </script>
