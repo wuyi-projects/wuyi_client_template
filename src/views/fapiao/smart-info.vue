@@ -2,10 +2,7 @@
   <div class="app-container">
     <!--数据展示-->
     <el-card class="box-card">
-
-      <el-row
-        type="flex"
-      >
+      <el-row type="flex">
         <el-col
           justify="center"
           align="middle"
@@ -14,10 +11,7 @@
           <pdf ref="pdf" style="width:37.2%;" :src="currentBillUrl" />
 
           <el-row style="position:absolute;bottom:10px;width:100%;">
-            <el-col
-              justify="center"
-              align="middle"
-            >
+            <el-col justify="center" align="middle">
               <el-button-group>
                 <el-button
                   round
@@ -144,7 +138,6 @@
           </el-col>
         </div>
       </el-row>
-
     </el-card>
   </div>
 </template>

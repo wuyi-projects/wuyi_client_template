@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <!--查询条件-->
-    <el-card class="box-card" shadow="never" style="margin-bottom:16px;">
+    <el-card class="box-card" shadow="never" style="margin-bottom: 16px">
       <el-form
         ref="searchForm"
         :model="searchFormData"
@@ -22,7 +22,7 @@
                   v-model="searchFormData.start"
                   type="date"
                   placeholder="起始日期"
-                  style="width: 100%;"
+                  style="width: 100%"
                   :picker-options="pickerOptions"
                   value-format="yyyy-MM-dd"
                 />
@@ -35,7 +35,7 @@
                   v-model="searchFormData.end"
                   type="date"
                   placeholder="结束时间"
-                  style="width: 100%;"
+                  style="width: 100%"
                   :picker-options="pickerOptions"
                   value-format="yyyy-MM-dd"
                 />
@@ -44,7 +44,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item style="float: right;" label-width="0">
+          <el-form-item style="float: right" label-width="0">
             <el-button @click="resetForm('searchForm')">重 置</el-button>
             <el-button
               type="primary"
@@ -93,8 +93,12 @@
             >批量删除</el-button>
             <el-button
               type="primary"
-              @click.native.prevent="handleUpload()"
-            >上传文件</el-button>
+              @click.native.prevent="handleFapiaoUpload()"
+            >上传电子发票</el-button>
+            <el-button
+              type="primary"
+              @click.native.prevent="handleImageUpload()"
+            >上传图片</el-button>
           </el-button-group>
         </template>
 
@@ -115,41 +119,7 @@
             :command="beforeHandleCommand('handleDelete', row)"
           >删除</el-button>
           <el-divider direction="vertical" />
-          <el-upload
-            ref="upload"
-            action=""
-            :http-request="Upload"
-            list-type="picture-card"
-            :data="dataOss"
-            :multiple="true"
-            :limit="imageSizeLimit"
-            :class="{ hide: hideUploadAdd }"
-          >
-            <i slot="default" class="el-icon-plus" />
-            <div slot="file" slot-scope="{ file }">
-              <img
-                class="el-upload-list__item-thumbnail"
-                :src="file.url"
-                alt=""
-              >
-              <span class="el-upload-list__item-actions">
-                <span
-                  class="el-upload-list__item-preview"
-                  @click="handlePictureCardPreview(file)"
-                >
-                  <i class="el-icon-zoom-in" />
-                </span>
 
-                <span
-                  v-if="!disabled"
-                  class="el-upload-list__item-delete"
-                  @click="handleFileRemove(file)"
-                >
-                  <i class="el-icon-delete" />
-                </span>
-              </span>
-            </div>
-          </el-upload>
           <el-button type="text" @click="handleViewDetail(row)">详情</el-button>
         </template>
         <!--自定义空数据模板-->
@@ -175,7 +145,7 @@
         :model="temp"
         label-position="right"
         label-width="80px"
-        style="width: 100%; padding:10px;"
+        style="width: 100%; padding: 10px"
       >
         <el-row>
           <el-col :span="24">
@@ -197,7 +167,7 @@
               <el-select
                 v-model="temp.permissionGroupInfoId"
                 placeholder="请选择权限分组"
-                style="width:100%"
+                style="width: 100%"
               >
                 <el-option
                   v-for="item in permissionGroupInfoOptions"
@@ -223,9 +193,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <template v-if="dialogStatus !== 'detail'">
-          <el-button @click="resetForm('dataForm')">
-            重置
-          </el-button>
+          <el-button @click="resetForm('dataForm')"> 重置 </el-button>
           <el-button
             type="primary"
             :loading="loadingSubmitButton"
@@ -238,36 +206,34 @@
       </div>
     </el-dialog>
 
-    <!-- 导入表单 -->
+    <!-- 上传电子发票 -->
     <el-dialog
       v-if="importFapiaoFormVisible"
-      title="上传发票"
+      title="上传电子发票"
       :center="true"
       width="410px"
       :visible.sync="importFapiaoFormVisible"
     >
-      <el-upload
-        ref="upload"
-        class="upload-demo"
-        drag
-        action=""
-        :show-file-list="false"
-        :headers="uploadHeaders"
-        accept="*"
-        :on-success="handleUploadSuccess"
-        :on-error="handleUploadError"
-        :before-upload="beforeUpload"
-        :http-request="Upload"
-        :data="dataOss"
-        :multiple="false"
-      >
-        <i class="el-icon-upload" />
-        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-        <div slot="tip" class="el-upload__tip">
-          只能上传Excel文件，且不超过500kB
-        </div>
-      </el-upload>
+      <el-form :model="fapiao">
+        <ElectronicFapiaoUpload v-model="uploadUrl" />
+      </el-form>
+      {{ fapiao.url }}
     </el-dialog>
+
+    <!-- 上传电子发票 -->
+    <el-dialog
+      v-if="importImageFormVisible"
+      title="上传图片"
+      :center="true"
+      width="410px"
+      :visible.sync="importImageFormVisible"
+    >
+      <el-form :model="images">
+        <SingleUpload v-model="uploadImageLoadUrl" />
+      </el-form>
+      {{ fapiao.url }}
+    </el-dialog>
+
   </div>
 </template>
 
@@ -275,18 +241,31 @@
 
 <script>
 import formatTableSize from '@/utils/size'
-import { date2YearMonthDay } from '@/utils/util.js'
-import { client } from '@/utils/aliyun.oss.client'
+import ElectronicFapiaoUpload from '@/components/Upload/ElectronicFapiaoUpload'
+import SingleUpload from '@/components/Upload/SingleUpload'
 
-import { saveFapiaoManagement, deleteFapiaoManagement, batchDeleteFapiaoManagement, updateFapiaoManagement, listFapiaoManagement } from '@/api/fapiao-management'
+import {
+  saveFapiaoManagement,
+  deleteFapiaoManagement,
+  batchDeleteFapiaoManagement,
+  updateFapiaoManagement,
+  listFapiaoManagement
+} from '@/api/fapiao-management'
 import CMapReaderFactory from 'vue-pdf/src/CMapReaderFactory.js'
 import { getSmartParsing } from '@/api/smart-parsing'
 
 export default {
+  components: {
+    ElectronicFapiaoUpload,
+    SingleUpload
+  },
   data() {
     return {
-      uploadHeaders: {
-      },
+      fapiao: {},
+      uploadUrl: '',
+      images: {},
+      uploadImageLoadUrl: '',
+      uploadHeaders: {},
       ossConfig: {
         region: 'oss-cn-hangzhou',
         accessKeyId: 'LTAI4FbewSnGUUvEXhG5hJff',
@@ -298,6 +277,7 @@ export default {
       dataOss: {},
       hideUploadAdd: false,
       importFapiaoFormVisible: false,
+      importImageFormVisible: false,
       dialogImageUrl: '',
       dialogVisible: false,
       defaultHeight: '500px',
@@ -350,26 +330,30 @@ export default {
         disabledDate(time) {
           return time.getTime() > Date.now()
         },
-        shortcuts: [{
-          text: '今天',
-          onClick(picker) {
-            picker.$emit('pick', new Date())
+        shortcuts: [
+          {
+            text: '今天',
+            onClick(picker) {
+              picker.$emit('pick', new Date())
+            }
+          },
+          {
+            text: '昨天',
+            onClick(picker) {
+              const date = new Date()
+              date.setTime(date.getTime() - 3600 * 1000 * 24)
+              picker.$emit('pick', date)
+            }
+          },
+          {
+            text: '一周前',
+            onClick(picker) {
+              const date = new Date()
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', date)
+            }
           }
-        }, {
-          text: '昨天',
-          onClick(picker) {
-            const date = new Date()
-            date.setTime(date.getTime() - 3600 * 1000 * 24)
-            picker.$emit('pick', date)
-          }
-        }, {
-          text: '一周前',
-          onClick(picker) {
-            const date = new Date()
-            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
-            picker.$emit('pick', date)
-          }
-        }]
+        ]
       },
       gridOptions: {
         border: 'default',
@@ -440,14 +424,19 @@ export default {
             total: 'total'
           },
           ajax: {
-
             query: ({ page, sort, filters }) => {
               // 查询条件
               const searchData = {}
               const searchFormData = this.searchFormData
               for (var key in searchFormData) {
                 const value = searchFormData[key]
-                if (!(typeof value === 'undefined' || value === null || value === '')) {
+                if (
+                  !(
+                    typeof value === 'undefined' ||
+                    value === null ||
+                    value === ''
+                  )
+                ) {
                   searchData[key] = value
                 }
               }
@@ -480,9 +469,7 @@ export default {
           }
         },
         columns: [
-          { type: 'checkbox',
-            width: 40,
-            align: 'center' },
+          { type: 'checkbox', width: 40, align: 'center' },
           {
             field: 'companyId',
             title: '公司编号',
@@ -811,7 +798,8 @@ export default {
             width: 200,
             align: 'center',
             headerAlign: 'center'
-          }, {
+          },
+          {
             title: '操作',
             width: 140,
             align: 'center',
@@ -855,7 +843,30 @@ export default {
       }
     }
   },
-  computed: {
+  computed: {},
+  watch: {
+    uploadUrl: function(val) {
+      if (val) {
+        this.importFapiaoFormVisible = false
+        this.$message({
+          type: 'success',
+          message: '上传成功'
+        })
+      } else {
+        this.importFapiaoFormVisible = true
+      }
+    },
+    uploadImageLoadUrl: function(val) {
+      if (val) {
+        this.importImageFormVisible = false
+        this.$message({
+          type: 'success',
+          message: '上传成功'
+        })
+      } else {
+        this.importImageFormVisible = true
+      }
+    }
   },
   created() {
     window.addEventListener('resize', this.getHeight)
@@ -863,8 +874,11 @@ export default {
   },
 
   methods: {
-    handleUpload() {
+    handleFapiaoUpload() {
       this.importFapiaoFormVisible = true
+    },
+    handleImageUpload() {
+      this.importImageFormVisible = true
     },
     handleViewDetail(row) {
       this.$router.push({
@@ -876,7 +890,7 @@ export default {
     },
     getHeight() {
       this.defaultHeight = window.innerHeight - 180 + 'px'
-      this.tableHeight = (window.innerHeight - 180 - 40) + 'px'
+      this.tableHeight = window.innerHeight - 180 - 40 + 'px'
     },
     checkColumnMethod({ column }) {
       if (['nickname', 'role'].includes(column.property)) {
@@ -917,44 +931,57 @@ export default {
     handleBatchDelete() {
       const selectRecords = this.$refs.dataGrid.getCheckboxRecords()
       const batchDeleteData = []
-      if (!(typeof selectRecords === 'undefined' || selectRecords === null || selectRecords === '' || selectRecords.length === 0)) {
+      if (
+        !(
+          typeof selectRecords === 'undefined' ||
+          selectRecords === null ||
+          selectRecords === '' ||
+          selectRecords.length === 0
+        )
+      ) {
         this.$confirm('永久删除记录吗, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           dangerouslyUseHTMLString: true,
           type: 'warning'
-        }).then(() => {
-          for (let index = 0, len = selectRecords.length; index < len; index++) {
-            const id = selectRecords[index].['id']
-            const version = selectRecords[index].['version']
-            const temp = {
-              id: id,
-              version: version
-            }
-            batchDeleteData.push(temp)
-          }
-          batchDeleteFapiaoManagement(batchDeleteData)
-            .then(response => {
-              const result = response.data
-              if (result) {
-                this.$message({
-                  type: 'success',
-                  message: '删除成功'
-                })
-              } else {
-                this.$message.error('删除失败')
-              }
-              this.$refs.dataGrid.commitProxy('reload')
-            })
-            .catch(e => {
-              this.loading = false
-            })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
         })
+          .then(() => {
+            for (
+              let index = 0, len = selectRecords.length;
+              index < len;
+              index++
+            ) {
+              const id = selectRecords[index]['id']
+              const version = selectRecords[index]['version']
+              const temp = {
+                id: id,
+                version: version
+              }
+              batchDeleteData.push(temp)
+            }
+            batchDeleteFapiaoManagement(batchDeleteData)
+              .then((response) => {
+                const result = response.data
+                if (result) {
+                  this.$message({
+                    type: 'success',
+                    message: '删除成功'
+                  })
+                } else {
+                  this.$message.error('删除失败')
+                }
+                this.$refs.dataGrid.commitProxy('reload')
+              })
+              .catch((e) => {
+                this.loading = false
+              })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            })
+          })
       } else {
         this.$message({
           showClose: true,
@@ -981,7 +1008,7 @@ export default {
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.temp)
           saveFapiaoManagement(tempData)
-            .then(response => {
+            .then((response) => {
               const result = response.data
               if (result) {
                 this.$message({
@@ -996,7 +1023,7 @@ export default {
                 this.initFormSafeSubmitConfig()
               }
             })
-            .catch(e => {
+            .catch((e) => {
               this.loading = false
               this.initFormSafeSubmitConfig()
             })
@@ -1010,7 +1037,7 @@ export default {
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.temp)
           updateFapiaoManagement(tempData)
-            .then(response => {
+            .then((response) => {
               const result = response.data
               if (result) {
                 this.$message({
@@ -1025,7 +1052,7 @@ export default {
                 this.initFormSafeSubmitConfig()
               }
             })
-            .catch(e => {
+            .catch((e) => {
               this.loading = false
               this.initFormSafeSubmitConfig()
             })
@@ -1038,34 +1065,36 @@ export default {
         cancelButtonText: '取消',
         dangerouslyUseHTMLString: true,
         type: 'warning'
-      }).then(() => {
-        const { id, version } = row
-        const tempData = Object.assign({
-          id: id,
-          version: version
-        })
-        deleteFapiaoManagement(tempData)
-          .then(response => {
-            const result = response.data
-            if (result) {
-              this.$message({
-                type: 'success',
-                message: '删除成功'
-              })
-            } else {
-              this.$message.error('删除失败')
-            }
-            this.$refs.dataGrid.commitProxy('reload')
-          })
-          .catch(e => {
-            this.loading = false
-          })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
       })
+        .then(() => {
+          const { id, version } = row
+          const tempData = Object.assign({
+            id: id,
+            version: version
+          })
+          deleteFapiaoManagement(tempData)
+            .then((response) => {
+              const result = response.data
+              if (result) {
+                this.$message({
+                  type: 'success',
+                  message: '删除成功'
+                })
+              } else {
+                this.$message.error('删除失败')
+              }
+              this.$refs.dataGrid.commitProxy('reload')
+            })
+            .catch((e) => {
+              this.loading = false
+            })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
     viewRow(row) {
       this.temp = Object.assign({}, row)
@@ -1091,68 +1120,6 @@ export default {
           break
         default:
       }
-    },
-    // http-request属性来覆盖默认的上传行为（即action="url"），自定义上传的实现
-    Upload(file) {
-      const that = this
-      async function multipartUpload() {
-        const temporary = file.file.name.lastIndexOf('.')
-        const fileNameLength = file.file.name.length
-        const fileType = file.file.name.substring(
-          temporary,
-          fileNameLength
-        )
-        const dir = 'dichong/file/' + date2YearMonthDay(new Date()) + '/'
-        const fileName = new Date().getTime() + Math.floor(Math.random() * 150) + fileType
-        const aliyunFileKey = dir + fileName
-        client(that.ossConfig)
-          .multipartUpload(aliyunFileKey, file.file, {
-            progress: function(p) {
-              // console.log(p)
-              // that.showProgress = true
-              // that.progress = Math.floor(p * 100)
-            }
-          })
-          .then(result => {
-            console.log('上传成功:' + JSON.stringify(result))
-            const protocol = that.ossConfig.secure ? 'https://' : 'http://'
-            const host = protocol + that.ossConfig.bucket + '.' + that.ossConfig.region + '.aliyuncs.com/'
-            const fileUrl = host + result.name
-            console.log('上传文件路径:' + fileUrl)
-            that.files.push(fileUrl)
-            console.log('上传文件数组:' + JSON.stringify(that.files))
-          })
-          .catch(err => {
-            console.log('err:', err)
-          })
-      }
-      multipartUpload()
-    },
-    handleUploadSuccess: function(response, file, fileList) {
-      const code = response.code
-      if (code === 0) {
-        const result = response.data
-        if (result) {
-          this.$message.success('上传成功')
-          this.$refs.dataGrid.commitProxy('reload')
-        } else {
-          this.$message.error('上传失败')
-        }
-      } else {
-        this.$message.error('请稍后重试')
-      }
-      this.importFapiaoFormVisible = false
-    },
-    handleUploadError: function(err, file, fileList) {
-      this.$message.error(err)
-      this.importFapiaoFormVisible = false
-    },
-    beforeUpload: function(file) {
-      const isLt500K = file.size / 1024 / 100 <= 5
-      if (!isLt500K) {
-        this.$message.error('导入文件超过 500kB')
-      }
-      return isLt500K
     }
   }
 }
