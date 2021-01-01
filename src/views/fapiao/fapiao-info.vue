@@ -233,30 +233,19 @@
 </style>
 
 <script>
-/* import formatTableSize from '@/utils/size' */
-import { getFileDetail } from '@/api/file-mangement'
 import pdf from 'vue-pdf'
-/* import {
-  listBillInfo,
-  saveBillInfo,
-  deleteBillInfo,
-  updateBillInfo
-} from '@/api/bill-info' */
-/* 插槽 */
-/* import Templet from '../templet/templet.vue' */
+import CMapReaderFactory from 'vue-pdf/src/CMapReaderFactory.js'
+import { getFapiaoManagement } from '@/api/fapiao-management'
+
 export default {
   components: {
     pdf
   },
   data() {
     return {
-      BillInfoGroupInfoOptions: [],
-      defaultHeight: '500px',
-      tableHeight: '460px',
       currentBilleInfo: {},
       currentBillUrl: '',
-      currentGroupInfo: {},
-      row: ''
+      
     }
   },
   created() {
@@ -279,21 +268,15 @@ export default {
             const data = response.data
             if (data) {
               this.currentBillInfo = data
-              this.currentBillUrl =
-                'https://' +
-                data.bucket +
-                '.oss-cn-hangzhou.aliyuncs.com/' +
-                data.filename
+              this.currentBillUrl = pdf.createLoadingTask({
+                url: data.url,
+                CMapReaderFactory})
             }
           })
           .catch(e => {
             that.loading = false
           })
       }
-    },
-    getHeight() {
-      this.defaultHeight = window.innerHeight - 180 + 'px'
-      this.tableHeight = window.innerHeight - 180 - 40 + 'px'
     }
   }
 }

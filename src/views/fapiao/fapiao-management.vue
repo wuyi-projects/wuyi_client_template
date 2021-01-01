@@ -106,26 +106,12 @@
 
         <!--数据行操作-->
         <template v-slot:operate="{ row }">
-          <el-button type="text" @click="handleUpdate(row)">修改</el-button>
+          <el-button
+            type="text"
+            :command="beforeHandleCommand('handleDelete', row)"
+          >删除</el-button>
           <el-divider direction="vertical" />
-          <el-dropdown @command="handleCommand">
-            <span class="el-dropdown-link">
-              更多<i class="el-icon-arrow-down" />
-            </span>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item
-                :command="beforeHandleCommand('handleDelete', row)"
-              >
-                删除
-              </el-dropdown-item>
-              <el-dropdown-item
-                :command="beforeHandleCommand('viewRow', row)"
-                divided
-              >
-                详情
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
+          <el-button type="text" @click="handleViewDetail(row)">详情</el-button>
         </template>
         <!--自定义空数据模板-->
         <template v-slot:empty>
@@ -232,8 +218,9 @@
 <script>
 import formatTableSize from '@/utils/size'
 
-import { saveAccountingVoucher, deleteAccountingVoucher, batchDeleteAccountingVoucher, updateAccountingVoucher, listAccountingVoucher } from '@/api/accounting-voucher'
-
+import { saveFapiaoManagement, deleteFapiaoManagement, batchDeleteFapiaoManagement, updateFapiaoManagement, listFapiaoManagement } from '@/api/fapiao-management'
+import CMapReaderFactory from 'vue-pdf/src/CMapReaderFactory.js'
+import { getSmartParsing } from '@/api/smart-parsing'
 export default {
   data() {
     return {
@@ -244,7 +231,7 @@ export default {
       dialogFormVisible: false,
       loadingSubmitButton: false,
       submitButtonText: '提交',
-      allAccountingVoucherGroup: [],
+      allFapiaoManagementGroup: [],
       textMap: {
         update: '编辑',
         create: '创建',
@@ -412,7 +399,7 @@ export default {
                 limit: page.pageSize
               })
               const result = Object.assign(pageData, searchData, sortParams)
-              return listAccountingVoucher(result)
+              return listFapiaoManagement(result)
             }
           }
         },
@@ -748,6 +735,13 @@ export default {
             width: 200,
             align: 'center',
             headerAlign: 'center'
+          }, {
+            title: '操作',
+            width: 140,
+            align: 'center',
+            headerAlign: 'center',
+            fixed: 'right',
+            slots: { default: 'operate' }
           }
         ],
         importConfig: {
@@ -793,6 +787,14 @@ export default {
   },
 
   methods: {
+    handleViewDetail(row) {
+      this.$router.push({
+        name: 'fapiao-info',
+        query: {
+          id: row.id
+        }
+      })
+    },
     getHeight() {
       this.defaultHeight = window.innerHeight - 180 + 'px'
       this.tableHeight = (window.innerHeight - 180 - 40) + 'px'
@@ -852,7 +854,7 @@ export default {
             }
             batchDeleteData.push(temp)
           }
-          batchDeleteAccountingVoucher(batchDeleteData)
+          batchDeleteFapiaoManagement(batchDeleteData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -899,7 +901,7 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.temp)
-          saveAccountingVoucher(tempData)
+          saveFapiaoManagement(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -928,7 +930,7 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.temp)
-          updateAccountingVoucher(tempData)
+          updateFapiaoManagement(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -963,7 +965,7 @@ export default {
           id: id,
           version: version
         })
-        deleteAccountingVoucher(tempData)
+        deleteFapiaoManagement(tempData)
           .then(response => {
             const result = response.data
             if (result) {

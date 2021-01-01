@@ -5,208 +5,137 @@
       <el-container>
         <el-main>
           <el-row>
-            <el-col>
-              <pdf ref="pdf" :src="currentBillUrl" />
+            <el-col
+              align="center"
+              style="background-color:#f0f0f0;padding:10px;"
+            >
+              <pdf ref="pdf" style="width:880px;" :src="currentBillUrl" />
+
+              <div class="pdf-tab">
+                <!-- <div class="btn-def"
+           @click.stop="clock">顺时针</div>
+      <div class="btn-def"
+           @click.stop="counterClock">逆时针</div> -->
+              </div>
+              <el-row justify="center" align="center" style="margin-top:9px">
+                <el-button
+                  type="primary"
+                  :class="{ select: idx == 0 }"
+                  @touchstart="idx = 0"
+                  @touchend="idx = -1"
+                  @click="scaleD"
+                >放大</el-button>
+                <el-button
+                  :class="{ select: idx == 0 }"
+                  @touchstart="idx = 0"
+                  @touchend="idx = -1"
+                  @click="reset"
+                >还原</el-button>
+                <el-button
+                  type="primary"
+                  :class="{ select: idx == 1 }"
+                  @touchstart="idx = 1"
+                  @touchend="idx = -1"
+                  @click="scaleX"
+                >
+                  缩小</el-button>
+              </el-row>
             </el-col>
           </el-row>
           <el-row>
-            <div style="height:40px;color:#72767b;margin-bottom:20px">
+            <div style="height:40px;color:#72767b;margin-bottom:10px">
               <el-row :span="4">
                 <span style="font-weight:bold;font-size:20px">文件详情</span>
               </el-row>
             </div>
             <div style="padding:0 40px;">
-              <el-row style="height:30px;">
-                <el-col :span="8">
-                  <span style="font-weight:bold;">凭证名称</span>{{ currentBilleInfo.voucherName }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">发票代码</span>{{ currentBilleInfo.voucherCode }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">发票号码</span>{{ currentBilleInfo.voucherNumber }}
-                </el-col>
-              </el-row>
-              <el-row style="height:30px;">
-                <el-col :span="8">
-                  <span style="font-weight:bold;">开票日期</span>{{ currentBilleInfo.voucherDate }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">密码区</span>{{ currentBilleInfo.hash }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">校验码</span>{{ currentBilleInfo.checkCode }}
-                </el-col>
-              </el-row>
-              <el-row style="height:30px;">
-                <el-col :span="8">
-                  <span style="font-weight:bold;">机器编号</span>{{ currentBilleInfo.machineNumber }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">购买方名称</span>{{ currentBilleInfo.purchaserName }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">购买方纳税人识别号</span>{{ currentBilleInfo.purchaserRegistrationNumber }}
-                </el-col>
-              </el-row>
-              <el-row style="height:30px;">
-                <el-col :span="8">
-                  <span style="font-weight:bold;">购买方地址、电话</span>{{ currentBilleInfo.purchaserAddressPhone }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">购买方地址</span>{{ currentBilleInfo.purchaserAddress }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">购买方电话</span>{{ currentBilleInfo.purchaserPhone }}
-                </el-col>
-              </el-row>
-              <el-row style="height:30px;">
-                <el-col :span="8">
-                  <span style="font-weight:bold;">电子支付标识</span>{{ currentBilleInfo.paymentIdentification }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">凭证明细</span>{{ currentBilleInfo.voucherContent }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">税率</span>{{ currentBilleInfo.taxRate }}
-                </el-col>
-              </el-row>
-              <el-row style="height:30px;">
-                <el-col :span="8">
-                  <span style="font-weight:bold;">税额</span>{{ currentBilleInfo.taxAmount }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">价税合计</span>{{ currentBilleInfo.totalAmount }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">销售方名称</span>{{ currentBilleInfo.sellerName }}
-                </el-col>
-              </el-row>
-              <el-row style="height:30px;">
-                <el-col :span="8">
-                  <span style="font-weight:bold;">销售方纳税人识别号</span>{{ currentBilleInfo.sellerRegistrationNumber }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">销售方地址、电话</span>{{ currentBilleInfo.sellerAddressPhone }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">销售方地址</span>{{ currentBilleInfo.sellerAddress }}
-                </el-col>
-              </el-row>
-              <el-row style="height:30px;">
-                <el-col :span="8">
-                  <span style="font-weight:bold;">销售方电话</span>{{ currentBilleInfo.sellerPhone }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">销售方开户行及账号</span>{{ currentBilleInfo.sellerDepositBank }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">发票备注</span>{{ currentBilleInfo.voucherNote }}
-                </el-col>
-              </el-row>
-              <el-row style="height:30px;">
-                <el-col :span="8">
-                  <span style="font-weight:bold;">发票收款人</span>{{ currentBilleInfo.voucherPayeeName }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">发票复核人</span>{{ currentBilleInfo.voucherAuditorName }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">发票开票人</span>{{ currentBilleInfo.voucherOperatorName }}
-                </el-col>
-              </el-row>
-              <el-row style="height:30px;">
-                <el-col :span="8">
-                  <span style="font-weight:bold;">发票格式</span>{{ currentBilleInfo.voucherBillType }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">凭证URL</span>{{ currentBilleInfo.voucherUrl }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">是否报销</span>{{ currentBilleInfo.reimbursementFlag }}
-                </el-col>
-              </el-row>
-              <el-row style="height:30px;">
-                <el-col :span="8">
-                  <span style="font-weight:bold;">报销日期</span>{{ currentBilleInfo.reimbursementTime }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">报销批次号</span>{{ currentBilleInfo.reimbursementBatchNumber }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">是否记账</span>{{ currentBilleInfo.accountingFlag }}
-                </el-col>
-              </el-row>
-              <el-row style="height:30px;">
-                <el-col :span="8">
-                  <span style="font-weight:bold;">记账日期</span>{{ currentBilleInfo.accountingTime }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">记账编号</span>{{ currentBilleInfo.accountingInfoId }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">凭证状态</span>{{ currentBilleInfo.voucherStatus }}
-                </el-col>
-              </el-row>
-              <el-row style="height:30px;">
-                <el-col :span="8">
-                  <span style="font-weight:bold;">操作人编号</span>{{ currentBilleInfo.operatorId }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">录入人</span>{{ currentBilleInfo.operatorName }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">录入时间</span>{{ currentBilleInfo.operateTime }}
-                </el-col>
-              </el-row>
-              <el-row style="height:30px;">
-                <el-col :span="8">
-                  <span style="font-weight:bold;">审核人编号</span>{{ currentBilleInfo.auditorId }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">审核人名称</span>{{ currentBilleInfo.auditorName }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">审核时间</span>{{ currentBilleInfo.auditTime }}
-                </el-col>
-              </el-row>
-              <el-row style="height:30px;">
-                <el-col :span="8">
-                  <span style="font-weight:bold;">审核意见</span>{{ currentBilleInfo.opinion }}
-                </el-col>
-
-                <el-col :span="8">
-                  <span style="font-weight:bold;">备注</span>{{ currentBilleInfo.note }}
-                </el-col>
-              </el-row>
+              <!-- <el-col :span="8">
+                <span style="font-weight:bold;">凭证名称 ：</span>{{ currentBillInfo.voucherName }}
+              </el-col> -->
+              <el-col :span="8">
+                <span style="font-weight:bold;">机器编号 ：</span>{{ currentBillInfo.machineNumber }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">发票代码 ：</span>{{ currentBillInfo.voucherCode }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">发票号码 ：</span>{{ currentBillInfo.voucherNumber }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">开票日期 ：</span>{{ currentBillInfo.voucherDate }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">密码区 ：</span>{{ currentBillInfo.hash }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">校验码 ：</span>{{ currentBillInfo.checkCode }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">购买方名称 ：</span>{{ currentBillInfo.purchaserName }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">购买方纳税人识别号 ：</span>{{ currentBillInfo.purchaserRegistrationNumber }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">购买方地址、电话 ：</span>{{ currentBillInfo.purchaserAddressPhone }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">购买方地址 ：</span>{{ currentBillInfo.purchaserAddress }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">购买方电话 ：</span>{{ currentBillInfo.purchaserPhone }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">购买方开户行及账号 ：</span>{{ currentBillInfo.purchaserDepositBank }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">电子支付标识 ：</span>{{ currentBillInfo.paymentIdentification }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">凭证明细 ：</span>{{ currentBillInfo.voucherContent }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">税率 ：</span>{{ currentBillInfo.taxRate }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">税额 ：</span>{{ currentBillInfo.taxAmount }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">价税合计 ：</span>{{ currentBillInfo.totalAmount }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">销售方名称 ：</span>{{ currentBillInfo.sellerName }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">销售方纳税人识别号 ：</span>{{ currentBillInfo.sellerRegistrationNumber }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">销售方地址、电话 ：</span>{{ currentBillInfo.sellerAddressPhone }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">销售方地址 ：</span>{{ currentBillInfo.sellerAddress }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">销售方电话 ：</span>{{ currentBillInfo.sellerPhone }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">销售方开户行及账号 ：</span>{{ currentBillInfo.sellerDepositBank }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">发票备注 ：</span>{{ currentBillInfo.voucherNote }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">发票收款人 ：</span>{{ currentBillInfo.voucherPayeeName }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">发票复核人 ：</span>{{ currentBillInfo.voucherAuditorName }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">发票开票人 ：</span>{{ currentBillInfo.voucherOperatorName }}
+              </el-col>
+              <el-col :span="8">
+                <span style="font-weight:bold;">备注 ：</span>{{ currentBillInfo.note }}
+              </el-col>
             </div>
           </el-row>
         </el-main>
@@ -234,6 +163,8 @@
 
 <script>
 import pdf from 'vue-pdf'
+// 修复中文显示异常
+import CMapReaderFactory from 'vue-pdf/src/CMapReaderFactory.js'
 import { getSmartParsing } from '@/api/smart-parsing'
 
 export default {
@@ -242,8 +173,11 @@ export default {
   },
   data() {
     return {
-      currentBilleInfo: {},
-      currentBillUrl: ''
+      currentBillInfo: {},
+      currentBillUrl: '',
+      scale: 100, // 放大系数
+      idx: -1,
+      origWidth4Pdf: 0
     }
   },
   created() {
@@ -265,18 +199,33 @@ export default {
           .then(response => {
             const data = response.data
             if (data) {
-              this.currentBilleInfo = data
-              this.currentBillUrl =
-                'https://' +
-                data.bucket +
-                '.oss-cn-hangzhou.aliyuncs.com/' +
-                data.filename
+              this.currentBillInfo = data
+              this.currentBillUrl = pdf.createLoadingTask({
+                url: data.url,
+                CMapReaderFactory
+              })
+              this.origWidth4Pdf = this.$refs.pdf.$el.style.width
             }
           })
           .catch(e => {
             that.loading = false
           })
       }
+    },
+    // 放大
+    scaleD() {
+      const orig = this.$refs.pdf.$el.style.width
+      const width = orig.substring(0, orig.length - 2)
+      this.$refs.pdf.$el.style.width = width * 1.05 + 'px'
+    },
+    reset() {
+      this.$refs.pdf.$el.style.width = this.origWidth4Pdf
+    },
+    // 缩小
+    scaleX() {
+      const orig = this.$refs.pdf.$el.style.width
+      const width = orig.substring(0, orig.length - 2)
+      this.$refs.pdf.$el.style.width = width * 0.95 + 'px'
     }
   }
 }

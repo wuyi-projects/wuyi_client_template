@@ -23,7 +23,8 @@ const fapiaoRouter = {
             meta: {
                 title: '发票详情',
                 roles: ['PermissionAdministrator']
-            }
+            },
+            hidden: true,
         },
         {
             path: 'smart-parsing',
@@ -41,9 +42,10 @@ const fapiaoRouter = {
                 import ('@/views/fapiao/smart-info'),
             name: 'smart-info',
             meta: {
-                title: '智能详情',
+                title: '解析详情',
                 roles: ['PermissionAdministrator', 'PermissionAssignmentAdministrator']
-            }
+            },
+            hidden: true,
         }
     ]
 }
