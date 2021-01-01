@@ -30,6 +30,22 @@
           </el-form-item>
         </el-col>
         <el-col v-if="folding" :span="8">
+          <el-form-item label="责任科室" prop="receiverDepartmentId">
+            <el-select
+              v-model="searchFormData.receiverDepartmentId"
+              placeholder="请选择责任科室"
+              style="width:100%"
+            >
+              <el-option
+                v-for="item in departmentOptionData"
+                :key="item.id"
+                :label="item.departmentName"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col v-if="folding" :span="8">
           <el-form-item label="任务状态" prop="status">
             <el-select
               v-model="searchFormData.status"
@@ -74,9 +90,6 @@
             </el-col>
           </el-form-item>
         </el-col>
-        <el-col v-if="folding" :span="8">
-          <el-form-item />
-        </el-col>
         <el-col :span="8">
           <el-form-item style="float: right;" label-width="0">
             <el-button @click="resetForm('searchForm')">重 置</el-button>
@@ -105,25 +118,25 @@
         <template v-slot:buttons>
           <el-button-group>
             <el-button @click.native.prevent="handleCreate()">新增</el-button>
-            <!--
             <el-button
               type="primary"
-              @click.native.prevent="handleBatchDelete()"
-            >批量删除</el-button>
-            -->
+              @click.native.prevent="handleImport()"
+            >导入<i
+              class="el-icon-upload el-icon--right"
+            /></el-button>
           </el-button-group>
         </template>
 
         <!--任务类型-->
         <template v-slot:taskType_default="{ row }">
           <template v-if="row.taskType === 1">
-            <el-tag type="success" effect="dark">重点工作</el-tag>
+            <el-tag type="success" effect="dark">临时任务</el-tag>
           </template>
           <template v-else-if="row.taskType === 2">
-            <el-tag type="danger" effect="dark">会议事项</el-tag>
+            <el-tag type="danger" effect="dark">月度任务</el-tag>
           </template>
           <template v-else-if="row.taskType === 3">
-            <el-tag type="warning" effect="dark">领导交办</el-tag>
+            <el-tag type="warning" effect="dark">年度任务</el-tag>
           </template>
           <template v-else />
         </template>
@@ -289,6 +302,43 @@
         </template>
       </div>
     </el-dialog>
+
+    <!-- 导入表单 -->
+    <el-dialog
+      v-if="importFormVisible"
+      title="导入任务"
+      :center="true"
+      width="410px"
+      :visible.sync="importFormVisible"
+    >
+      <el-row style="margin-bottom:10px;">
+        <el-col :span="24">
+          <div>
+            下载导入模板：<el-link
+              href="https://dichong-wuhan.oss-cn-hangzhou.aliyuncs.com/dichong/mobileoa365/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%85%A5%E6%A8%A1%E6%9D%BF.xlsx"
+              type="primary"
+            >点击下载</el-link>
+          </div>
+        </el-col>
+      </el-row>
+      <el-upload
+        class="upload-demo"
+        drag
+        action="https://open.zhukaoplus.com/wuyi_oa/v1/task/importExcel.json"
+        :show-file-list="false"
+        :headers="uploadHeaders"
+        accept=".xls,.xlsx"
+        :on-success="handleUploadSuccess"
+        :on-error="handleUploadError"
+        :before-upload="beforeUpload"
+      >
+        <i class="el-icon-upload" />
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div slot="tip" class="el-upload__tip">
+          只能上传Excel文件，且不超过500kB
+        </div>
+      </el-upload>
+    </el-dialog>
   </div>
 </template>
 
@@ -308,6 +358,7 @@
 
 <script>
 import formatTableSize from '@/utils/size'
+import { getOpenID, getToken } from '@/utils/auth'
 
 import {
   listTask,
@@ -343,6 +394,7 @@ export default {
       optionsData: [],
       folding: false,
       dialogFormVisible: false,
+      importFormVisible: false,
       loadingSubmitButton: false,
       submitButtonText: '提交',
       allTaskGroup: [],
@@ -357,7 +409,8 @@ export default {
         end: '',
         taskType: null,
         taskName: '',
-        status: null
+        status: null,
+        receiverDepartmentId: null
       },
       rules: {
         taskType: [
@@ -398,18 +451,18 @@ export default {
         { code: null,
           name: '全部' },
         { code: 1,
-          name: '重点工作' },
+          name: '临时任务' },
         { code: 2,
-          name: '会议事项' },
+          name: '月度任务' },
         { code: 3,
-          name: '领导交办' }],
+          name: '年度任务' }],
       taskTypeRadioOptionData: [
         { code: 1,
-          name: '重点工作' },
+          name: '临时任务' },
         { code: 2,
-          name: '会议事项' },
+          name: '月度任务' },
         { code: 3,
-          name: '领导交办' }],
+          name: '年度任务' }],
       temp: {
         id: null,
         taskType: null,
@@ -433,9 +486,6 @@ export default {
         version: 0
       },
       pickerOptions: {
-        disabledDate(time) {
-          return time.getTime() > Date.now()
-        },
         shortcuts: [{
           text: '今天',
           onClick(picker) {
@@ -483,7 +533,7 @@ export default {
           remote: true
         },
         pagerConfig: {
-          autoHidden: true,
+          autoHidden: false,
           pageSize: 10,
           pageSizes: [10, 20, 50, 80, 100],
           layouts: [
@@ -571,7 +621,7 @@ export default {
           {
             field: 'taskType',
             title: '任务类型',
-            width: 140,
+            width: 100,
             align: 'center',
             headerAlign: 'center',
             slots: { default: 'taskType_default' }
@@ -606,6 +656,13 @@ export default {
             headerAlign: 'center'
           },
           {
+            field: 'departmentName',
+            title: '责任科室',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
             title: '任务状态',
             minWidth: 100,
             align: 'center',
@@ -622,8 +679,8 @@ export default {
           },
           {
             field: 'endTime',
-            title: '截止时间',
-            minWidth: 160,
+            title: '完成期限',
+            minWidth: 100,
             align: 'center',
             headerAlign: 'center',
             formatter: 'formatShortDate'
@@ -677,6 +734,10 @@ export default {
           mode: 'row',
           showStatus: true
         }
+      },
+      uploadHeaders: {
+        'Open-ID': getOpenID(),
+        'Access-Token': getToken()
       }
     }
   },
@@ -726,6 +787,9 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
       */
+    },
+    handleImport() {
+      this.importFormVisible = true
     },
     handleBatchDelete() {
       const selectRecords = this.$refs.dataGrid.getCheckboxRecords()
@@ -910,7 +974,13 @@ export default {
       listAllDepartment()
         .then(response => {
           const data = response.data
-          this.departmentOptionData = data
+          const temp = []
+          temp.push({
+            id: null,
+            departmentName: '全部'
+          })
+          temp.push(...data)
+          this.departmentOptionData = temp
         })
         .catch(e => {
           this.loading = false
@@ -935,6 +1005,32 @@ export default {
     },
     handleChangePerson(val) {
 
+    },
+    beforeUpload: function(file) {
+      const isLt500K = file.size / 1024 / 100 <= 5
+      if (!isLt500K) {
+        this.$message.error('导入文件超过 500kB')
+      }
+      return isLt500K
+    },
+    handleUploadSuccess: function(response, file, fileList) {
+      const code = response.code
+      if (code === 0) {
+        const result = response.data
+        if (result) {
+          this.$message.success('导入成功')
+          this.$refs.dataGrid.commitProxy('reload')
+        } else {
+          this.$message.error('导入失败')
+        }
+      } else {
+        this.$message.error('请检查导入模板和数据是否正确')
+      }
+      this.importFormVisible = false
+    },
+    handleUploadError: function(err, file, fileList) {
+      this.$message.error(err)
+      this.importFormVisible = false
     },
     formatStatus({ cellValue, row, column }) {
       let result = ''
