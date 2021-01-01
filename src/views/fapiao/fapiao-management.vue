@@ -91,6 +91,10 @@
               type="primary"
               @click.native.prevent="handleBatchDelete()"
             >批量删除</el-button>
+            <el-button
+              type="primary"
+              @click.native.prevent="handleUpload()"
+            >上传文件</el-button>
           </el-button-group>
         </template>
 
@@ -111,6 +115,41 @@
             :command="beforeHandleCommand('handleDelete', row)"
           >删除</el-button>
           <el-divider direction="vertical" />
+          <el-upload
+            ref="upload"
+            action=""
+            :http-request="Upload"
+            list-type="picture-card"
+            :data="dataOss"
+            :multiple="true"
+            :limit="imageSizeLimit"
+            :class="{ hide: hideUploadAdd }"
+          >
+            <i slot="default" class="el-icon-plus" />
+            <div slot="file" slot-scope="{ file }">
+              <img
+                class="el-upload-list__item-thumbnail"
+                :src="file.url"
+                alt=""
+              >
+              <span class="el-upload-list__item-actions">
+                <span
+                  class="el-upload-list__item-preview"
+                  @click="handlePictureCardPreview(file)"
+                >
+                  <i class="el-icon-zoom-in" />
+                </span>
+
+                <span
+                  v-if="!disabled"
+                  class="el-upload-list__item-delete"
+                  @click="handleFileRemove(file)"
+                >
+                  <i class="el-icon-delete" />
+                </span>
+              </span>
+            </div>
+          </el-upload>
           <el-button type="text" @click="handleViewDetail(row)">详情</el-button>
         </template>
         <!--自定义空数据模板-->
@@ -198,32 +237,69 @@
         </template>
       </div>
     </el-dialog>
+
+    <!-- 导入表单 -->
+    <el-dialog
+      v-if="importFapiaoFormVisible"
+      title="上传发票"
+      :center="true"
+      width="410px"
+      :visible.sync="importFapiaoFormVisible"
+    >
+      <el-upload
+        ref="upload"
+        class="upload-demo"
+        drag
+        action=""
+        :show-file-list="false"
+        :headers="uploadHeaders"
+        accept="*"
+        :on-success="handleUploadSuccess"
+        :on-error="handleUploadError"
+        :before-upload="beforeUpload"
+        :http-request="Upload"
+        :data="dataOss"
+        :multiple="false"
+      >
+        <i class="el-icon-upload" />
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div slot="tip" class="el-upload__tip">
+          只能上传Excel文件，且不超过500kB
+        </div>
+      </el-upload>
+    </el-dialog>
   </div>
 </template>
 
-<style>
-.el-dropdown-link {
-  cursor: pointer;
-  color: #409eff;
-}
-.el-icon-arrow-down {
-  font-size: 12px;
-}
-.item {
-  margin-top: 10px;
-  margin-right: 5px;
-}
-</style>
+<style></style>
 
 <script>
 import formatTableSize from '@/utils/size'
+import { date2YearMonthDay } from '@/utils/util.js'
+import { client } from '@/utils/aliyun.oss.client'
 
 import { saveFapiaoManagement, deleteFapiaoManagement, batchDeleteFapiaoManagement, updateFapiaoManagement, listFapiaoManagement } from '@/api/fapiao-management'
 import CMapReaderFactory from 'vue-pdf/src/CMapReaderFactory.js'
 import { getSmartParsing } from '@/api/smart-parsing'
+
 export default {
   data() {
     return {
+      uploadHeaders: {
+      },
+      ossConfig: {
+        region: 'oss-cn-hangzhou',
+        accessKeyId: 'LTAI4FbewSnGUUvEXhG5hJff',
+        accessKeySecret: 'CwB9sLy6cuq51ZGHQpTSM1hAX9tmYR',
+        bucket: 'dichong-wuhan',
+        secure: true
+      },
+      imageSizeLimit: 20,
+      dataOss: {},
+      hideUploadAdd: false,
+      importFapiaoFormVisible: false,
+      dialogImageUrl: '',
+      dialogVisible: false,
       defaultHeight: '500px',
       tableHeight: '460px',
       permissionGroupInfoOptions: [],
@@ -787,6 +863,9 @@ export default {
   },
 
   methods: {
+    handleUpload() {
+      this.importFapiaoFormVisible = true
+    },
     handleViewDetail(row) {
       this.$router.push({
         name: 'fapiao-info',
@@ -1012,6 +1091,68 @@ export default {
           break
         default:
       }
+    },
+    // http-request属性来覆盖默认的上传行为（即action="url"），自定义上传的实现
+    Upload(file) {
+      const that = this
+      async function multipartUpload() {
+        const temporary = file.file.name.lastIndexOf('.')
+        const fileNameLength = file.file.name.length
+        const fileType = file.file.name.substring(
+          temporary,
+          fileNameLength
+        )
+        const dir = 'dichong/file/' + date2YearMonthDay(new Date()) + '/'
+        const fileName = new Date().getTime() + Math.floor(Math.random() * 150) + fileType
+        const aliyunFileKey = dir + fileName
+        client(that.ossConfig)
+          .multipartUpload(aliyunFileKey, file.file, {
+            progress: function(p) {
+              // console.log(p)
+              // that.showProgress = true
+              // that.progress = Math.floor(p * 100)
+            }
+          })
+          .then(result => {
+            console.log('上传成功:' + JSON.stringify(result))
+            const protocol = that.ossConfig.secure ? 'https://' : 'http://'
+            const host = protocol + that.ossConfig.bucket + '.' + that.ossConfig.region + '.aliyuncs.com/'
+            const fileUrl = host + result.name
+            console.log('上传文件路径:' + fileUrl)
+            that.files.push(fileUrl)
+            console.log('上传文件数组:' + JSON.stringify(that.files))
+          })
+          .catch(err => {
+            console.log('err:', err)
+          })
+      }
+      multipartUpload()
+    },
+    handleUploadSuccess: function(response, file, fileList) {
+      const code = response.code
+      if (code === 0) {
+        const result = response.data
+        if (result) {
+          this.$message.success('上传成功')
+          this.$refs.dataGrid.commitProxy('reload')
+        } else {
+          this.$message.error('上传失败')
+        }
+      } else {
+        this.$message.error('请稍后重试')
+      }
+      this.importFapiaoFormVisible = false
+    },
+    handleUploadError: function(err, file, fileList) {
+      this.$message.error(err)
+      this.importFapiaoFormVisible = false
+    },
+    beforeUpload: function(file) {
+      const isLt500K = file.size / 1024 / 100 <= 5
+      if (!isLt500K) {
+        this.$message.error('导入文件超过 500kB')
+      }
+      return isLt500K
     }
   }
 }
