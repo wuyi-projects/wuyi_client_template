@@ -250,8 +250,6 @@ import {
   updateFapiaoManagement,
   listFapiaoManagement
 } from '@/api/fapiao-management'
-import CMapReaderFactory from 'vue-pdf/src/CMapReaderFactory.js'
-import { getSmartParsing } from '@/api/smart-parsing'
 
 export default {
   components: {
