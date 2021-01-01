@@ -10,12 +10,12 @@
             </el-col>
           </el-row>
           <el-row>
-            <div style="height:40px;color:#72767b;margin-bottom:20px">
+            <div style="color:#72767b;margin:10px 0">
               <el-row :span="4">
-                <span style="font-weight:bold;font-size:20px">文件详情</span>
+                <span style="font-weight:bold;font-size:16px">文件详情</span>
               </el-row>
             </div>
-            <div style="padding:0 40px;">
+            <div style="padding:0 40px;font-size:14px;">
               <el-row style="height:30px;">
                 <el-col :span="8">
                   <span style="font-weight:bold;">凭证名称</span>{{ currentBilleInfo.voucherName }}

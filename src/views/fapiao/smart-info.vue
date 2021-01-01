@@ -18,7 +18,7 @@
            @click.stop="counterClock">逆时针</div> -->
               </div>
               <el-row justify="center" align="center" style="margin-top:9px">
-                <el-button
+                <!-- <el-button
                   type="primary"
                   :class="{ select: idx == 0 }"
                   @touchstart="idx = 0"
@@ -38,17 +38,32 @@
                   @touchend="idx = -1"
                   @click="scaleX"
                 >
-                  缩小</el-button>
+                  缩小</el-button> -->
+
+                <el-button-group>
+                  <el-button round :class="{ select: idx == 0 }"
+                  @touchstart="idx = 0"
+                  @touchend="idx = -1"
+                  @click="scaleD">放大</el-button>
+                  <el-button round :class="{ select: idx == 0 }"
+                  @touchstart="idx = 0"
+                  @touchend="idx = -1"
+                  @click="reset">还原</el-button>
+                  <el-button round :class="{ select: idx == 1 }"
+                  @touchstart="idx = 1"
+                  @touchend="idx = -1"
+                  @click="scaleX">缩小</el-button>
+                </el-button-group>
               </el-row>
             </el-col>
           </el-row>
           <el-row>
-            <div style="height:40px;color:#72767b;margin-bottom:10px">
+            <div style="color:#72767b;margin:10px 0">
               <el-row :span="4">
-                <span style="font-weight:bold;font-size:20px">文件详情</span>
+                <span style="font-weight:bold;font-size:16px;">文件详情</span>
               </el-row>
             </div>
-            <div style="padding:0 40px;">
+            <div style="padding:0 40px;font-size:14px;">
               <!-- <el-col :span="8">
                 <span style="font-weight:bold;">凭证名称 ：</span>{{ currentBillInfo.voucherName }}
               </el-col> -->
