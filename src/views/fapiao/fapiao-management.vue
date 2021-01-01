@@ -262,17 +262,6 @@ export default {
       uploadUrl: '',
       images: {},
       uploadImageLoadUrl: '',
-      uploadHeaders: {},
-      ossConfig: {
-        region: 'oss-cn-hangzhou',
-        accessKeyId: 'LTAI4FbewSnGUUvEXhG5hJff',
-        accessKeySecret: 'CwB9sLy6cuq51ZGHQpTSM1hAX9tmYR',
-        bucket: 'dichong-wuhan',
-        secure: true
-      },
-      imageSizeLimit: 20,
-      dataOss: {},
-      hideUploadAdd: false,
       importFapiaoFormVisible: false,
       importImageFormVisible: false,
       dialogImageUrl: '',
