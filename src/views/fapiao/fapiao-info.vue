@@ -235,7 +235,7 @@
 <script>
 import pdf from 'vue-pdf'
 import CMapReaderFactory from 'vue-pdf/src/CMapReaderFactory.js'
-import { getFapiaoManagement } from '@/api/fapiao-management'
+import { getFileDetail } from '@/api/fapiao-management'
 
 export default {
   components: {
@@ -244,8 +244,7 @@ export default {
   data() {
     return {
       currentBilleInfo: {},
-      currentBillUrl: '',
-      
+      currentBillUrl: ''
     }
   },
   created() {
@@ -270,7 +269,7 @@ export default {
               this.currentBillInfo = data
               this.currentBillUrl = pdf.createLoadingTask({
                 url: data.url,
-                CMapReaderFactory})
+                CMapReaderFactory })
             }
           })
           .catch(e => {
