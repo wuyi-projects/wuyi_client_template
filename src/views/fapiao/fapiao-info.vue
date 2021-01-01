@@ -10,9 +10,9 @@
             </el-col>
           </el-row>
           <el-row>
-            <div style="height:40px;color:#72767b">
+            <div style="height:40px;color:#72767b;margin-bottom:20px">
               <el-row :span="4">
-                <span style="font-weight:bold">文件详情</span>
+                <span style="font-weight:bold;font-size:20px">文件详情</span>
               </el-row>
             </div>
             <div style="padding:0 40px;">
@@ -233,7 +233,7 @@
 </style>
 
 <script>
-import formatTableSize from '@/utils/size'
+/* import formatTableSize from '@/utils/size' */
 import { getFileDetail } from '@/api/file-mangement'
 import pdf from 'vue-pdf'
 /* import {
@@ -242,7 +242,8 @@ import pdf from 'vue-pdf'
   deleteBillInfo,
   updateBillInfo
 } from '@/api/bill-info' */
-import Templet from '../templet/templet.vue'
+/* 插槽 */
+/* import Templet from '../templet/templet.vue' */
 export default {
   components: {
     pdf
@@ -276,6 +277,8 @@ export default {
         })
           .then(response => {
             const data = response.data
+            const that=this
+            var thatdata=that.data
             if (!data) {
               return
             }
@@ -286,9 +289,9 @@ export default {
             this.currentBillInfo = {}
             this.currentBillUrl =
               'https://' +
-              data.bucket +
+              thatdata.bucket +
               '.oss-cn-hangzhou.aliyuncs.com/' +
-              data.filename
+              thatdata.filename
           })
       }
     },

@@ -15,6 +15,7 @@ import newsRouter from './modules/news'
 import configRouter from './modules/config'
 import fileRouter from './modules/file'
 import fapiaoRouter from './modules/fapiao'
+import calendarRouter from './modules/calendar'
 
 /**
  * constantRoutes
@@ -67,6 +68,7 @@ export const asyncRoutes = [
     fileRouter,
     fapiaoRouter,
     permissionRouter,
+    calendarRouter,
     { path: '*', redirect: '/404', hidden: true }
 ]
 
