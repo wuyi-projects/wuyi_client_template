@@ -5,7 +5,7 @@
         <span>日历</span>
       </div>
       <!-- 日历 -->
-      <FullCalendar :options="calendarOptions" @click="" />
+      <FullCalendar :options="calendarOptions" />
     </el-card>
   </div>
 </template>
