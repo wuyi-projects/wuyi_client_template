@@ -119,7 +119,6 @@
             :command="beforeHandleCommand('handleDelete', row)"
           >删除</el-button>
           <el-divider direction="vertical" />
-
           <el-button type="text" @click="handleViewDetail(row)">详情</el-button>
         </template>
         <!--自定义空数据模板-->
