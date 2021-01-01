@@ -32,6 +32,16 @@ const fapiaoRouter = {
             name: 'smart-parsing',
             meta: {
                 title: '智能解析',
+                roles: ['PermissionAdministrator']
+            }
+        },
+        {
+            path: 'smart-info',
+            component: () =>
+                import ('@/views/fapiao/smart-info'),
+            name: 'smart-info',
+            meta: {
+                title: '智能详情',
                 roles: ['PermissionAdministrator', 'PermissionAssignmentAdministrator']
             }
         }

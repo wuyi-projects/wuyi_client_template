@@ -233,30 +233,17 @@
 </style>
 
 <script>
-/* import formatTableSize from '@/utils/size' */
-import { getFileDetail } from '@/api/file-mangement'
 import pdf from 'vue-pdf'
-/* import {
-  listBillInfo,
-  saveBillInfo,
-  deleteBillInfo,
-  updateBillInfo
-} from '@/api/bill-info' */
-/* 插槽 */
-/* import Templet from '../templet/templet.vue' */
+import { getSmartParsing } from '@/api/smart-parsing'
+
 export default {
   components: {
     pdf
   },
   data() {
     return {
-      BillInfoGroupInfoOptions: [],
-      defaultHeight: '500px',
-      tableHeight: '460px',
       currentBilleInfo: {},
-      currentBillUrl: '',
-      currentGroupInfo: {},
-      row: ''
+      currentBillUrl: ''
     }
   },
   created() {
@@ -264,21 +251,21 @@ export default {
     const id = that.$route.query.id
     if (id) {
       that.id = id
-      that.getFileDetail()
+      that.getSmartInfo()
     }
   },
   methods: {
-    getFileDetail() {
+    getSmartInfo() {
       const that = this
       const id = that.id
       if (id) {
-        getFileDetail({
+        getSmartParsing({
           id: id
         })
           .then(response => {
             const data = response.data
             if (data) {
-              this.currentBillInfo = data
+              this.currentBilleInfo = data
               this.currentBillUrl =
                 'https://' +
                 data.bucket +
@@ -290,10 +277,6 @@ export default {
             that.loading = false
           })
       }
-    },
-    getHeight() {
-      this.defaultHeight = window.innerHeight - 180 + 'px'
-      this.tableHeight = window.innerHeight - 180 - 40 + 'px'
     }
   }
 }

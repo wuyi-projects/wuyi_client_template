@@ -852,21 +852,15 @@ export default {
       }
     },
     handleViewDetail(row) {
-      this.$router.push({
-        name: 'fapiao-info',
-        query: {
-          id: row.id
-        }
-      })
-      return
-      /* this.currentGroupInfo = row
+      
+      this.currentGroupInfo = row
       this.currentFileInfo = row
       this.currentFileUrl =
         'https://' +
         row.bucket +
         '.oss-cn-hangzhou.aliyuncs.com/' +
         row.filename
-      this.fileInfoDetailDrawerVisable = true */
+      this.fileInfoDetailDrawerVisable = true
     },
     handleCommand(command) {
       switch (command.command) {
