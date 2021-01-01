@@ -9,7 +9,7 @@ const calendarRouter = {
         roles: ['PermissionAdministrator', 'PermissionAssignmentAdministrator']
     },
     children: [{
-        path: 'platform-product',
+        path: 'calendar',
         component: () =>
             import ('@/views/calendar/calendar'),
         name: 'calendar',
