@@ -10,49 +10,35 @@
               style="background-color:#f0f0f0;padding:10px;"
             >
               <pdf ref="pdf" style="width:880px;" :src="currentBillUrl" />
-
               <div class="pdf-tab">
                 <!-- <div class="btn-def"
            @click.stop="clock">顺时针</div>
       <div class="btn-def"
            @click.stop="counterClock">逆时针</div> -->
               </div>
-              <el-row justify="center" align="center" style="margin-top:9px">
-                <!-- <el-button
-                  type="primary"
-                  :class="{ select: idx == 0 }"
-                  @touchstart="idx = 0"
-                  @touchend="idx = -1"
-                  @click="scaleD"
-                >放大</el-button>
-                <el-button
-                  :class="{ select: idx == 0 }"
-                  @touchstart="idx = 0"
-                  @touchend="idx = -1"
-                  @click="reset"
-                >还原</el-button>
-                <el-button
-                  type="primary"
-                  :class="{ select: idx == 1 }"
-                  @touchstart="idx = 1"
-                  @touchend="idx = -1"
-                  @click="scaleX"
-                >
-                  缩小</el-button> -->
-
+              <el-row justify="center" align="center" style="margin-top:10px">
                 <el-button-group>
-                  <el-button round :class="{ select: idx == 0 }"
-                  @touchstart="idx = 0"
-                  @touchend="idx = -1"
-                  @click="scaleD">放大</el-button>
-                  <el-button round :class="{ select: idx == 0 }"
-                  @touchstart="idx = 0"
-                  @touchend="idx = -1"
-                  @click="reset">还原</el-button>
-                  <el-button round :class="{ select: idx == 1 }"
-                  @touchstart="idx = 1"
-                  @touchend="idx = -1"
-                  @click="scaleX">缩小</el-button>
+                  <el-button
+                    round
+                    :class="{ select: idx == 0 }"
+                    @touchstart="idx = 0"
+                    @touchend="idx = -1"
+                    @click="scaleD"
+                  >放大</el-button>
+                  <el-button
+                    round
+                    :class="{ select: idx == 0 }"
+                    @touchstart="idx = 0"
+                    @touchend="idx = -1"
+                    @click="reset"
+                  >还原</el-button>
+                  <el-button
+                    round
+                    :class="{ select: idx == 1 }"
+                    @touchstart="idx = 1"
+                    @touchend="idx = -1"
+                    @click="scaleX"
+                  >缩小</el-button>
                 </el-button-group>
               </el-row>
             </el-col>
