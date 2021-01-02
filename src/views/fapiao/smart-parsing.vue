@@ -43,6 +43,17 @@
             </el-col>
           </el-form-item>
         </el-col>
+        <el-col v-if="folding" :span="8">
+          <el-form-item label="金额" prop="money">
+            <el-input v-model="searchFormData.money" />
+          </el-form-item>
+        </el-col>
+        <el-col v-if="folding" :span="8">
+          <el-form-item />
+        </el-col>
+        <el-col v-if="folding" :span="8">
+          <el-form-item />
+        </el-col>
         <el-col :span="8">
           <el-form-item style="float: right;" label-width="0">
             <el-button @click="resetForm('searchForm')">重 置</el-button>
@@ -64,11 +75,6 @@
             >展开<i
               class="el-icon-arrow-down el-icon--right"
             /></el-button>
-          </el-form-item>
-        </el-col>
-        <el-col v-if="folding" :span="8">
-          <el-form-item label="金额" prop="money">
-            <el-input v-model="searchFormData.money" />
           </el-form-item>
         </el-col>
       </el-form>
@@ -412,203 +418,219 @@ export default {
             align: 'center' },
           {
             field: 'voucherName',
-            title: '凭证名称 ',
+            title: '凭证名称',
             width: 200,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            visible: false
           },
           {
             field: 'voucherCode',
-            title: '发票代码 ',
-            width: 200,
+            title: '发票代码',
+            width: 140,
             align: 'center',
             headerAlign: 'center'
           },
           {
             field: 'voucherNumber',
-            title: '发票号码 ',
-            width: 200,
+            title: '发票号码',
+            width: 100,
             align: 'center',
             headerAlign: 'center'
           },
           {
             field: 'voucherDate',
-            title: '开票日期 ',
-            width: 200,
+            title: '开票日期',
+            width: 140,
             align: 'center',
             headerAlign: 'center'
           },
           {
             field: 'hash',
-            title: '密码区 ',
+            title: '密码区',
             width: 200,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            visible: false
           },
           {
             field: 'checkCode',
-            title: '校验码 ',
+            title: '校验码',
             width: 200,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            visible: false
           },
           {
             field: 'machineNumber',
-            title: '机器编号 ',
+            title: '机器编号',
             width: 200,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            visible: false
           },
           {
             field: 'purchaserName',
-            title: '购买方名称 ',
-            width: 200,
-            align: 'center',
+            title: '购买方名称',
+            width: 240,
+            align: 'left',
             headerAlign: 'center'
           },
           {
             field: 'purchaserRegistrationNumber',
-            title: '购买方纳税人识别号 ',
-            width: 200,
-            align: 'center',
+            title: '购买方纳税人识别号',
+            width: 180,
+            align: 'left',
             headerAlign: 'center'
           },
           {
             field: 'purchaserAddressPhone',
-            title: '购买方地址、电话 ',
+            title: '购买方地址、电话',
             width: 200,
-            align: 'center',
+            align: 'left',
             headerAlign: 'center'
           },
           {
             field: 'purchaserAddress',
-            title: '购买方地址 ',
+            title: '购买方地址',
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: 'left',
+            headerAlign: 'center',
+            visible: false
           },
           {
             field: 'purchaserPhone',
-            title: '购买方电话 ',
+            title: '购买方电话',
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: 'left',
+            headerAlign: 'center',
+            visible: false
           },
           {
             field: 'purchaserDepositBank',
-            title: '购买方开户行及账号 ',
+            title: '购买方开户行及账号',
             width: 200,
-            align: 'center',
+            align: 'left',
             headerAlign: 'center'
           },
           {
             field: 'paymentIdentification',
-            title: '电子支付标识 ',
+            title: '电子支付标识',
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: 'left',
+            headerAlign: 'center',
+            visible: false
           },
           {
             field: 'voucherContent',
-            title: '凭证明细 ',
+            title: '凭证明细',
             width: 200,
             align: 'center',
             headerAlign: 'center'
           },
           {
             field: 'taxRate',
-            title: '税率 ',
-            width: 200,
+            title: '税率',
+            width: 80,
             align: 'center',
             headerAlign: 'center'
           },
           {
             field: 'taxAmount',
-            title: '税额 ',
-            width: 200,
+            title: '税额',
+            width: 100,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'amount',
+            title: '金额',
+            width: 100,
             align: 'center',
             headerAlign: 'center'
           },
           {
             field: 'totalAmount',
-            title: '价税合计 ',
-            width: 200,
+            title: '价税合计',
+            width: 100,
             align: 'center',
             headerAlign: 'center'
           },
           {
             field: 'sellerName',
-            title: '销售方名称 ',
-            width: 200,
-            align: 'center',
+            title: '销售方名称',
+            width: 240,
+            align: 'left',
             headerAlign: 'center'
           },
           {
             field: 'sellerRegistrationNumber',
-            title: '销售方纳税人识别号 ',
+            title: '销售方纳税人识别号',
             width: 200,
-            align: 'center',
+            align: 'left',
             headerAlign: 'center'
           },
           {
             field: 'sellerAddressPhone',
-            title: '销售方地址、电话 ',
+            title: '销售方地址、电话',
             width: 200,
-            align: 'center',
+            align: 'left',
             headerAlign: 'center'
           },
           {
             field: 'sellerAddress',
-            title: '销售方地址 ',
+            title: '销售方地址',
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: 'left',
+            headerAlign: 'center',
+            visible: false
           },
           {
             field: 'sellerPhone',
-            title: '销售方电话 ',
+            title: '销售方电话',
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: 'left',
+            headerAlign: 'center',
+            visible: false
           },
           {
             field: 'sellerDepositBank',
-            title: '销售方开户行及账号 ',
+            title: '销售方开户行及账号',
             width: 200,
-            align: 'center',
+            align: 'left',
             headerAlign: 'center'
           },
           {
             field: 'voucherNote',
-            title: '发票备注 ',
+            title: '发票备注',
             width: 200,
-            align: 'center',
+            align: 'left',
             headerAlign: 'center'
           },
           {
             field: 'voucherPayeeName',
-            title: '发票收款人 ',
-            width: 200,
+            title: '发票收款人',
+            width: 100,
             align: 'center',
             headerAlign: 'center'
           },
           {
             field: 'voucherAuditorName',
-            title: '发票复核人 ',
-            width: 200,
+            title: '发票复核人',
+            width: 100,
             align: 'center',
             headerAlign: 'center'
           },
           {
             field: 'voucherOperatorName',
-            title: '发票开票人 ',
-            width: 200,
+            title: '发票开票人',
+            width: 100,
             align: 'center',
             headerAlign: 'center'
           },
           {
             field: 'note',
-            title: '备注 ',
+            title: '备注',
             width: 200,
             align: 'center',
             headerAlign: 'center'
