@@ -202,7 +202,6 @@ export default {
   methods: {
     getFapiaoDisplayWidth() {
       const width = parseInt((window.innerWidth - 210 - (20 * 2)) * 0.4)
-      console.log(width)
       this.fapiaoDisplayWidth = (width < 520 ? 520 : width > 1200 ? 1200 : width) + 'px'
       this.origWidth4Pdf = this.fapiaoDisplayWidth
     },
@@ -269,11 +268,7 @@ export default {
         this.$refs.pdf.$el.style.width = width + 'px'
       }
     },
-    getProgress(e) {
-      console.log('加载进度：', e)
-    },
     loadPdfHandler() {
-      console.log('PDF加载完成啦')
     },
     // 返回
     goBack() {
@@ -324,8 +319,8 @@ export default {
         downEle.setAttribute('download', fname)
         document.body.appendChild(downEle)
         downEle.click()
-      }).catch(function(error) {
-        console.log('There has been a problem with your fetch operation: ', error.message)
+      }).catch(function(e) {
+        this.$message.error('发票下载异常')
       })
     }
   }
