@@ -359,7 +359,6 @@ import {
   deleteFileInfo,
   updateFileInfo
 } from '@/api/file-mangement'
-import Templet from '../templet/templet.vue'
 export default {
   components: {
     pdf
@@ -559,7 +558,7 @@ export default {
           { type: 'checkbox', width: 40, align: 'center' },
           {
             title: '文件类型',
-            width: 200,
+            width: 100,
             align: 'center',
             headerAlign: 'center',
             slots: { default: 'mimeType_default' }
@@ -852,14 +851,23 @@ export default {
       }
     },
     handleViewDetail(row) {
-      
       this.currentGroupInfo = row
       this.currentFileInfo = row
-      this.currentFileUrl =
+      const url =
         'https://' +
         row.bucket +
         '.oss-cn-hangzhou.aliyuncs.com/' +
         row.filename
+      if (row.mimeType === 'application/pdf') {
+        this.currentFileUrl = pdf.createLoadingTask({
+          url: url,
+          cMapUrl: '../../../../cmaps/',
+          cMapPacked: true
+        })
+      } else {
+        this.currentFileUrl = url
+      }
+
       this.fileInfoDetailDrawerVisable = true
     },
     handleCommand(command) {
