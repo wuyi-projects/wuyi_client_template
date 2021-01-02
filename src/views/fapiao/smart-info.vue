@@ -2,6 +2,7 @@
   <div class="app-container">
     <!--数据展示-->
     <el-card class="box-card">
+      <el-page-header content="详情页面" @back="goBack" />
       <el-row type="flex">
         <el-col
           justify="center"
@@ -10,39 +11,46 @@
             background-color: #f0f0f0;
             padding: 5px 0;
             height: 360px;
-            overflow-y: scroll;
+            overflow-y: auto;
             position: relative;
           "
         >
-          <pdf ref="pdf" style="width: 42%" :src="currentBillUrl" />
-          <el-row style="position: absolute; bottom: 5px; width: 100%">
-            <el-button-group>
-              <el-button
-                round
-                size="mini"
-                :class="{ select: idx == 0 }"
-                @touchstart="idx = 0"
-                @touchend="idx = -1"
-                @click="scaleD"
-              >放大</el-button>
-              <el-button
-                round
-                size="mini"
-                :class="{ select: idx == 0 }"
-                @touchstart="idx = 0"
-                @touchend="idx = -1"
-                @click="reset"
-              >还原</el-button>
-              <el-button
-                round
-                size="mini"
-                :class="{ select: idx == 1 }"
-                @touchstart="idx = 1"
-                @touchend="idx = -1"
-                @click="scaleX"
-              >缩小</el-button>
-            </el-button-group>
-          </el-row>
+          <pdf ref="pdf" :style="{width:fapiaoDisplayWidth}" :src="currentBillUrl" :page="currentPage" @progress="getProgress" @page-loaded="currentPage=$event" @loaded="loadPdfHandler" />
+        </el-col>
+      </el-row>
+      <el-row style="text-align:center;top:-40px;z-index:999;">
+        <el-col style="margin:0 auto;float: left;">
+          <el-button-group>
+            <el-button
+              round
+              size="mini"
+              :class="{ select: idx == 0 }"
+              @touchstart="idx = 0"
+              @touchend="idx = -1"
+              @click="scaleD"
+            >放大</el-button>
+            <el-button
+              round
+              size="mini"
+              :class="{ select: idx == 0 }"
+              @touchstart="idx = 0"
+              @touchend="idx = -1"
+              @click="reset"
+            >还原</el-button>
+            <el-button
+              round
+              size="mini"
+              :class="{ select: idx == 1 }"
+              @touchstart="idx = 1"
+              @touchend="idx = -1"
+              @click="scaleX"
+            >缩小</el-button>
+            <el-button
+              round
+              size="mini"
+              @click="downloadFapiao"
+            >下载</el-button>
+          </el-button-group>
         </el-col>
       </el-row>
       <el-row>
@@ -164,8 +172,6 @@
 
 <script>
 import pdf from 'vue-pdf'
-// 修复中文显示异常
-import CMapReaderFactory from 'vue-pdf/src/CMapReaderFactory.js'
 import { getSmartParsing } from '@/api/smart-parsing'
 
 export default {
@@ -176,12 +182,16 @@ export default {
     return {
       currentBillInfo: {},
       currentBillUrl: '',
-      scale: 100, // 放大系数
+      currentBillUrlString: '',
+      fapiaoDisplayWidth: '520px',
       idx: -1,
-      origWidth4Pdf: 0
+      origWidth4Pdf: '520px',
+      currentPage: 1
     }
   },
   created() {
+    window.addEventListener('resize', this.getFapiaoDisplayWidth)
+    this.getFapiaoDisplayWidth()
     const that = this
     const id = that.$route.query.id
     if (id) {
@@ -190,6 +200,12 @@ export default {
     }
   },
   methods: {
+    getFapiaoDisplayWidth() {
+      const width = parseInt((window.innerWidth - 210 - (20 * 2)) * 0.4)
+      console.log(width)
+      this.fapiaoDisplayWidth = (width < 520 ? 520 : width > 1200 ? 1200 : width) + 'px'
+      this.origWidth4Pdf = this.fapiaoDisplayWidth
+    },
     getSmartInfo() {
       const that = this
       const id = that.id
@@ -201,17 +217,17 @@ export default {
             const data = response.data
             if (data) {
               this.currentBillInfo = data
+              // this.currentBillUrl = pdf.createLoadingTask({
+              //   url: data.url,
+              //   cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@2.5.207/cmaps/',
+              //   cMapPacked: true
+              // })
               this.currentBillUrl = pdf.createLoadingTask({
                 url: data.url,
-                CMapReaderFactory
+                cMapUrl: '../../../../cmaps/',
+                cMapPacked: true
               })
-              // 加载完PDF后清除缓存,保证再次进入不出现显示不完整情况
-              for (var key in require.cache) {
-                if (key.indexOf('bcmap') >= 0) {
-                  delete require.cache[key]
-                }
-              }
-              this.origWidth4Pdf = this.$refs.pdf.$el.style.width
+              this.currentBillUrlString = data.url
             }
           })
           .catch((e) => {
@@ -222,18 +238,95 @@ export default {
     // 放大
     scaleD() {
       const orig = this.$refs.pdf.$el.style.width
-      console.log('orig' + orig)
-      const width = orig.substring(0, orig.length - 1) * 1.05
-      this.$refs.pdf.$el.style.width = width >= 100 ? 100 : width + '%'
+      const width = parseInt(orig.substring(0, orig.length - 2)) + 20
+      const maxWidth = parseInt((window.innerWidth - 210 - (20 * 2)))
+      if (width >= maxWidth) {
+        this.$refs.pdf.$el.style.width = maxWidth + 'px'
+        this.$message({
+          type: 'success',
+          message: '已放大到最大级别'
+        })
+      } else {
+        this.$refs.pdf.$el.style.width = width + 'px'
+      }
     },
+    // 还原
     reset() {
       this.$refs.pdf.$el.style.width = this.origWidth4Pdf
     },
     // 缩小
     scaleX() {
       const orig = this.$refs.pdf.$el.style.width
-      const width = orig.substring(0, orig.length - 1)
-      this.$refs.pdf.$el.style.width = width * 0.95 + '%'
+      const width = parseInt(orig.substring(0, orig.length - 2)) - 20
+      const minWidth = parseInt((window.innerWidth - 210 - (20 * 2)) * 0.3)
+      if (width <= minWidth) {
+        this.$refs.pdf.$el.style.width = minWidth + 'px'
+        this.$message({
+          type: 'success',
+          message: '已缩小到最小级别'
+        })
+      } else {
+        this.$refs.pdf.$el.style.width = width + 'px'
+      }
+    },
+    getProgress(e) {
+      console.log('加载进度：', e)
+    },
+    loadPdfHandler() {
+      console.log('PDF加载完成啦')
+    },
+    // 返回
+    goBack() {
+      this.$router.go(-1)
+    },
+    // 下载
+    downloadFapiao() {
+      if (!this.currentBillUrlString) {
+        this.$message.error('发票地址不合法')
+      }
+      const billInfo = this.currentBillInfo
+      let fileName = ''
+      const temp = []
+      if (billInfo) {
+        if (billInfo.voucherDate) {
+          temp.push(billInfo.voucherDate)
+        }
+        if (billInfo.sellerName) {
+          temp.push(billInfo.sellerName)
+        }
+        if (temp && temp.length > 0) {
+          fileName = '发票_' + temp.join('_') + '.pdf'
+        } else {
+          fileName = '发票.pdf'
+        }
+      } else {
+        fileName = '发票.pdf'
+      }
+      this.downloadPDF(this.currentBillUrlString, fileName)
+    },
+    downloadPDF(url, fileName) {
+      fetch(url).then(function(response) {
+        if (response.ok) {
+          return response.arrayBuffer()
+        }
+        throw new Error('Network response was not ok.')
+      }).then(function(arraybuffer) {
+        const blob = new Blob([arraybuffer], {
+          type: `application/pdf;charset-UTF-8` // word文档为msword,pdf文档为pdf
+        })
+
+        const objectURL = URL.createObjectURL(blob)
+
+        const downEle = document.createElement('a')
+        const fname = fileName // 下载文件的名字
+        // let fname = `download` // 下载文件的名字
+        downEle.href = objectURL
+        downEle.setAttribute('download', fname)
+        document.body.appendChild(downEle)
+        downEle.click()
+      }).catch(function(error) {
+        console.log('There has been a problem with your fetch operation: ', error.message)
+      })
     }
   }
 }
