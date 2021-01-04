@@ -16,8 +16,9 @@ import configRouter from './modules/config'
 import fileRouter from './modules/file'
 import fapiaoRouter from './modules/fapiao'
 import calendarRouter from './modules/calendar'
-// import companyRouter from './modules/company'
+import companyRouter from './modules/company'
 import wechatMiniprogramConfigRouter from './modules/wechat-miniprogram-config'
+import profileRouter from './modules/profile'
 
 /**
  * constantRoutes
@@ -70,8 +71,9 @@ export const asyncRoutes = [
   fapiaoRouter,
   permissionRouter,
   calendarRouter,
-  // companyRouter,
+  companyRouter,
   wechatMiniprogramConfigRouter,
+  profileRouter,
   { path: '*', redirect: '/404', hidden: true }
 ]
 
