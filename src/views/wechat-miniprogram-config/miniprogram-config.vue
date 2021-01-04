@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <!--查询条件-->
-    <el-card class="box-card" shadow="never" style="margin-bottom:16px;">
+    <el-card class="box-card" shadow="never" style="margin-bottom: 16px">
       <el-form
         ref="searchForm"
         :model="searchFormData"
@@ -19,22 +19,6 @@
           </el-form-item>
         </el-col>
         <el-col v-if="folding" :span="8">
-          <el-form-item label="账号状态" prop="accountStatus">
-            <el-select
-              v-model="searchFormData.accountStatus"
-              placeholder="请选择账号状态"
-              style="width:100%"
-            >
-              <el-option
-                v-for="item in accountStatusOptionData"
-                :key="item.code"
-                :label="item.name"
-                :value="item.code"
-              />
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col v-if="folding" :span="8">
           <el-form-item label="起止时间">
             <el-col :span="11">
               <el-form-item prop="start">
@@ -42,7 +26,7 @@
                   v-model="searchFormData.start"
                   type="date"
                   placeholder="起始日期"
-                  style="width: 100%;"
+                  style="width: 100%"
                   :picker-options="pickerOptions"
                   value-format="yyyy-MM-dd"
                 />
@@ -55,7 +39,7 @@
                   v-model="searchFormData.end"
                   type="date"
                   placeholder="结束时间"
-                  style="width: 100%;"
+                  style="width: 100%"
                   :picker-options="pickerOptions"
                   value-format="yyyy-MM-dd"
                 />
@@ -66,8 +50,11 @@
         <el-col v-if="folding" :span="8">
           <el-form-item />
         </el-col>
+        <el-col v-if="folding" :span="8">
+          <el-form-item />
+        </el-col>
         <el-col :span="8">
-          <el-form-item style="float: right;" label-width="0">
+          <el-form-item style="float: right" label-width="0">
             <el-button @click="resetForm('searchForm')">重 置</el-button>
             <el-button type="primary" @click="submitForm('searchForm')">
               查 询
@@ -101,46 +88,21 @@
           </el-button-group>
         </template>
 
-        <!--是否可用展示-->
-        <template v-slot:accountStatus_default="{ row }">
-          <template v-if="row.accountStatus === 0">
-            <el-badge is-dot class="item" type="primary" />初始化
-          </template>
-          <template v-else-if="row.accountStatus === 1">
-            <el-badge is-dot class="item" type="success" />正常
-          </template>
-          <template v-else-if="row.accountStatus === 2">
-            <el-badge is-dot class="item" type="info" />停用
-          </template>
-          <template v-else>
-            <el-badge is-dot class="item" type="warning" />未知
-          </template>
-        </template>
-
         <!--数据行操作-->
         <template v-slot:operate="{ row }">
-          <el-button v-if="row.accountStatus !== 2" type="text" style="color:red;" @click="handleDisable(row)">停用</el-button>
-          <el-button v-else type="text" @click="handleEnable(row)">启用</el-button>
+          <el-button type="text" @click="handleUpdate(row)">修改</el-button>
           <el-divider direction="vertical" />
           <el-dropdown @command="handleCommand">
             <span class="el-dropdown-link">
               更多<i class="el-icon-arrow-down" />
             </span>
             <el-dropdown-menu slot="dropdown">
-              <!--<el-dropdown-item
+              <el-dropdown-item
                 :command="beforeHandleCommand('handleDelete', row)"
               >
                 删除
-              </el-dropdown-item>-->
-              <el-dropdown-item
-                :command="beforeHandleCommand('handleChangePhone', row)"
-              >
-                更换手机号码
               </el-dropdown-item>
-              <el-dropdown-item
-                :command="beforeHandleCommand('viewRow', row)"
-                divided
-              >
+              <el-dropdown-item :command="beforeHandleCommand('viewRow', row)">
                 详情
               </el-dropdown-item>
             </el-dropdown-menu>
@@ -168,49 +130,46 @@
         :rules="rules"
         :model="temp"
         label-position="right"
-        label-width="80px"
-        style="width: 100%; padding:10px;"
+        label-width="100px"
+        style="width: 100%; padding: 10px"
       >
         <el-row>
           <el-col :span="24">
-            <el-form-item label="姓名" prop="name">
-              <el-input v-model="temp.name" clearable :disabled="dialogStatus == 'changePhone'" />
+            <el-form-item label="产品代码" prop="productCode">
+              <el-input v-model="temp.productCode" clearable />
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="手机号码" prop="phone">
-              <el-input v-model="temp.phone" clearable />
+            <el-form-item label="AppID" prop="appId">
+              <el-input v-model="temp.appId" clearable />
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="账号状态" prop="accountStatus">
-              <el-select
-                v-model="temp.accountStatus"
-                placeholder="请选择账户状态"
-                style="width:100%"
-                :disabled="dialogStatus == 'changePhone'"
-              >
-                <el-option
-                  v-for="item in accountStatusOptionData"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.code"
-                />
-              </el-select>
+            <el-form-item label="AppSecret" prop="appSecret">
+              <el-input v-model="temp.appSecret" clearable />
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="备注" prop="note">
+              <el-input v-model="temp.note" clearable />
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <template v-if="dialogStatus !== 'detail'">
-          <el-button @click="resetForm('dataForm')">
-            重置
-          </el-button>
+          <el-button @click="resetForm('dataForm')"> 重置 </el-button>
           <el-button
             type="primary"
             :loading="loadingSubmitButton"
             :disabled="loadingSubmitButton"
-            @click="dialogStatus === 'create' ? createData() :dialogStatus === 'changePhone'?changePhone(): updateData()"
+            @click="
+              dialogStatus === 'create'
+                ? createData()
+                : dialogStatus === 'changePhone'
+                  ? changePhone()
+                  : updateData()
+            "
           >
             {{ submitButtonText }}
           </el-button>
@@ -238,24 +197,12 @@
 import formatTableSize from '@/utils/size'
 
 import {
-  listMiniProgramBindAccount,
-  saveMiniProgramBindAccount,
-  deleteMiniProgramBindAccount,
-  batchDeleteMiniProgramBindAccount,
-  updateMiniProgramBindAccount,
-  disableMiniProgramBindAccount,
-  enableMiniProgramBindAccount,
-  changePhone4MiniProgramBindAccount
-} from '@/api/miniprogram'
-
-const validatePhone = (rule, value, callback) => { // 手机正则验证
-  if (/^(13[0-9]|14[05679]|15[012356789]|16[2567]|17[012356789]|18[0-9]|19[189])[0-9]{8}$/.test(value) === false
-  ) {
-    callback(new Error('请输入正确的手机号'))
-  } else {
-    callback()
-  }
-}
+  listWechatMiniprogramConfig,
+  saveWechatMiniprogramConfig,
+  deleteWechatMiniprogramConfig,
+  batchDeleteWechatMiniprogramConfig,
+  updateWechatMiniprogramConfig
+} from '@/api/wechat-miniprogram-config'
 
 export default {
   data() {
@@ -268,7 +215,7 @@ export default {
       dialogFormVisible: false,
       loadingSubmitButton: false,
       submitButtonText: '提交',
-      allMiniProgramBindAccountGroup: [],
+      allWechatMiniprogramConfigGroup: [],
       textMap: {
         update: '编辑',
         create: '创建',
@@ -284,10 +231,6 @@ export default {
         end: ''
       },
       rules: {
-        phone: [
-          { required: true, message: '请输入手机号码', trigger: 'blur' },
-          { validator: validatePhone, trigger: 'blur' }
-        ],
         name: [
           { required: true, message: '请输入权限名称', trigger: 'blur' },
           { min: 2, message: '长度大于等于 2 个字符', trigger: 'blur' }
@@ -296,21 +239,6 @@ export default {
           { required: true, message: '请选择账号状态', trigger: 'change' }
         ]
       },
-      accountStatusOptionData: [
-        {
-          code: null,
-          name: '全部'
-        },
-        {
-          code: 0,
-          name: '初始化'
-        }, {
-          code: 1,
-          name: '正常'
-        }, {
-          code: 2,
-          name: '停用'
-        }],
       temp: {
         id: null,
         phone: '',
@@ -323,26 +251,30 @@ export default {
         disabledDate(time) {
           return time.getTime() > Date.now()
         },
-        shortcuts: [{
-          text: '今天',
-          onClick(picker) {
-            picker.$emit('pick', new Date())
+        shortcuts: [
+          {
+            text: '今天',
+            onClick(picker) {
+              picker.$emit('pick', new Date())
+            }
+          },
+          {
+            text: '昨天',
+            onClick(picker) {
+              const date = new Date()
+              date.setTime(date.getTime() - 3600 * 1000 * 24)
+              picker.$emit('pick', date)
+            }
+          },
+          {
+            text: '一周前',
+            onClick(picker) {
+              const date = new Date()
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', date)
+            }
           }
-        }, {
-          text: '昨天',
-          onClick(picker) {
-            const date = new Date()
-            date.setTime(date.getTime() - 3600 * 1000 * 24)
-            picker.$emit('pick', date)
-          }
-        }, {
-          text: '一周前',
-          onClick(picker) {
-            const date = new Date()
-            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
-            picker.$emit('pick', date)
-          }
-        }]
+        ]
       },
       gridOptions: {
         border: 'default',
@@ -413,14 +345,19 @@ export default {
             total: 'total'
           },
           ajax: {
-
             query: ({ page, sort, filters }) => {
               // 查询条件
               const searchData = {}
               const searchFormData = this.searchFormData
               for (var key in searchFormData) {
                 const value = searchFormData[key]
-                if (!(typeof value === 'undefined' || value === null || value === '')) {
+                if (
+                  !(
+                    typeof value === 'undefined' ||
+                    value === null ||
+                    value === ''
+                  )
+                ) {
                   searchData[key] = value
                 }
               }
@@ -448,14 +385,12 @@ export default {
                 limit: page.pageSize
               })
               const result = Object.assign(pageData, searchData, sortParams)
-              return listMiniProgramBindAccount(result)
+              return listWechatMiniprogramConfig(result)
             }
           }
         },
         columns: [
-          { type: 'checkbox',
-            width: 40,
-            align: 'center' },
+          { type: 'checkbox', width: 40, align: 'center' },
           {
             field: 'id',
             title: '编号',
@@ -465,62 +400,32 @@ export default {
             visible: false
           },
           {
-            field: 'name',
-            title: '姓名',
+            field: 'productCode',
+            title: '产品代码',
             align: 'center',
             headerAlign: 'center',
             minWidth: 200
           },
           {
-            field: 'phone',
-            title: '手机号码',
-            minWidth: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'accountStatus',
-            title: '账号状态',
-            minWidth: 120,
+            field: 'appId',
+            title: 'AppID',
             align: 'center',
             headerAlign: 'center',
-            filters: [
-              { label: '初始化', value: 0 },
-              { label: '正常', value: 1 },
-              { label: '停用', value: 2 }
-            ],
-            filterMultiple: false,
-            slots: { default: 'accountStatus_default' }
+            minWidth: 200
           },
           {
-            field: 'miniProgramOpenid',
-            title: '微信小程序OpenID',
-            minWidth: 200,
+            field: 'appSecret',
+            title: 'AppSecret',
             align: 'center',
             headerAlign: 'center',
-            visible: false
+            minWidth: 200
           },
           {
-            field: 'openId',
-            title: '统一编号',
-            minWidth: 200,
+            field: 'note',
+            title: '备注',
             align: 'center',
             headerAlign: 'center',
-            visible: false
-          },
-          {
-            field: 'registrationTime',
-            title: '注册时间',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'bindTime',
-            title: '绑定时间',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            minWidth: 200
           },
           {
             title: '操作',
@@ -566,8 +471,7 @@ export default {
       }
     }
   },
-  computed: {
-  },
+  computed: {},
   created() {
     window.addEventListener('resize', this.getMinHeight)
     this.getMinHeight()
@@ -617,44 +521,57 @@ export default {
     handleBatchDelete() {
       const selectRecords = this.$refs.dataGrid.getCheckboxRecords()
       const batchDeleteData = []
-      if (!(typeof selectRecords === 'undefined' || selectRecords === null || selectRecords === '' || selectRecords.length === 0)) {
+      if (
+        !(
+          typeof selectRecords === 'undefined' ||
+          selectRecords === null ||
+          selectRecords === '' ||
+          selectRecords.length === 0
+        )
+      ) {
         this.$confirm('永久删除记录吗, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           dangerouslyUseHTMLString: true,
           type: 'warning'
-        }).then(() => {
-          for (let index = 0, len = selectRecords.length; index < len; index++) {
-            const id = selectRecords[index].['id']
-            const version = selectRecords[index].['version']
-            const temp = {
-              id: id,
-              version: version
-            }
-            batchDeleteData.push(temp)
-          }
-          batchDeleteMiniProgramBindAccount(batchDeleteData)
-            .then(response => {
-              const result = response.data
-              if (result) {
-                this.$message({
-                  type: 'success',
-                  message: '删除成功'
-                })
-              } else {
-                this.$message.error('删除失败')
-              }
-              this.$refs.dataGrid.commitProxy('reload')
-            })
-            .catch(e => {
-              this.loading = false
-            })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
         })
+          .then(() => {
+            for (
+              let index = 0, len = selectRecords.length;
+              index < len;
+              index++
+            ) {
+              const id = selectRecords[index]['id']
+              const version = selectRecords[index]['version']
+              const temp = {
+                id: id,
+                version: version
+              }
+              batchDeleteData.push(temp)
+            }
+            batchDeleteWechatMiniprogramConfig(batchDeleteData)
+              .then((response) => {
+                const result = response.data
+                if (result) {
+                  this.$message({
+                    type: 'success',
+                    message: '删除成功'
+                  })
+                } else {
+                  this.$message.error('删除失败')
+                }
+                this.$refs.dataGrid.commitProxy('reload')
+              })
+              .catch((e) => {
+                this.loading = false
+              })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            })
+          })
       } else {
         this.$message({
           showClose: true,
@@ -670,64 +587,6 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
-    handleDisable(row) {
-      this.$confirm('停用[ <span style="color:red;font-weight:bold;">' + row.name + '(' + row.phone + ')' + '</span> ]微信小程序账号吗, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        dangerouslyUseHTMLString: true,
-        type: 'warning'
-      }).then(() => {
-        const { id, version } = row
-        const tempData = Object.assign({
-          id: id,
-          version: version
-        })
-        disableMiniProgramBindAccount(tempData)
-          .then(response => {
-            const result = response.data
-            if (result) {
-              this.$message({
-                type: 'success',
-                message: '停用账号操作成功'
-              })
-            } else {
-              this.$message.error('停用账号操作失败')
-            }
-            this.$refs.dataGrid.commitProxy('reload')
-          })
-          .catch(e => {
-            this.loading = false
-          })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消操作'
-        })
-      })
-    },
-    handleEnable(row) {
-      const { id, version } = row
-      const tempData = Object.assign({
-        id: id,
-        version: version
-      })
-      enableMiniProgramBindAccount(tempData)
-        .then(response => {
-          const result = response.data
-          if (result) {
-            this.$message({
-              type: 'success',
-              message: '停用账号操作成功'
-            })
-          } else {
-            this.$message.error('停用账号操作失败')
-          }
-          this.$refs.dataGrid.commitProxy('reload')
-        })
-        .catch(e => {
-          this.loading = false
-        })
-    },
     initFormSafeSubmitConfig() {
       this.loadingSubmitButton = false
       this.submitButtonText = '提交'
@@ -738,8 +597,8 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.temp)
-          saveMiniProgramBindAccount(tempData)
-            .then(response => {
+          saveWechatMiniprogramConfig(tempData)
+            .then((response) => {
               const result = response.data
               if (result) {
                 this.$message({
@@ -754,7 +613,7 @@ export default {
                 this.initFormSafeSubmitConfig()
               }
             })
-            .catch(e => {
+            .catch((e) => {
               this.loading = false
               this.initFormSafeSubmitConfig()
             })
@@ -767,8 +626,8 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.temp)
-          updateMiniProgramBindAccount(tempData)
-            .then(response => {
+          updateWechatMiniprogramConfig(tempData)
+            .then((response) => {
               const result = response.data
               if (result) {
                 this.$message({
@@ -783,36 +642,7 @@ export default {
                 this.initFormSafeSubmitConfig()
               }
             })
-            .catch(e => {
-              this.loading = false
-              this.initFormSafeSubmitConfig()
-            })
-        }
-      })
-    },
-    changePhone() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          this.loadingSubmitButton = true
-          this.submitButtonText = '执行中...'
-          const tempData = Object.assign({}, this.temp)
-          changePhone4MiniProgramBindAccount(tempData)
-            .then(response => {
-              const result = response.data
-              if (result) {
-                this.$message({
-                  message: '更换手机号码操作成功',
-                  type: 'success'
-                })
-                this.initFormSafeSubmitConfig()
-                this.dialogFormVisible = false
-                this.$refs.dataGrid.commitProxy('reload')
-              } else {
-                this.$message.error('更换手机号码操作失败')
-                this.initFormSafeSubmitConfig()
-              }
-            })
-            .catch(e => {
+            .catch((e) => {
               this.loading = false
               this.initFormSafeSubmitConfig()
             })
@@ -825,34 +655,36 @@ export default {
         cancelButtonText: '取消',
         dangerouslyUseHTMLString: true,
         type: 'warning'
-      }).then(() => {
-        const { id, version } = row
-        const tempData = Object.assign({
-          id: id,
-          version: version
-        })
-        deleteMiniProgramBindAccount(tempData)
-          .then(response => {
-            const result = response.data
-            if (result) {
-              this.$message({
-                type: 'success',
-                message: '删除成功'
-              })
-            } else {
-              this.$message.error('删除失败')
-            }
-            this.$refs.dataGrid.commitProxy('reload')
-          })
-          .catch(e => {
-            this.loading = false
-          })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
       })
+        .then(() => {
+          const { id, version } = row
+          const tempData = Object.assign({
+            id: id,
+            version: version
+          })
+          deleteWechatMiniprogramConfig(tempData)
+            .then((response) => {
+              const result = response.data
+              if (result) {
+                this.$message({
+                  type: 'success',
+                  message: '删除成功'
+                })
+              } else {
+                this.$message.error('删除失败')
+              }
+              this.$refs.dataGrid.commitProxy('reload')
+            })
+            .catch((e) => {
+              this.loading = false
+            })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
     viewRow(row) {
       this.temp = Object.assign({}, row)

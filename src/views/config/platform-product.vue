@@ -78,8 +78,7 @@
             <el-button
               type="primary"
               @click.native.prevent="handleBatchDelete()"
-              >批量删除</el-button
-            >
+            >批量删除</el-button>
           </el-button-group>
         </template>
 
@@ -98,9 +97,10 @@
         <template v-slot:operate="{ row }">
           <el-button type="text" @click="handleUpdate(row)">修改</el-button>
           <el-divider direction="vertical" />
-          <el-button type="text" @click="handleManagePatformProduct(row)"
-            >下属账户类型</el-button
-          >
+          <el-button
+            type="text"
+            @click="handleManagePatformProduct(row)"
+          >下属账户类型</el-button>
           <el-divider direction="vertical" />
           <el-dropdown @command="handleCommand">
             <span class="el-dropdown-link">
@@ -181,8 +181,8 @@
               dialogStatus === 'create'
                 ? createData()
                 : dialogStatus === 'update'
-                ? updateData()
-                : ''
+                  ? updateData()
+                  : ''
             "
           >
             {{ submitButtonText }}
@@ -203,9 +203,9 @@
         <el-col :span="24" style="padding:0 20px 20px;">
           <el-row>
             <el-col :span="24">
-              <span style="font-size:16px;font-weight:bold;"
-                >下属用户账号类型</span
-              >
+              <span
+                style="font-size:16px;font-weight:bold;"
+              >下属用户账号类型</span>
             </el-col>
           </el-row>
           <el-row style="margin-top:20px;">
@@ -218,14 +218,13 @@
                 <!--工具栏按钮-->
                 <template v-slot:toolbar_buttons>
                   <el-button-group>
-                    <el-button @click.native.prevent="handleAccountTypeCreate()"
-                      >新增</el-button
-                    >
+                    <el-button
+                      @click.native.prevent="handleAccountTypeCreate()"
+                    >新增</el-button>
                     <el-button
                       type="primary"
                       @click.native.prevent="handleAccountTypeBatchDelete()"
-                      >批量删除</el-button
-                    >
+                    >批量删除</el-button>
                   </el-button-group>
                 </template>
 
@@ -247,21 +246,22 @@
                       <el-button
                         type="primary"
                         @click="submitPermissionForm('permissionForm')"
-                        >查询</el-button
-                      >
+                      >查询</el-button>
                     </el-form-item>
                   </el-form>
                 </template>
 
                 <!--数据行操作-->
                 <template v-slot:operate="{ row }">
-                  <el-button type="text" @click="handleAccountTypeUpdate(row)"
-                    >修改</el-button
-                  >
+                  <el-button
+                    type="text"
+                    @click="handleAccountTypeUpdate(row)"
+                  >修改</el-button>
                   <el-divider direction="vertical" />
-                  <el-button type="text" @click="handleAccountTypeDelete(row)"
-                    >删除</el-button
-                  >
+                  <el-button
+                    type="text"
+                    @click="handleAccountTypeDelete(row)"
+                  >删除</el-button>
                 </template>
                 <!--自定义空数据模板-->
                 <template v-slot:empty>
@@ -311,10 +311,10 @@
           <el-col :span="24">
             <el-form-item label="备注" prop="note">
               <el-input
+                v-model="accountTypeFormData.note"
                 type="textarea"
                 :rows="2"
                 placeholder="请输入备注"
-                v-model="accountTypeFormData.note"
                 clearable
               />
             </el-form-item>
@@ -334,8 +334,8 @@
               dialogStatus === 'create'
                 ? createAccountTypeData()
                 : dialogStatus === 'update'
-                ? updateAccountTypeData()
-                : ''
+                  ? updateAccountTypeData()
+                  : ''
             "
           >
             {{ submitButtonText }}
@@ -374,7 +374,7 @@ import {
   saveAccountType,
   deleteAccountType,
   batchDeleteAccountType,
-  updateAccountType,
+  updateAccountType
 } from '@/api/platform-product'
 
 const validatePhone = (rule, value, callback) => { // 手机正则验证
@@ -394,19 +394,19 @@ export default {
         region: ''
       },
       defaultMinHeight: {
-        minHeight : ''
+        minHeight: ''
       },
       optionsData: [],
       folding: false,
       dialogFormVisible: false,
-      accountTypeDialogFormVisible:false,
+      accountTypeDialogFormVisible: false,
       loadingSubmitButton: false,
       submitButtonText: '提交',
       allPlatformProductGroup: [],
       textMap: {
         update: '编辑',
         create: '创建',
-        detail: '详情',
+        detail: '详情'
       },
       searchFormData: {
         id: '',
@@ -416,30 +416,30 @@ export default {
         start: '',
         end: ''
       },
-      productAccountTypeDetailDrawer:false,
+      productAccountTypeDetailDrawer: false,
       currentAccountType: {},
       rules: {
         productName: [
           { required: true, message: '请输入产品名称', trigger: 'blur' },
-         { min: 2, message: '长度大于等于 2 个字符', trigger: 'blur' }
+          { min: 2, message: '长度大于等于 2 个字符', trigger: 'blur' }
         ],
         productCode: [
           { required: true, message: '请输入产品代号', trigger: 'blur' },
           { min: 2, message: '长度大于等于 2 个字符', trigger: 'blur' }
-        ],
+        ]
       },
       accountTypeRules: {
         typeName: [
           { required: true, message: '请输入账户类型名称', trigger: 'blur' },
-         { min: 2, message: '长度大于等于 2 个字符', trigger: 'blur' }
+          { min: 2, message: '长度大于等于 2 个字符', trigger: 'blur' }
         ],
         typeCode: [
           { required: true, message: '请输入账户类型代码', trigger: 'blur' },
           { min: 2, message: '长度大于等于 2 个字符', trigger: 'blur' }
         ],
         type: [
-          { required: true, message: '请输入账户类型', trigger: 'blur' },
-        ],
+          { required: true, message: '请输入账户类型', trigger: 'blur' }
+        ]
       },
       temp: {
         id: null,
@@ -450,7 +450,7 @@ export default {
       },
       accountTypeFormData: {
         id: null,
-        paltformProductId:null,
+        paltformProductId: null,
         typeName: null,
         typeCode: null,
         type: null,
@@ -795,7 +795,7 @@ export default {
             headerAlign: 'center',
             filters: [
               { label: '平台产品', value: 1 },
-              { label: '其他产品', value: 0 },
+              { label: '其他产品', value: 0 }
             ],
             filterMultiple: false,
             slots: { default: 'platformFlag_default' }
@@ -847,11 +847,11 @@ export default {
           trigger: 'click',
           mode: 'row',
           showStatus: true
-        },
+        }
       },
       searchAccountTypeFormData: {
         typeName: ''
-      },
+      }
     }
   },
   computed: {
@@ -1140,7 +1140,7 @@ export default {
     },
     handleManagePatformProduct(row) {
       this.currentAccountType = row
-      //this.listAllPermissions4Group(row.id)
+      // this.listAllPermissions4Group(row.id)
       this.productAccountTypeDetailDrawer = true
     },
     submitPermissionForm(formName) {
@@ -1152,8 +1152,6 @@ export default {
         }
       })
     },
-
-
 
     handleAccountTypeCreate() {
       this.accountTypeFormData = Object.assign({}, this.initCreateData)
@@ -1311,7 +1309,7 @@ export default {
           message: '已取消删除'
         })
       })
-    },
+    }
   }
 }
 </script>
