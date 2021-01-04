@@ -66,11 +66,6 @@
             /></el-button>
           </el-form-item>
         </el-col>
-        <el-col v-if="folding" :span="8">
-          <el-form-item label="公司规模" prop="money">
-            <el-input v-model="searchFormData.money" />
-          </el-form-item>
-        </el-col>
       </el-form>
     </el-card>
 
@@ -104,76 +99,13 @@
           </template>
         </template> -->
 
-        <!-- 公司logo -->
-        <template v-slot:companyLogo_default="{ row }">
-          <template v-if="row.companyLogo">
-            <el-row>
-              <el-col>
-                <el-image
-                  :src="row.companyLogo"
-                  fit="contain"
-                  style="width:50%!important;"
-                />
-              </el-col>
-            </el-row>
-          </template>
-          <template v-else>
-            <el-image>
-              <div slot="error" class="image-slot">
-                <i class="el-icon-picture-outline" />
-              </div>
-            </el-image>
-          </template>
-        </template>
-
-        <!-- 公司规模 -->
-        <template v-slot:scale_default="{ row }">
-          <template v-if="row.scale === 0">
-            <el-tag type="danger" effect="dark">0-20人</el-tag>
-          </template>
-          <template v-else-if="row.scale === 1">
-            <el-tag type="danger" effect="dark">20-99人</el-tag>
-          </template>
-          <template v-else-if="row.scale === 2">
-            <el-tag type="warning" effect="dark">100-499人</el-tag>
-          </template>
-          <template v-else-if="row.scale === 3">
-            <el-tag type="" effect="dark">500-999人</el-tag>
-          </template>
-          <template v-else-if="row.scale === 4">
-            <el-tag type="" effect="dark">1000-9999人</el-tag>
-          </template>
-          <template v-else-if="row.scale === 5">
-            <el-tag type="success" effect="dark">10000人以上</el-tag>
-          </template>
-          <template v-else />
-        </template>
-
         <!-- 融资阶段 -->
-        <template v-slot:financingStage_default="{ row }">
-          <template v-if="row.financingStage === 0">
+        <template v-slot:voucherType_default="{ row }">
+          <template v-if="row.voucherType === 1">
             <el-tag type="" effect="dark">不需要融资</el-tag>
           </template>
-          <template v-else-if="row.financingStage === 1">
+          <template v-else-if="row.voucherType === 2">
             <el-tag type="warning" effect="dark">未融资</el-tag>
-          </template>
-          <template v-else-if="row.financingStage === 2">
-            <el-tag type="success" effect="dark">天使轮</el-tag>
-          </template>
-          <template v-else-if="row.financingStage === 3">
-            <el-tag type="success" effect="dark">A轮</el-tag>
-          </template>
-          <template v-else-if="row.financingStage === 4">
-            <el-tag type="warning" effect="dark">B轮</el-tag>
-          </template>
-          <template v-else-if="row.financingStage === 5">
-            <el-tag type="warning" effect="dark">C轮</el-tag>
-          </template>
-          <template v-else-if="row.financingStage === 6">
-            <el-tag type="danger" effect="dark">D轮及以上</el-tag>
-          </template>
-          <template v-else-if="row.financingStage === 7">
-            <el-tag type="success" effect="dark">已上市</el-tag>
           </template>
           <template v-else />
         </template>
@@ -221,27 +153,17 @@
       <el-form
         ref="dataForm"
         :rules="rules"
-        :model="company"
+        :model="voucher"
         label-position="right"
         label-width="120px"
         style="width: 100%; padding: 10px"
       >
         <el-row>
           <el-col :span="12">
-            <el-form-item label="公司全称" prop="companyName">
-              <el-input v-model="company.companyName" clearable />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="公司简称" prop="companyShortName">
-              <el-input v-model="company.companyShortName" clearable />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="融资阶段" prop="financingStage">
+            <el-form-item label="凭证分类" prop="voucherType">
               <el-select
-                v-model="company.financingStage"
-                placeholder="请选择融资阶段"
+                v-model="voucher.voucherType"
+                placeholder="请选择凭证分类"
                 style="width:100%"
               >
                 <el-option
@@ -254,62 +176,13 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="公司规模" prop="scale">
-              <el-select
-                v-model="company.scale"
-                placeholder="请选择公司规模"
-                style="width:100%"
-              >
-                <el-option
-                  v-for="item in genderOptionData"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.code"
-                />
-              </el-select>
+            <el-form-item label="凭证类型代码" prop="voucherCode">
+              <el-input v-model="voucher.voucherCode" clearable />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="公司官网" prop="website">
-              <el-input v-model="company.website" clearable />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="公司简介" prop="introduction">
-              <el-input v-model="company.introduction" clearable />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="操作人编号" prop="operatorId">
-              <el-input v-model="company.operatorId" clearable />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="录用人" prop="operatorName">
-              <el-input v-model="company.operatorName" clearable />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="审核人" prop="auditorName">
-              <el-input v-model="company.auditorName" clearable />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="审核人编号" prop="auditorId">
-              <el-input v-model="company.auditorId" clearable />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="备注" prop="note">
-              <el-input v-model="company.note" clearable />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="公司logo" prop="companyLogo">
-              <el-button
-                type="primary"
-                @click.native.prevent="handleImageUpload()"
-              >上传图片</el-button>
+            <el-form-item label="凭证名称" prop="voucherName">
+              <el-input v-model="voucher.voucherName" clearable />
             </el-form-item>
           </el-col>
         </el-row>
@@ -328,20 +201,6 @@
         </template>
       </div>
     </el-dialog>
-
-    <!-- 上传图片 -->
-    <el-dialog
-      v-if="importImageFormVisible"
-      title="上传图片"
-      :center="true"
-      width="410px"
-      :visible.sync="importImageFormVisible"
-    >
-      <el-form :model="images">
-        <SingleUpload v-model="uploadImageLoadUrl" />
-      </el-form>
-      {{ fapiao.url }}
-    </el-dialog>
   </div>
 </template>
 
@@ -354,26 +213,18 @@
 
 <script>
 import formatTableSize from '@/utils/size'
-import SingleUpload from '@/components/Upload/SingleUpload'
 import {
-  saveCompany,
-  deleteCompany,
-  batchDeleteCompany,
-  updateCompany,
-  listCompany,
-  getCompany
-} from '@/api/company'
+  saveVoucher,
+  deleteVoucher,
+  batchDeleteVoucher,
+  updateVoucher,
+  listVoucher,
+  getVoucher
+} from '@/api/voucher'
 
 export default {
-  components: {
-    SingleUpload
-  },
   data() {
     return {
-      uploadImageLoadUrl: '',
-      importImageFormVisible: false,
-      fapiao: {},
-      images: {},
       defaultHeight: '500px',
       tableHeight: '460px',
       permissionGroupInfoOptions: [],
@@ -381,70 +232,21 @@ export default {
       dialogFormVisible: false,
       loadingSubmitButton: false,
       submitButtonText: '提交',
-      allCompanyGroup: [],
+      allVoucherGroup: [],
       textMap: {
         update: '编辑',
         create: '创建',
         detail: '详情'
       },
+
       postOptionData: [
         {
-          code: 0,
-          name: '不需要融资'
-        },
-        {
           code: 1,
-          name: '未融资'
+          name: '发票'
         },
         {
           code: 2,
-          name: '天使轮'
-        },
-        {
-          code: 3,
-          name: 'A轮'
-        },
-        {
-          code: 4,
-          name: 'B轮'
-        },
-        {
-          code: 5,
-          name: 'C轮'
-        },
-        {
-          code: 6,
-          name: 'D轮及以上'
-        },
-        {
-          code: 7,
-          name: '以上市'
-        }
-      ],
-      genderOptionData: [
-        {
-          code: 0,
-          name: '0~20人'
-        },
-        {
-          code: 1,
-          name: '20~99人'
-        },
-        {
-          code: 2,
-          name: '100~499人'
-        },
-        {
-          code: 3,
-          name: '500~999人'
-        },
-        {
-          code: 4,
-          name: '1000~9999人'
-        },
-        {
-          code: 5,
-          name: '10000人以上'
+          name: '票据'
         }
       ],
       searchFormData: {
@@ -456,29 +258,25 @@ export default {
         end: '',
         type: [],
         resource: '',
-        desc: '',
-        financingStage: null,
-        scale: null
+        desc: ''
       },
       rules: {
-        companyName: [
-          { required: true, message: '请输入公司名称', trigger: 'blur' },
-          { min: 5, message: '长度大于 5 个字符', trigger: 'blur' }
+        voucherName: [
+          { required: true, message: '请输入凭证名称', trigger: 'blur' },
+          { min: 10, message: '长度大于 10 个字符', trigger: 'blur' }
+        ],
+        voucherCode: [
+          { required: true, message: '请输入类型代码', trigger: 'blur' },
+          { min: 10, message: '长度大于 5 个字符', trigger: 'blur' }
+        ],
+        voucherType: [
+          { required: true, message: '请输入分类', trigger: 'blur' },
         ]
       },
-      company: {
-        companyName: '',
-        companyShortName: '',
-        companyLogo: '',
-        website: '',
-        operatorId: '',
-        operatorName: '',
-        auditorId: '',
-        note: '',
-        introduction: '',
-        auditorName: '',
-        financingStage: null,
-        scale: null
+      voucher: {
+        voucherName: '',
+        voucherCode: '',
+        voucherType: null
       },
       initCreateData: {
         id: null,
@@ -626,155 +424,33 @@ export default {
                 limit: page.pageSize
               })
               const result = Object.assign(pageData, searchData, sortParams)
-              return listCompany(result)
+              return listVoucher(result)
             }
           }
         },
         columns: [
           { type: 'checkbox', width: 40, align: 'center' },
           {
-            field: 'companyName',
-            title: '公司全称 ',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'companyShortName',
-            title: '公司简称 ',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'companyLogo',
-            title: '公司Logo ',
+            field: 'voucherType',
+            title: '凭证分类',
             width: 200,
             align: 'center',
             headerAlign: 'center',
-            slots: { default: 'companyLogo_default' }
+            slots: { default: 'voucherType_default' }
           },
           {
-            field: 'financingStage',
-            title: '融资阶段 ',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center',
-            slots: { default: 'financingStage_default' }
-          },
-          {
-            field: 'scale',
-            title: '公司规模 ',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center',
-            slots: { default: 'scale_default' }
-          },
-          {
-            field: 'website',
-            title: '公司官网 ',
+            field: 'voucherCode ',
+            title: '凭证类型代码',
             width: 200,
             align: 'center',
             headerAlign: 'center'
           },
           {
-            field: 'introduction',
-            title: '公司简介 ',
+            field: 'voucherName',
+            title: '凭证名称',
             width: 200,
             align: 'center',
             headerAlign: 'center'
-          },
-          {
-            field: 'organizationCode',
-            title: '组织结构代码 ',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'businessLicenseUrl',
-            title: '公司营业执照 ',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'operatorId',
-            title: '操作人编号 ',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'operatorName',
-            title: '录入人 ',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'operateTime',
-            title: '录入时间 ',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'markFlag',
-            title: '认证状态 ',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'markTime',
-            title: '认证时间 ',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'auditorId',
-            title: '审核人编号 ',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'auditorName',
-            title: '审核人 ',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'auditTime',
-            title: '审核时间 ',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'opinion',
-            title: '审核意见 ',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'note',
-            title: '备注 ',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            title: '操作',
-            width: 140,
-            align: 'center',
-            headerAlign: 'center',
-            fixed: 'right',
-            slots: { default: 'operate' }
           }
         ],
         importConfig: {
@@ -795,57 +471,17 @@ export default {
           reserve: true,
           highlight: true,
           range: true
-        },
-        editRules: {
-          name: [
-            { required: true, message: 'app.body.valid.rName' },
-            { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
-          ],
-          email: [{ required: true, message: '邮件必须填写' }],
-          role: [{ required: true, message: '角色必须填写' }]
-        },
-        editConfig: {
-          trigger: 'click',
-          mode: 'row',
-          showStatus: true
         }
       }
     }
   },
   computed: {},
-  watch: {
-    uploadUrl: function(val) {
-      if (val) {
-        this.importFapiaoFormVisible = false
-        this.$message({
-          type: 'success',
-          message: '上传成功'
-        })
-      } else {
-        this.importFapiaoFormVisible = true
-      }
-    },
-    uploadImageLoadUrl: function(val) {
-      if (val) {
-        this.importImageFormVisible = false
-        this.$message({
-          type: 'success',
-          message: '上传成功'
-        })
-      } else {
-        this.importImageFormVisible = true
-      }
-    }
-  },
   created() {
     window.addEventListener('resize', this.getHeight)
     this.getHeight()
   },
 
   methods: {
-    handleImageUpload() {
-      this.importImageFormVisible = true
-    },
     handleViewDetail(row) {
       this.$router.push({
         name: 'fapiao-info',
@@ -887,7 +523,7 @@ export default {
       this.$refs[formName].resetFields()
     },
     handleCreate() {
-      this.company = Object.assign({}, this.initCreateData)
+      this.voucher = Object.assign({}, this.initCreateData)
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -919,13 +555,13 @@ export default {
             ) {
               const id = selectRecords[index]['id']
               const version = selectRecords[index]['version']
-              const company = {
+              const voucher = {
                 id: id,
                 version: version
               }
-              batchDeleteData.push(company)
+              batchDeleteData.push(voucher)
             }
-            batchDeleteCompany(batchDeleteData)
+            batchDeleteVoucher(batchDeleteData)
               .then(response => {
                 const result = response.data
                 if (result) {
@@ -956,7 +592,7 @@ export default {
       }
     },
     handleUpdate(row) {
-      this.company = Object.assign({}, row)
+      this.voucher = Object.assign({}, row)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -972,9 +608,9 @@ export default {
         if (valid) {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
-          const tempData = Object.assign({}, this.company)
+          const tempData = Object.assign({}, this.voucher)
           tempData.companyLogo = this.uploadImageLoadUrl
-          saveCompany(tempData)
+          saveVoucher(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -1002,8 +638,8 @@ export default {
         if (valid) {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
-          const tempData = Object.assign({}, this.company)
-          updateCompany(tempData)
+          const tempData = Object.assign({}, this.voucher)
+          updateVoucher(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -1039,7 +675,7 @@ export default {
             id: id,
             version: version
           })
-          deleteCompany(tempData)
+          deleteVoucher(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -1064,7 +700,7 @@ export default {
         })
     },
     viewRow(row) {
-      this.company = Object.assign({}, row)
+      this.voucher = Object.assign({}, row)
       this.dialogStatus = 'detail'
       this.dialogFormVisible = true
       this.$nextTick(() => {

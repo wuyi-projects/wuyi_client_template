@@ -196,7 +196,7 @@
       >
         <el-row>
           <el-col :span="12">
-            <el-form-item label="公司名称名" prop="name">
+            <el-form-item label="公司名称" prop="name">
               <el-input v-model="temp.name" clearable />
             </el-form-item>
           </el-col>
