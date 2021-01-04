@@ -102,10 +102,10 @@
         <!-- 融资阶段 -->
         <template v-slot:voucherType_default="{ row }">
           <template v-if="row.voucherType === 1">
-            <el-tag type="" effect="dark">不需要融资</el-tag>
+            <el-tag type="" effect="dark">发票</el-tag>
           </template>
           <template v-else-if="row.voucherType === 2">
-            <el-tag type="warning" effect="dark">未融资</el-tag>
+            <el-tag type="warning" effect="dark">票据</el-tag>
           </template>
           <template v-else />
         </template>
@@ -177,7 +177,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="凭证类型代码" prop="voucherCode">
-              <el-input v-model="voucher.voucherCode" clearable />
+              <el-input v-model="voucher.voucherCode" type="number" clearable />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -261,16 +261,15 @@ export default {
         desc: ''
       },
       rules: {
-        voucherName: [
-          { required: true, message: '请输入凭证名称', trigger: 'blur' },
-          { min: 10, message: '长度大于 10 个字符', trigger: 'blur' }
+        voucherType: [
+          { required: true, message: '请选择分类', trigger: 'blur' }
         ],
         voucherCode: [
-          { required: true, message: '请输入类型代码', trigger: 'blur' },
-          { min: 10, message: '长度大于 5 个字符', trigger: 'blur' }
+          { required: true, message: '请输入类型代码', trigger: 'blur' }
         ],
-        voucherType: [
-          { required: true, message: '请输入分类', trigger: 'blur' },
+        voucherName: [
+          { required: true, message: '请输入凭证名称', trigger: 'blur' },
+          { min: 2, message: '长度大于 2 个字符', trigger: 'blur' }
         ]
       },
       voucher: {
@@ -439,7 +438,7 @@ export default {
             slots: { default: 'voucherType_default' }
           },
           {
-            field: 'voucherCode ',
+            field: 'voucherCode',
             title: '凭证类型代码',
             width: 200,
             align: 'center',
@@ -448,9 +447,17 @@ export default {
           {
             field: 'voucherName',
             title: '凭证名称',
-            width: 200,
+            minWidth: 200,
             align: 'center',
             headerAlign: 'center'
+          },
+          {
+            title: '操作',
+            width: 120,
+            align: 'center',
+            headerAlign: 'center',
+            fixed: 'right',
+            slots: { default: 'operate' }
           }
         ],
         importConfig: {
