@@ -13,7 +13,7 @@
       v-if="dialogFormVisible"
       :title="textMap[dialogStatus]"
       :center="true"
-      width="60%"
+      width="40%"
       :visible.sync="dialogFormVisible"
     >
       <el-form
@@ -40,6 +40,8 @@
                 range-separator="至"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
+                first-day-of-week="1"
+                style="width:100%"
               />
             </el-form-item>
           </el-col>
@@ -186,12 +188,6 @@ export default {
       this.submitButtonText = '提交'
     },
     createData() {
-      console.log('@@@' + this.temp.title)
-
-      console.log('@@@' + this.temp.start)
-
-      console.log('@@@' + this.temp.content)
-
       const startEnd = this.temp.start
       const size = startEnd.length
 
@@ -210,9 +206,11 @@ export default {
           content: this.temp.content
         })
       }
-
       //   隐藏弹出框
       this.dialogFormVisible = false
+      this.temp.title=''
+      this.temp.start=null
+      this.temp.content=''
       /*  //   刷新日历
       this.calendarApi.refetchEvents() */
       /* this.$refs['dataForm'].validate(valid => {
