@@ -5,7 +5,7 @@ const calendarRouter = {
     component: Layout,
     meta: {
         title: '日历详情',
-        icon: 'tree',
+        icon: 'calendar',
         roles: ['PermissionAdministrator', 'PermissionAssignmentAdministrator']
     },
     children: [{

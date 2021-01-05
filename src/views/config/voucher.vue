@@ -10,7 +10,7 @@
         size="small"
       >
         <el-col :span="8">
-          <el-form-item label="发票名称" prop="name">
+          <el-form-item label="公司全称" prop="name">
             <el-input v-model="searchFormData.name" clearable />
           </el-form-item>
         </el-col>
@@ -42,17 +42,6 @@
               </el-form-item>
             </el-col>
           </el-form-item>
-        </el-col>
-        <el-col v-if="folding" :span="8">
-          <el-form-item label="金额" prop="money">
-            <el-input v-model="searchFormData.money" />
-          </el-form-item>
-        </el-col>
-        <el-col v-if="folding" :span="8">
-          <el-form-item />
-        </el-col>
-        <el-col v-if="folding" :span="8">
-          <el-form-item />
         </el-col>
         <el-col :span="8">
           <el-form-item style="float: right" label-width="0">
@@ -97,40 +86,52 @@
               type="primary"
               @click.native.prevent="handleBatchDelete()"
             >批量删除</el-button>
-            <el-button
-              type="primary"
-              @click.native.prevent="handleFapiaoUpload()"
-            >上传电子发票</el-button>
-            <el-button
-              type="primary"
-              @click.native.prevent="handleImageUpload()"
-            >上传图片</el-button>
           </el-button-group>
-          <el-button
-            style="margin:0 10px;"
-            type="primary"
-            @click.native.prevent="handleUpload()"
-          >上传文件</el-button>
         </template>
 
         <!--是否可用展示-->
-        <template v-slot:available_default="{ row }">
+        <!-- <template v-slot:available_default="{ row }">
           <template v-if="row.available === 1">
             <el-badge is-dot class="item" type="primary" />启用
           </template>
           <template v-else>
             <el-badge is-dot class="item" type="info" />停用
           </template>
+        </template> -->
+
+        <!-- 融资阶段 -->
+        <template v-slot:voucherType_default="{ row }">
+          <template v-if="row.voucherType === 1">
+            <el-tag type="" effect="dark">不需要融资</el-tag>
+          </template>
+          <template v-else-if="row.voucherType === 2">
+            <el-tag type="warning" effect="dark">未融资</el-tag>
+          </template>
+          <template v-else />
         </template>
 
         <!--数据行操作-->
         <template v-slot:operate="{ row }">
-          <el-button
-            type="text"
-            :command="beforeHandleCommand('handleDelete', row)"
-          >删除</el-button>
+          <el-button type="text" @click="handleUpdate(row)">修改</el-button>
           <el-divider direction="vertical" />
-          <el-button type="text" @click="handleViewDetail(row)">详情</el-button>
+          <el-dropdown @command="handleCommand">
+            <span class="el-dropdown-link">
+              更多<i class="el-icon-arrow-down" />
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item
+                :command="beforeHandleCommand('handleDelete', row)"
+              >
+                删除
+              </el-dropdown-item>
+              <el-dropdown-item
+                :command="beforeHandleCommand('viewRow', row)"
+                divided
+              >
+                详情
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
         <!--自定义空数据模板-->
         <template v-slot:empty>
@@ -146,57 +147,42 @@
       v-if="dialogFormVisible"
       :title="textMap[dialogStatus]"
       :center="true"
-      width="40%"
+      width="60%"
       :visible.sync="dialogFormVisible"
     >
       <el-form
         ref="dataForm"
         :rules="rules"
-        :model="temp"
+        :model="voucher"
         label-position="right"
-        label-width="80px"
+        label-width="120px"
         style="width: 100%; padding: 10px"
       >
         <el-row>
-          <el-col :span="24">
-            <el-form-item label="权限名称" prop="permission">
-              <el-input v-model="temp.permission" clearable />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="权限描述" prop="description">
-              <el-input v-model="temp.description" type="textarea" clearable />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="权限分组" prop="permissionGroupInfoId">
+          <el-col :span="12">
+            <el-form-item label="凭证分类" prop="voucherType">
               <el-select
-                v-model="temp.permissionGroupInfoId"
-                placeholder="请选择权限分组"
-                style="width: 100%"
+                v-model="voucher.voucherType"
+                placeholder="请选择凭证分类"
+                style="width:100%"
               >
                 <el-option
-                  v-for="item in permissionGroupInfoOptions"
+                  v-for="item in postOptionData"
                   :key="item.id"
-                  :label="item.groupName"
-                  :value="item.id"
+                  :label="item.name"
+                  :value="item.code"
                 />
               </el-select>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="是否可用" prop="available">
-              <el-switch
-                v-model="temp.available"
-                :active-value="1"
-                :inactive-value="0"
-              />
+          <el-col :span="12">
+            <el-form-item label="凭证类型代码" prop="voucherCode">
+              <el-input v-model="voucher.voucherCode" clearable />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="凭证名称" prop="voucherName">
+              <el-input v-model="voucher.voucherName" clearable />
             </el-form-item>
           </el-col>
         </el-row>
@@ -215,67 +201,30 @@
         </template>
       </div>
     </el-dialog>
-
-    <!-- 上传电子发票 -->
-    <el-dialog
-      v-if="importFapiaoFormVisible"
-      title="上传电子发票"
-      :center="true"
-      width="410px"
-      :visible.sync="importFapiaoFormVisible"
-    >
-      <el-form :model="fapiao">
-        <ElectronicFapiaoUpload v-model="uploadUrl" />
-      </el-form>
-      {{ fapiao.url }}
-    </el-dialog>
-
-    <!-- 上传电子发票 -->
-    <el-dialog
-      v-if="importImageFormVisible"
-      title="上传图片"
-      :center="true"
-      width="410px"
-      :visible.sync="importImageFormVisible"
-    >
-      <el-form :model="images">
-        <SingleUpload v-model="uploadImageLoadUrl" />
-      </el-form>
-      {{ fapiao.url }}
-    </el-dialog>
   </div>
 </template>
 
-<style></style>
+<style>
+.el-dropdown-link {
+  cursor: pointer;
+  color: #409eff;
+}
+</style>
 
 <script>
 import formatTableSize from '@/utils/size'
-import ElectronicFapiaoUpload from '@/components/Upload/ElectronicFapiaoUpload'
-import SingleUpload from '@/components/Upload/SingleUpload'
-
 import {
-  saveFapiaoManagement,
-  deleteFapiaoManagement,
-  batchDeleteFapiaoManagement,
-  updateFapiaoManagement,
-  listFapiaoManagement
-} from '@/api/fapiao-management'
+  saveVoucher,
+  deleteVoucher,
+  batchDeleteVoucher,
+  updateVoucher,
+  listVoucher,
+  getVoucher
+} from '@/api/voucher'
 
 export default {
-  components: {
-    ElectronicFapiaoUpload,
-    SingleUpload
-  },
   data() {
     return {
-      fapiao: {},
-      uploadUrl: '',
-      images: {},
-      uploadImageLoadUrl: '',
-      importFapiaoFormVisible: false,
-      importImageFormVisible: false,
-      dialogImageUrl: '',
-      dialogVisible: false,
       defaultHeight: '500px',
       tableHeight: '460px',
       permissionGroupInfoOptions: [],
@@ -283,12 +232,23 @@ export default {
       dialogFormVisible: false,
       loadingSubmitButton: false,
       submitButtonText: '提交',
-      allFapiaoManagementGroup: [],
+      allVoucherGroup: [],
       textMap: {
         update: '编辑',
         create: '创建',
         detail: '详情'
       },
+
+      postOptionData: [
+        {
+          code: 1,
+          name: '发票'
+        },
+        {
+          code: 2,
+          name: '票据'
+        }
+      ],
       searchFormData: {
         id: '',
         name: '',
@@ -301,18 +261,22 @@ export default {
         desc: ''
       },
       rules: {
-        permission: [
-          { required: true, message: '请输入权限名称', trigger: 'blur' },
-          { min: 5, message: '长度大于 5 个字符', trigger: 'blur' }
+        voucherName: [
+          { required: true, message: '请输入凭证名称', trigger: 'blur' },
+          { min: 10, message: '长度大于 10 个字符', trigger: 'blur' }
+        ],
+        voucherCode: [
+          { required: true, message: '请输入类型代码', trigger: 'blur' },
+          { min: 10, message: '长度大于 5 个字符', trigger: 'blur' }
+        ],
+        voucherType: [
+          { required: true, message: '请输入分类', trigger: 'blur' },
         ]
       },
-      temp: {
-        id: null,
-        permission: '',
-        description: '',
-        permissionGroupInfoId: null,
-        available: 1,
-        version: 0
+      voucher: {
+        voucherName: '',
+        voucherCode: '',
+        voucherType: null
       },
       initCreateData: {
         id: null,
@@ -460,28 +424,22 @@ export default {
                 limit: page.pageSize
               })
               const result = Object.assign(pageData, searchData, sortParams)
-              return listFapiaoManagement(result)
+              return listVoucher(result)
             }
           }
         },
         columns: [
           { type: 'checkbox', width: 40, align: 'center' },
           {
-            field: 'companyId',
-            title: '公司编号',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
             field: 'voucherType',
             title: '凭证分类',
             width: 200,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            slots: { default: 'voucherType_default' }
           },
           {
-            field: 'voucherTypeCode',
+            field: 'voucherCode ',
             title: '凭证类型代码',
             width: 200,
             align: 'center',
@@ -493,315 +451,6 @@ export default {
             width: 200,
             align: 'center',
             headerAlign: 'center'
-          },
-          {
-            field: 'voucherCode',
-            title: '发票代码',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'voucherNumber',
-            title: '发票号码',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'voucherDate',
-            title: '开票日期',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'hash',
-            title: '密码区',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'checkCode',
-            title: '校验码',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'machineNumber',
-            title: '机器编号',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'purchaserName',
-            title: '购买方名称',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'purchaserRegistrationNumber',
-            title: '购买方纳税人识别号',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'purchaserAddressPhone',
-            title: '购买方地址、电话',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'purchaserAddress',
-            title: '购买方地址',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'purchaserPhone',
-            title: '购买方电话',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'paymentIdentification',
-            title: '电子支付标识',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'voucherContent',
-            title: '凭证明细',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'taxRate',
-            title: '税率',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'taxAmount',
-            title: '税额',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'totalAmount',
-            title: '价税合计',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'sellerName',
-            title: '销售方名称',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'sellerRegistrationNumber',
-            title: '销售方纳税人识别号',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'sellerAddressPhone',
-            title: '销售方地址、电话',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'sellerAddress',
-            title: '销售方地址',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'sellerPhone',
-            title: '销售方电话',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'sellerDepositBank',
-            title: '销售方开户行及账号',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'voucherNote',
-            title: '发票备注',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'voucherPayeeName',
-            title: '发票收款人',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'voucherAuditorName',
-            title: '发票复核人',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'voucherOperatorName',
-            title: '发票开票人',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'voucherFileType',
-            title: '发票格式',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'voucherUrl',
-            title: '凭证URL',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'reimbursementFlag',
-            title: '是否报销',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'reimbursementTime',
-            title: '报销日期',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'reimbursementBatchNumber',
-            title: '报销批次号',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'accountingFlag',
-            title: '是否记账',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'accountingTime',
-            title: '记账日期',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'accountingInfoId',
-            title: '记账编号',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'voucherStatus',
-            title: '凭证状态',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'operatorId',
-            title: '操作人编号',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'operatorName',
-            title: '录入人',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'operateTime',
-            title: '录入时间',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'auditorId',
-            title: '审核人编号',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'auditorName',
-            title: '审核人名称',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'auditTime',
-            title: '审核时间',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'opinion',
-            title: '审核意见',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'note',
-            title: '备注',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            title: '操作',
-            width: 140,
-            align: 'center',
-            headerAlign: 'center',
-            fixed: 'right',
-            slots: { default: 'operate' }
           }
         ],
         importConfig: {
@@ -822,60 +471,17 @@ export default {
           reserve: true,
           highlight: true,
           range: true
-        },
-        editRules: {
-          name: [
-            { required: true, message: 'app.body.valid.rName' },
-            { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
-          ],
-          email: [{ required: true, message: '邮件必须填写' }],
-          role: [{ required: true, message: '角色必须填写' }]
-        },
-        editConfig: {
-          trigger: 'click',
-          mode: 'row',
-          showStatus: true
         }
       }
     }
   },
   computed: {},
-  watch: {
-    uploadUrl: function(val) {
-      if (val) {
-        this.importFapiaoFormVisible = false
-        this.$message({
-          type: 'success',
-          message: '上传成功'
-        })
-      } else {
-        this.importFapiaoFormVisible = true
-      }
-    },
-    uploadImageLoadUrl: function(val) {
-      if (val) {
-        this.importImageFormVisible = false
-        this.$message({
-          type: 'success',
-          message: '上传成功'
-        })
-      } else {
-        this.importImageFormVisible = true
-      }
-    }
-  },
   created() {
     window.addEventListener('resize', this.getHeight)
     this.getHeight()
   },
 
   methods: {
-    handleFapiaoUpload() {
-      this.importFapiaoFormVisible = true
-    },
-    handleImageUpload() {
-      this.importImageFormVisible = true
-    },
     handleViewDetail(row) {
       this.$router.push({
         name: 'fapiao-info',
@@ -917,7 +523,7 @@ export default {
       this.$refs[formName].resetFields()
     },
     handleCreate() {
-      this.temp = Object.assign({}, this.initCreateData)
+      this.voucher = Object.assign({}, this.initCreateData)
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -949,13 +555,13 @@ export default {
             ) {
               const id = selectRecords[index]['id']
               const version = selectRecords[index]['version']
-              const temp = {
+              const voucher = {
                 id: id,
                 version: version
               }
-              batchDeleteData.push(temp)
+              batchDeleteData.push(voucher)
             }
-            batchDeleteFapiaoManagement(batchDeleteData)
+            batchDeleteVoucher(batchDeleteData)
               .then(response => {
                 const result = response.data
                 if (result) {
@@ -986,7 +592,7 @@ export default {
       }
     },
     handleUpdate(row) {
-      this.temp = Object.assign({}, row)
+      this.voucher = Object.assign({}, row)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -1002,8 +608,9 @@ export default {
         if (valid) {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
-          const tempData = Object.assign({}, this.temp)
-          saveFapiaoManagement(tempData)
+          const tempData = Object.assign({}, this.voucher)
+          tempData.companyLogo = this.uploadImageLoadUrl
+          saveVoucher(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -1031,8 +638,8 @@ export default {
         if (valid) {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
-          const tempData = Object.assign({}, this.temp)
-          updateFapiaoManagement(tempData)
+          const tempData = Object.assign({}, this.voucher)
+          updateVoucher(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -1068,7 +675,7 @@ export default {
             id: id,
             version: version
           })
-          deleteFapiaoManagement(tempData)
+          deleteVoucher(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -1093,7 +700,7 @@ export default {
         })
     },
     viewRow(row) {
-      this.temp = Object.assign({}, row)
+      this.voucher = Object.assign({}, row)
       this.dialogStatus = 'detail'
       this.dialogFormVisible = true
       this.$nextTick(() => {
