@@ -369,22 +369,12 @@ import {
   deletePlatformProduct,
   batchDeletePlatformProduct,
   updatePlatformProduct,
-  listAllAccountType4Product,
   listAccountType4Product,
   saveAccountType,
   deleteAccountType,
   batchDeleteAccountType,
   updateAccountType
 } from '@/api/platform-product'
-
-const validatePhone = (rule, value, callback) => { // 手机正则验证
-  if (/^(13[0-9]|14[05679]|15[012356789]|16[2567]|17[012356789]|18[0-9]|19[189])[0-9]{8}$/.test(value) === false
-  ) {
-    callback(new Error('请输入正确的手机号'))
-  } else {
-    callback()
-  }
-}
 
 export default {
   data() {
@@ -1152,9 +1142,9 @@ export default {
         }
       })
     },
-
     handleAccountTypeCreate() {
       this.accountTypeFormData = Object.assign({}, this.initCreateData)
+      this.accountTypeFormData.paltformProductId = this.currentAccountType.id
       this.dialogStatus = 'create'
       this.accountTypeDialogFormVisible = true
       this.$nextTick(() => {
