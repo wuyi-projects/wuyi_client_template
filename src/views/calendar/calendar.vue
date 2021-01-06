@@ -1,76 +1,119 @@
 /*
 <template>
   <div class="app-container">
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
+    <el-card class="box-card" :style="{ height: defaultHeight }">
+      <el-row slot="header" class="clearfix" style="font-size:20px">
         <span>日历</span>
-      </div>
-      <!-- 日历 -->
-      <FullCalendar ref="calendarTest" :options="calendarOptions" />
-    </el-card>
+      </el-row>
+      <el-row>
+        <el-col :span="4" justify="center" align="middle">
+          <div
+            class="left-title-box"
+            style="text-align:center;font-weight:700;font-size:18px;color:black"
+          >
+            日程详情
+          </div>
+        </el-col>
+        <el-col :span="20">
+          <!-- 日历 -->
+          <FullCalendar
+            ref="calendarTest"
+            :options="calendarOptions"
+            :height="tableHeight"
+          />
+          <el-dialog
+            v-if="dialogFormVisible"
+            :title="textMap[dialogStatus]"
+            :center="true"
+            width="40%"
+            :visible.sync="dialogFormVisible"
+          >
+            <el-form
+              ref="dataForm"
+              :rules="rules"
+              :model="temp"
+              label-position="right"
+              label-width="80px"
+              style="width: 100%; padding:10px;"
+            >
+              <el-row>
+                <el-col :span="24">
+                  <el-form-item label="日程等级" prop="bgColor">
+                    <el-select
+                      v-model="temp.bgColor"
+                      placeholder="请选择日程的等级"
+                      style="width:100%"
+                    >
+                      <el-option
+                        v-for="item in calendarBgColor"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.code"
+                      />
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
 
-    <el-dialog
-      v-if="dialogFormVisible"
-      :title="textMap[dialogStatus]"
-      :center="true"
-      width="40%"
-      :visible.sync="dialogFormVisible"
-    >
-      <el-form
-        ref="dataForm"
-        :rules="rules"
-        :model="temp"
-        label-position="right"
-        label-width="80px"
-        style="width: 100%; padding:10px;"
-      >
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="标题" prop="title">
-              <el-input v-model="temp.title" clearable />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="起始时间" prop="start">
-              <el-date-picker
-                v-model="temp.start"
-                type="datetimerange"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                first-day-of-week="1"
-                style="width:100%"
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="日程内容" prop="content">
-              <el-input v-model="temp.content" type="textarea" clearable />
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <template v-if="dialogStatus === 'create'">
-          <el-button @click="resetForm('dataForm')">
-            重置
-          </el-button>
-          <el-button type="primary" @click="createData()">
-            {{ submitButtonText }}
-          </el-button>
-        </template>
-      </div>
-    </el-dialog>
+              <el-row>
+                <el-col :span="24">
+                  <el-form-item label="标题" prop="title">
+                    <el-input v-model="temp.title" clearable />
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="24">
+                  <el-form-item label="起始时间" prop="start">
+                    <el-date-picker
+                      v-model="temp.start"
+                      type="datetimerange"
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      end-placeholder="结束日期"
+                      first-day-of-week="1"
+                      style="width:100%"
+                    />
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="24">
+                  <el-form-item label="日程内容" prop="content">
+                    <el-input
+                      v-model="temp.content"
+                      type="textarea"
+                      clearable
+                    />
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <template v-if="dialogStatus === 'create'">
+                <el-button @click="resetForm('dataForm')">
+                  重置
+                </el-button>
+                <el-button type="primary" @click="createData()">
+                  {{ submitButtonText }}
+                </el-button>
+              </template>
+            </div>
+          </el-dialog>
+        </el-col>
+      </el-row>
+    </el-card>
   </div>
 </template>
 
 <style>
-.fc-toolbar h2 {
-  display: inline;
+.left-title-box {
+  position: relative;
+  border-radius: 4px 0 0 0px;
+  padding: 20px;
+  box-sizing: border-box;
+  color: #fff;
+  font-size: 14px;
 }
 </style>
 
@@ -91,11 +134,14 @@ export default {
   },
   data() {
     return {
+      defaultHeight: '1000px',
+      tableHeight: '460px',
       textMap: {
         create: '创建日程事件'
       },
       dialogFormVisible: false,
       temp: {
+        bgColor: '',
         title: '',
         start: '',
         content: ''
@@ -106,6 +152,24 @@ export default {
           { min: 8, message: '长度大于 8 个字符', trigger: 'blur' }
         ]
       },
+      calendarBgColor: [
+        {
+          code: 0,
+          name: '重要'
+        },
+        {
+          code: 1,
+          name: '普通'
+        },
+        {
+          code: 2,
+          name: '一般'
+        },
+        {
+          code: 3,
+          name: '特殊'
+        }
+      ],
       dialogStatus: '',
       submitButtonText: '提交',
       calendarOptions: {
@@ -137,49 +201,38 @@ export default {
         select: this.handleDateSelect, // 选择日期事件，可响应一个新建日程的事件
         eventLimit: true,
         dayMaxEventRows: true,
+        contentHeight: 710, // 设置查看日历的高度
         views: {
           timeGrid: {
-            eventLimit: 2,
-            dayMaxEventRows: 5
+            eventLimit: 2
+            // dayMaxEventRows: 5
           },
           timeGridFourDay: {
             type: 'timeGrid',
             dayCount: 4
           }
         },
-        events: [
-          {
-            title: '发票接口开发',
-            start: '2021-01-05',
-            classNames: ['cal']
-          },
-          {
-            title: '发票接口开发',
-            start: '2021-01-05',
-            classNames: ['cal']
-          },
-          {
-            title: '发票接口开发',
-            start: '2021-01-05',
-            classNames: ['cal']
-          },
-          {
-            title: '发票接口开发',
-            start: '2021-01-05',
-            classNames: ['cal']
-          },
-          {
-            title: '发票接口开发',
-            start: '2021-01-05',
-            classNames: ['cal']
-          }
-        ]
+        eventTimeFormat: {
+          // like '14:30:00'
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          meridiem: false
+        },
+        events: []
       }
     }
   },
   computed: {},
-  created() {},
+  created() {
+    addEventListener('resize', this.getHeight)
+    this.getHeight()
+  },
   methods: {
+    getHeight() {
+      this.defaultHeight = window.innerHeight - 70 + 'px'
+      this.tableHeight = window.innerHeight - 220 + 'px'
+    },
     resetForm(formName) {
       this.$refs[formName].resetFields()
     },
@@ -191,6 +244,7 @@ export default {
       const startEnd = this.temp.start
       const size = startEnd.length
 
+      const bgColor = ['red', 'orange', 'skyblue', 'purple']
       let start
       let end
       if (size >= 1) {
@@ -200,17 +254,21 @@ export default {
       }
       if (start || end) {
         this.calendarOptions.events.push({
+          backgroundColor: bgColor[this.temp.bgColor],
           title: this.temp.title,
           start: start,
           end: end,
-          content: this.temp.content
+          content: this.temp.content,
+          display: 'block',
+          borderColor: bgColor[this.temp.bgColor]
         })
       }
       //   隐藏弹出框
       this.dialogFormVisible = false
-      this.temp.title=''
-      this.temp.start=null
-      this.temp.content=''
+      this.temp.title = ''
+      this.temp.start = ''
+      this.temp.content = ''
+      this.temp.bgColor = ''
       /*  //   刷新日历
       this.calendarApi.refetchEvents() */
       /* this.$refs['dataForm'].validate(valid => {
@@ -242,7 +300,8 @@ export default {
       }) */
     },
     handleDateClick(arg) {
-      (this.dialogFormVisible = true), (this.dialogStatus = 'create')
+      this.dialogFormVisible = true
+      this.dialogStatus = 'create'
       /* const data = {
         title: 'New Event',
         start: arg.dateStr,
