@@ -13,7 +13,7 @@
             <span>我的待办</span>
           </div>
           <div>
-            <h2>8个任务</h2>
+            <h2>{{ commission }}个任务</h2>
           </div>
         </el-col>
         <el-col
@@ -26,7 +26,7 @@
             <span>本周任务平均处理时间</span>
           </div>
           <div>
-            <h2>32分钟</h2>
+            <h2>{{ needtime }}分钟</h2>
           </div>
         </el-col>
         <el-col :span="8" justify="center" align="middle">
@@ -34,7 +34,7 @@
             <span>本周完成任务数</span>
           </div>
           <div>
-            <h2>24个任务</h2>
+            <h2>{{ finishcommission }}个任务</h2>
           </div>
         </el-col>
       </el-row>
@@ -42,28 +42,26 @@
     <!-- 详情栏 -->
     <!-- <el-card class="box-card" :style="{ height: defaultHeight }"> -->
     <el-row :gutter="20">
-      <el-col :span="4">
-        <el-card class="box-card">
+      <el-col :span="4" v-for="data in Data"  :key="data.title">
+        <el-card  shadow="hover" body-style="padding:0">
           <el-row>
-            <el-col :span="8" style="padding-top:20px">
+            <el-col :span="24" style="padding-top:20px;text-align:center">
               <el-image
-                style="width: 60px; height: 60px;border-radius:50%"
+                style="width: 100px; height: 100px;"
                 :src="url"
                 :preview-src-list="srcList"
               />
             </el-col>
-            <el-col :span="16">
-              <h3 style="margin-bottom:0">网络技术那家强,就来武汉找物一</h3>
-              <span>在中台产品的研发过程中，会出现不同的设计规范和实现方式，但其中往往存在很多类似的页面</span>
+            <el-col :span="24">
+              <h3 style="padding:10px">{{data.title}}</h3>
             </el-col>
           </el-row>
-          <el-row><el-divider /></el-row>
-          <el-row style="height:35px;line-height:35px;">
+          <el-row style="border-top:1px solid #ccc;width:100%" type="flex">
             <el-col
               :span="11"
               style="text-align:center"
             ><el-button type="text">操作一</el-button></el-col>
-            <el-col :span="2"> <el-divider direction="vertical" /></el-col>
+            <el-col :span="2" style="margin-top:8px;font-size:16px"> <el-divider direction="vertical" /></el-col>
             <el-col
               :span="11"
               style="text-align:center"
@@ -97,6 +95,22 @@ import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
+       Data:[{
+          title:'网络技术那家强,就来武汉找物一'
+       },{
+          title:'网络技术那家强,就来武汉找物一'
+       },{
+          title:'网络技术那家强,就来武汉找物一'
+       },{
+          title:'网络技术那家强,就来武汉找物一'
+       },{
+          title:'网络技术那家强,就来武汉找物一'
+       },{
+          title:'网络技术那家强,就来武汉找物一'
+       }],
+      commission: 8,
+      needtime: 32,
+      finishcommission: 24,
       defaultHeight: '500px',
       url:
         'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
