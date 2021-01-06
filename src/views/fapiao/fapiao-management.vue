@@ -246,7 +246,7 @@
   </div>
 </template>
 
-<style></style>
+<style scoped></style>
 
 <script>
 import formatTableSize from '@/utils/size'

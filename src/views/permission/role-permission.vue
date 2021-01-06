@@ -128,7 +128,7 @@
   </div>
 </template>
 
-<style>
+<style scoped>
 .el-dropdown-link {
   cursor: pointer;
   color: #409eff;

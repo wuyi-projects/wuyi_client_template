@@ -204,7 +204,7 @@
   </div>
 </template>
 
-<style>
+<style scoped>
 .el-dropdown-link {
   cursor: pointer;
   color: #409eff;
@@ -270,7 +270,7 @@ export default {
           { min: 10, message: '长度大于 5 个字符', trigger: 'blur' }
         ],
         voucherType: [
-          { required: true, message: '请输入分类', trigger: 'blur' },
+          { required: true, message: '请输入分类', trigger: 'blur' }
         ]
       },
       voucher: {
