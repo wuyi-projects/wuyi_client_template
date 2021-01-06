@@ -19,6 +19,7 @@ import calendarRouter from './modules/calendar'
 import companyRouter from './modules/company'
 import wechatMiniprogramConfigRouter from './modules/wechat-miniprogram-config'
 import profileRouter from './modules/profile'
+import homeRouter from './modules/home'
 
 /**
  * constantRoutes
@@ -26,68 +27,69 @@ import profileRouter from './modules/profile'
  * all roles can be accessed
  */
 export const constantRoutes = [{
-  path: '/redirect',
-  component: Layout,
-  hidden: true,
-  children: [{
-    path: '/redirect/:path(.*)',
-    component: () =>
-      import ('@/views/redirect/index')
-  }]
-},
-{
-  path: '/login',
-  component: () =>
-    import ('@/views/login/index'),
-  hidden: true
-},
-{
-  path: '/404',
-  component: () =>
-    import ('@/views/error-page/404'),
-  hidden: true
-},
-{
-  path: '/',
-  component: Layout,
-  redirect: '/dashboard',
-  children: [{
-    path: 'dashboard',
-    name: 'Dashboard',
-    component: () =>
-      import ('@/views/dashboard/index'),
-    meta: { title: '首页', icon: 'dashboard' }
-  }]
-}
+        path: '/redirect',
+        component: Layout,
+        hidden: true,
+        children: [{
+            path: '/redirect/:path(.*)',
+            component: () =>
+                import ('@/views/redirect/index')
+        }]
+    },
+    {
+        path: '/login',
+        component: () =>
+            import ('@/views/login/index'),
+        hidden: true
+    },
+    {
+        path: '/404',
+        component: () =>
+            import ('@/views/error-page/404'),
+        hidden: true
+    },
+    {
+        path: '/',
+        component: Layout,
+        redirect: '/dashboard',
+        children: [{
+            path: 'dashboard',
+            name: 'Dashboard',
+            component: () =>
+                import ('@/views/dashboard/index'),
+            meta: { title: '首页', icon: 'dashboard' }
+        }]
+    }
 ]
 
 export const asyncRoutes = [
-  taskRouter,
-  newsRouter,
-  oaRouter,
-  userRouter,
-  configRouter,
-  fileRouter,
-  fapiaoRouter,
-  permissionRouter,
-  calendarRouter,
-  companyRouter,
-  wechatMiniprogramConfigRouter,
-  profileRouter,
-  { path: '*', redirect: '/404', hidden: true }
+    taskRouter,
+    newsRouter,
+    oaRouter,
+    userRouter,
+    configRouter,
+    fileRouter,
+    fapiaoRouter,
+    permissionRouter,
+    calendarRouter,
+    companyRouter,
+    wechatMiniprogramConfigRouter,
+    profileRouter,
+    homeRouter,
+    { path: '*', redirect: '/404', hidden: true }
 ]
 
 const createRouter = () =>
-  new Router({
-    scrollBehavior: () => ({ y: 0 }),
-    routes: constantRoutes
-  })
+    new Router({
+        scrollBehavior: () => ({ y: 0 }),
+        routes: constantRoutes
+    })
 
 const router = createRouter()
 
 export function resetRouter() {
-  const newRouter = createRouter()
-  router.matcher = newRouter.matcher
+    const newRouter = createRouter()
+    router.matcher = newRouter.matcher
 }
 
 export default router

@@ -106,7 +106,7 @@
   </div>
 </template>
 
-<style>
+<style scoped>
 .left-title-box {
   position: relative;
   border-radius: 4px 0 0 0px;
