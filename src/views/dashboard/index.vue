@@ -10,7 +10,7 @@
   </el-main>
 </template>
 
-<style>
+<style scoped>
 
 .el-main {
   height: calc(100vh - 50px);

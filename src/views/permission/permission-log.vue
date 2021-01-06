@@ -139,7 +139,7 @@
   </div>
 </template>
 
-<style>
+<style scoped>
 .el-dropdown-link {
   cursor: pointer;
   color: #409eff;
@@ -373,15 +373,15 @@ export default {
   },
   computed: {},
   /*  */
-   created() {
+  created() {
     window.addEventListener('resize', this.getHeight)
     this.getHeight()
   },
   methods: {
     /* 自适应高度 */
     getHeight() {
-      this.defaultHeight = window.innerHeight - 180+"px"
-      this.tableHeight=window.innerHeight-220+'px'
+      this.defaultHeight = window.innerHeight - 180 + 'px'
+      this.tableHeight = window.innerHeight - 220 + 'px'
     },
     checkColumnMethod({ column }) {
       if (['nickname', 'role'].includes(column.property)) {

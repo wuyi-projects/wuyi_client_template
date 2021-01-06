@@ -121,7 +121,7 @@
   </div>
 </template>
 
-<style>
+<style scoped>
 .el-dropdown-link {
   cursor: pointer;
   color: #409eff;
@@ -145,7 +145,7 @@ export default {
     return {
       /* range: [],
       startDatePicker: this.beginDate(),
-      endDatePicker: this.processDate(), */      
+      endDatePicker: this.processDate(), */
       defaultHeight: '500px',
       tableHeight: '460px',
       permissionGroupInfoOptions: [],
@@ -405,15 +405,15 @@ export default {
     }
   },
   computed: {},
-  created(){
-    window:addEventListener('resize',this.getHeight)
+  created() {
+    addEventListener('resize', this.getHeight)
     this.getHeight()
   },
 
   methods: {
-    getHeight(){
-      this.defaultHeight=window.innerHeight-180+'px'
-      this.tableHeight=window.innerHeight-200+'px'
+    getHeight() {
+      this.defaultHeight = window.innerHeight - 180 + 'px'
+      this.tableHeight = window.innerHeight - 200 + 'px'
     },
     /* beginDate() {
       const self = this;

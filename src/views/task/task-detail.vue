@@ -195,7 +195,7 @@
   </div>
 </template>
 
-<style>
+<style scoped>
 
 .padding-right {
   padding-right:10px;

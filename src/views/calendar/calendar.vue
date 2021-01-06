@@ -68,7 +68,7 @@
   </div>
 </template>
 
-<style>
+<style scoped>
 .fc-toolbar h2 {
   display: inline;
 }
