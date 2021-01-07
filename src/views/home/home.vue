@@ -7,39 +7,39 @@
           :span="6"
           justify="center"
           align="middle"
-          style="border-right:1px solid #ccc"
+          style="border-right:1px solid #e6ebf5"
         >
           <div>
             <span>我的待办</span>
           </div>
           <div>
-            <h2>{{ commission }}个</h2>
+            <h2 style="color:#1890FF;">{{ commission }}&emsp;个</h2>
           </div>
         </el-col>
         <el-col
           :span="6"
           justify="center"
           align="middle"
-          style="border-right:1px solid #ccc"
+          style="border-right:1px solid #e6ebf5"
         >
           <div>
             <span>本周上传发票数</span>
           </div>
           <div>
-            <h2>{{ needtime }}张</h2>
+            <h2 style="color:#1890FF;">{{ needtime }}&emsp;张</h2>
           </div>
         </el-col>
         <el-col
           :span="6"
           justify="center"
           align="middle"
-          style="border-right:1px solid #ccc"
+          style="border-right:1px solid #e6ebf5"
         >
           <div>
             <span>总发票数</span>
           </div>
           <div>
-            <h2>{{ finishcommission }}张</h2>
+            <h2 style="color:#1890FF;">{{ finishcommission }}&emsp;张</h2>
           </div>
         </el-col>
         <el-col :span="6" justify="center" align="middle">
@@ -47,101 +47,103 @@
             <span>累计节省时间</span>
           </div>
           <div>
-            <h2>{{ needtime*3 }}分钟</h2>
+            <h2 style="color:#1890FF;">{{ needtime*3 }}&emsp;分钟</h2>
           </div>
         </el-col>
       </el-row>
     </el-card>
-    <!-- 发票服务 -->
-    <el-card class="box-card" shadow="never" style="margin-top: 10px">
-      <div slot="header" class="clearfix">
-        <span style="font-weight:bold">发票服务</span>
-      </div>
-      <!-- 详情栏 -->
-      <!-- <el-card class="box-card" :style="{ height: defaultHeight }"> -->
-      <el-row :gutter="20">
-        <el-col
-          v-for="data in Data"
-          :key="data.title"
-          :span="3"
-          style="margin-bottom:20px"
-        >
-          <el-card shadow="hover" body-style="padding:0">
-            <el-row>
-              <el-col :span="24" style="line-height:1">
-                <el-image
-                  fit="contian"
-                  :src="url"
-                  :preview-src-list="srcList"
-                />
-              </el-col>
-              <el-col :span="24" align="middle" style="padding:5px 0">
-                <span>{{ data.title }}</span>
-              </el-col>
-            </el-row>
-            <el-row style="border-top:1px solid #ccc;width:100%" type="flex">
-              <el-col
-                :span="11"
-                style="text-align:center"
-              ><el-button type="text">操作一</el-button></el-col>
-              <el-col :span="2" style="margin-top:8px;">
-                <el-divider
-                  direction="vertical"
-                /></el-col>
-              <el-col
-                :span="11"
-                style="text-align:center"
-              ><el-button type="text">操作二</el-button></el-col>
-            </el-row>
-          </el-card>
-        </el-col>
-      </el-row>
-    </el-card>
-    <!-- 我的工具 -->
-    <el-card class="box-card" shadow="never" style="margin-top: 10px">
-      <div slot="header" class="clearfix">
-        <span style="font-weight:bold">我的工具</span>
-      </div>
-      <!-- 详情栏 -->
-      <!-- <el-card class="box-card" :style="{ height: defaultHeight }"> -->
-      <el-row :gutter="20">
-        <el-col
-          v-for="data in Data"
-          :key="data.title"
-          :span="3"
-          style="margin-bottom:20px"
-        >
-          <el-card shadow="hover" body-style="padding:0">
-            <el-row>
-              <el-col :span="24" style="line-height:1">
-                <el-image
-                  fit="contian"
-                  :src="url"
-                  :preview-src-list="srcList"
-                />
-              </el-col>
-              <el-col :span="24" align="middle" style="padding:5px 0">
-                <span>{{ data.title }}</span>
-              </el-col>
-            </el-row>
-            <el-row style="border-top:1px solid #ccc;width:100%" type="flex">
-              <el-col
-                :span="11"
-                style="text-align:center"
-              ><el-button type="text">操作一</el-button></el-col>
-              <el-col :span="2" style="margin-top:8px;">
-                <el-divider
-                  direction="vertical"
-                /></el-col>
-              <el-col
-                :span="11"
-                style="text-align:center"
-              ><el-button type="text">操作二</el-button></el-col>
-            </el-row>
-          </el-card>
-        </el-col>
-      </el-row>
-    </el-card>
+    <el-row :gutter="20">
+      <el-col :span="12">
+        <!-- 发票服务 -->
+        <el-card class="box-card" shadow="never" style="margin-top: 10px">
+          <div slot="header" class="clearfix">
+            <span style="font-weight:bold">发票服务</span>
+          </div>
+          <!-- 详情栏 -->
+          <!-- <el-card class="box-card" :style="{ height: defaultHeight }"> -->
+          <el-row :gutter="20">
+            <el-col
+              v-for="data in Data"
+              :key="data.title"
+              :span="6"
+              style="margin-bottom:20px"
+            >
+              <el-card shadow="hover" body-style="padding:0">
+                <el-row>
+                  <el-col :span="24" style="line-height:1;padding:10px 0 0;" align="middle">
+                    <svg-icon :icon-class="data.icon" style="width:80px;height:80px;" />
+                  </el-col>
+                  <el-col :span="24" align="middle" style="padding:2px 0">
+                    {{ data.title }}
+                  </el-col>
+                </el-row>
+                <el-row
+                  style="border-top:1px solid #e6ebf5;width:100%"
+                  type="flex"
+                  align="middle"
+                >
+                  <el-col :span="11" style="text-align:center">
+                    <el-button type="text">操作一</el-button>
+                  </el-col>
+                  <el-col :span="2" style="text-align:center">
+                    <el-divider direction="vertical" />
+                  </el-col>
+                  <el-col :span="11" style="text-align:center">
+                    <el-button type="text">操作二</el-button>
+                  </el-col>
+                </el-row>
+              </el-card>
+            </el-col>
+          </el-row>
+        </el-card>
+
+      </el-col>
+      <el-col :span="12">
+        <!-- 我的工具 -->
+        <el-card class="box-card" shadow="never" style="margin-top: 10px">
+          <div slot="header" class="clearfix">
+            <span style="font-weight:bold">我的工具</span>
+          </div>
+          <!-- 详情栏 -->
+          <!-- <el-card class="box-card" :style="{ height: defaultHeight }"> -->
+          <el-row :gutter="20">
+            <el-col
+              v-for="data in Data"
+              :key="data.title"
+              :span="6"
+              style="margin-bottom:20px"
+            >
+              <el-card shadow="hover" body-style="padding:0">
+                <el-row>
+                  <el-col :span="24" style="line-height:1;padding:10px 0 0;" align="middle">
+                    <svg-icon :icon-class="data.icon" style="width:80px;height:80px;" />
+                  </el-col>
+                  <el-col :span="24" align="middle" style="padding:2px 0">
+                    {{ data.title }}
+                  </el-col>
+                </el-row>
+                <el-row
+                  style="border-top:1px solid #e6ebf5;width:100%"
+                  type="flex"
+                  align="middle"
+                >
+                  <el-col :span="11" style="text-align:center">
+                    <el-button type="text">操作一</el-button>
+                  </el-col>
+                  <el-col :span="2" style="text-align:center">
+                    <el-divider direction="vertical" />
+                  </el-col>
+                  <el-col :span="11" style="text-align:center">
+                    <el-button type="text">操作二</el-button>
+                  </el-col>
+                </el-row>
+              </el-card>
+            </el-col>
+          </el-row>
+        </el-card>
+
+      </el-col>
+    </el-row>
     <!-- </el-card> -->
   </div>
 </template>
@@ -169,13 +171,16 @@ export default {
     return {
       Data: [
         {
-          title: '发票录入'
+          title: '发票录入',
+          icon: 'input'
         },
         {
-          title: '发票审核'
+          title: '发票审核',
+          icon: 'aduit'
         },
         {
-          title: '发票批量上传'
+          title: '发票批量上传',
+          icon: 'upload'
         }
       ],
       commission: 8,
