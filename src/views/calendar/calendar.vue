@@ -21,88 +21,140 @@
             :options="calendarOptions"
             :height="tableHeight"
           />
-          <el-dialog
-            v-if="dialogFormVisible"
-            :title="textMap[dialogStatus]"
-            :center="true"
-            width="40%"
-            :visible.sync="dialogFormVisible"
-          >
-            <el-form
-              ref="dataForm"
-              :rules="rules"
-              :model="temp"
-              label-position="right"
-              label-width="80px"
-              style="width: 100%; padding:10px;"
-            >
-              <el-row>
-                <el-col :span="24">
-                  <el-form-item label="日程等级" prop="bgColor">
-                    <el-select
-                      v-model="temp.bgColor"
-                      placeholder="请选择日程的等级"
-                      style="width:100%"
-                    >
-                      <el-option
-                        v-for="item in calendarBgColor"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.code"
-                      />
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-
-              <el-row>
-                <el-col :span="24">
-                  <el-form-item label="标题" prop="title">
-                    <el-input v-model="temp.title" clearable />
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="24">
-                  <el-form-item label="起始时间" prop="start">
-                    <el-date-picker
-                      v-model="temp.start"
-                      type="datetimerange"
-                      range-separator="至"
-                      start-placeholder="开始日期"
-                      end-placeholder="结束日期"
-                      first-day-of-week="1"
-                      style="width:100%"
-                    />
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="24">
-                  <el-form-item label="日程内容" prop="content">
-                    <el-input
-                      v-model="temp.content"
-                      type="textarea"
-                      clearable
-                    />
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-              <template v-if="dialogStatus === 'create'">
-                <el-button @click="resetForm('dataForm')">
-                  重置
-                </el-button>
-                <el-button type="primary" @click="createData()">
-                  {{ submitButtonText }}
-                </el-button>
-              </template>
-            </div>
-          </el-dialog>
         </el-col>
       </el-row>
     </el-card>
+
+    <el-dialog
+      v-if="dialogFormVisible"
+      :title="textMap[dialogStatus]"
+      :center="true"
+      width="40%"
+      :visible.sync="dialogFormVisible"
+    >
+      <el-form
+        ref="dataForm"
+        :rules="rules"
+        :model="temp"
+        label-position="right"
+        label-width="80px"
+        style="width: 100%; padding:10px;"
+      >
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="日程等级" prop="bgColor">
+              <el-select
+                v-model="temp.bgColor"
+                placeholder="请选择日程的等级"
+                style="width:100%"
+              >
+                <el-option
+                  v-for="item in calendarBgColor"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.code"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="标题" prop="title">
+              <el-input v-model="temp.title" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="起始时间" prop="start">
+              <el-date-picker
+                v-model="temp.start"
+                type="datetimerange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                first-day-of-week="1"
+                style="width:100%"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="日程内容" prop="content">
+              <el-input v-model="temp.content" type="textarea" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <template v-if="dialogStatus === 'create'">
+          <el-button @click="resetForm('dataForm')">
+            重置
+          </el-button>
+          <el-button type="primary" @click="createData()">
+            {{ submitButtonText }}
+          </el-button>
+        </template>
+      </div>
+    </el-dialog>
+
+    <!-- 抽屉 -->
+    <el-drawer
+      title="日历详情"
+      :visible.sync="drawer"
+      :direction="direction"
+      :before-close="handleClose"
+      size="50%"
+    >
+      <span>日历天气</span>
+      <el-row>
+        <el-col :span="22" :offset="1">
+          <el-form ref="form" :model="currentEvent" label-width="80px">
+            <el-form-item label="标题名称">
+              <el-input v-model="currentEvent.title" />
+            </el-form-item>
+            <el-form-item label="起止时间">
+              <el-col :span="11">
+                <el-date-picker
+                  v-model="currentEvent.start"
+                  type="date"
+                  placeholder="选择日期"
+                  style="width: 100%;"
+                />
+              </el-col>
+              <el-col class="line" :span="2">-</el-col>
+              <el-col :span="11">
+                <el-time-picker
+                  v-model="currentEvent.end"
+                  placeholder="选择时间"
+                  style="width: 100%;"
+                />
+              </el-col>
+            </el-form-item>
+            <el-form-item label="今日任务">
+              <el-switch v-model="currentEvent.delivery" />
+            </el-form-item>
+            <el-form-item label="日程等级">
+              <el-radio-group v-model="currentEvent.resource">
+                <el-radio :label="0">重要</el-radio>
+                <el-radio :label="1">普通</el-radio>
+                <el-radio :label="2">一般</el-radio>
+                <el-radio :label="3">特殊</el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="日程内容">
+              <el-input v-model="currentEvent.content" type="textarea" />
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="onSubmit">编辑</el-button>
+              <el-button @click="onDelete">删除</el-button>
+            </el-form-item>
+          </el-form>
+        </el-col>
+      </el-row>
+    </el-drawer>
   </div>
 </template>
 
@@ -134,6 +186,16 @@ export default {
   },
   data() {
     return {
+      calendardata: {
+        name: '',
+        start: '',
+        end: '',
+        delivery: false,
+        resource: '',
+        desc: ''
+      },
+      drawer: false,
+      direction: 'rtl',
       defaultHeight: '1000px',
       tableHeight: '460px',
       textMap: {
@@ -146,10 +208,20 @@ export default {
         start: '',
         content: ''
       },
+      initCreateData: {
+        bgColor: '',
+        title: '',
+        start: '',
+        content: ''
+      },
       rules: {
         title: [
-          { required: true, message: '请输入主题名称', trigger: 'blur' },
-          { min: 8, message: '长度大于 8 个字符', trigger: 'blur' }
+          {
+            required: true,
+            pattern: /^\S{8,}$/,
+            message: '请输入标题',
+            trigger: 'blur'
+          }
         ]
       },
       calendarBgColor: [
@@ -220,6 +292,9 @@ export default {
           meridiem: false
         },
         events: []
+      },
+      currentEvent: {
+
       }
     }
   },
@@ -254,6 +329,7 @@ export default {
       }
       if (start || end) {
         this.calendarOptions.events.push({
+          id: this.calendarOptions.events.length,
           backgroundColor: bgColor[this.temp.bgColor],
           title: this.temp.title,
           start: start,
@@ -263,60 +339,124 @@ export default {
           borderColor: bgColor[this.temp.bgColor]
         })
       }
-      //   隐藏弹出框
       this.dialogFormVisible = false
-      this.temp.title = ''
-      this.temp.start = ''
-      this.temp.content = ''
-      this.temp.bgColor = ''
-      /*  //   刷新日历
-      this.calendarApi.refetchEvents() */
+
       /* this.$refs['dataForm'].validate(valid => {
         if (valid) {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.temp)
-          savePermission(tempData)
-            .then(response => {
-              const result = response.data
-              if (result) {
-                this.$message({
-                  message: '新增成功',
-                  type: 'success'
-                })
-                this.initFormSafeSubmitConfig()
-                this.dialogFormVisible = false
-                this.$refs.dataGrid.commitProxy('reload')
-              } else {
-                this.$message.error('新增失败')
-                this.initFormSafeSubmitConfig()
-              }
+
+          if (start || end) {
+            this.calendarOptions.events.push({
+              id: countNumber,
+              backgroundColor: bgColor[this.temp.bgColor],
+              title: this.temp.title,
+              start: start,
+              end: end,
+              content: this.temp.content,
+              display: 'block',
+              borderColor: bgColor[this.temp.bgColor]
             })
-            .catch(e => {
-              this.loading = false
-              this.initFormSafeSubmitConfig()
-            })
+          }
+          // savePlatformProduct(tempData)
+          //   .then(response => {
+          //     const result = response.data
+          //     if (result) {
+          //       this.$message({
+          //         message: '新增成功',
+          //         type: 'success'
+          //       })
+          //       this.initFormSafeSubmitConfig()
+          //       this.dialogFormVisible = false
+          //       this.$refs.dataGrid.commitProxy('reload')
+          //     } else {
+          //       this.$message.error('新增失败')
+          //       this.initFormSafeSubmitConfig()
+          //     }
+          //   })
+          //   .catch(e => {
+          //     this.loading = false
+          //     this.initFormSafeSubmitConfig()
+          //   })
         }
       }) */
     },
     handleDateClick(arg) {
-      this.dialogFormVisible = true
+      this.temp = Object.assign({}, this.initCreateData)
       this.dialogStatus = 'create'
-      /* const data = {
-        title: 'New Event',
-        start: arg.dateStr,
-        classNames: ['cal'],
-        flag: 0
-      }
-      if (data.flag === 0) {
-        data.backgroundColor = 'red'
-        data.borderColor = 'red'
-        data.textColor = 'white'
-      }
-      console.log(arg.dateStr)
-      this.calendarOptions.events.push(data) */
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
     },
-    handleEventClick(info) {}
+    handleEventClick(info) {
+      this.drawer = true
+      console.log(JSON.stringify(info))
+      this.currentEvent.title = info.event.title
+      this.currentEvent.start = info.event.start
+      this.currentEvent.end = info.event.end
+      // console.log(info.event.content)
+      // console.log(info.event.backgroundColor);
+      if (info.event.backgroundColor == 'red') {
+        this.currentEvent.resource = 0
+      } else if (info.event.backgroundColor == 'orange') {
+        this.currentEvent.resource = 1
+      } else if (info.event.backgroundColor == 'skyblue') {
+        this.currentEvent.resource = 2
+      } else {
+        this.currentEvent.resource = 3
+      }
+      this.currentEvent.content = info.event.extendedProps.content
+    },
+    handleClose(done) {
+      this.drawer = false
+    },
+    onSubmit() {
+      /* this.$refs['dataForm'].validate(valid => {
+        if (valid) {
+          this.loadingSubmitButton = true
+          this.submitButtonText = '执行中...'
+          const tempData = Object.assign({}, this.temp)
+
+          if (start || end) {
+            this.calendarOptions.events.push({
+              id: countNumber,
+              backgroundColor: bgColor[this.temp.bgColor],
+              title: this.temp.title,
+              start: start,
+              end: end,
+              content: this.temp.content,
+              display: 'block',
+              borderColor: bgColor[this.temp.bgColor]
+            })
+          }
+          // savePlatformProduct(tempData)
+          //   .then(response => {
+          //     const result = response.data
+          //     if (result) {
+          //       this.$message({
+          //         message: '新增成功',
+          //         type: 'success'
+          //       })
+          //       this.initFormSafeSubmitConfig()
+          //       this.dialogFormVisible = false
+          //       this.$refs.dataGrid.commitProxy('reload')
+          //     } else {
+          //       this.$message.error('新增失败')
+          //       this.initFormSafeSubmitConfig()
+          //     }
+          //   })
+          //   .catch(e => {
+          //     this.loading = false
+          //     this.initFormSafeSubmitConfig()
+          //   })
+        }
+      }) */
+    },
+    onDelete() {
+      console.log(this.calendardata.events.id)
+    }
   }
 }
 </script>
