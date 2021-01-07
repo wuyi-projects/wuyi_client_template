@@ -102,6 +102,11 @@
             @click="handleManagePatformProduct(row)"
           >下属账户类型</el-button>
           <el-divider direction="vertical" />
+          <el-button
+            type="text"
+            @click="handleProductDefaultRole(row)"
+          >默认账户类型</el-button>
+          <el-divider direction="vertical" />
           <el-dropdown @command="handleCommand">
             <span class="el-dropdown-link">
               更多<i class="el-icon-arrow-down" />
@@ -343,6 +348,91 @@
         </template>
       </div>
     </el-dialog>
+
+    <!--默认角色管理-->
+    <el-drawer
+      v-if="productDefaultRoleDrawer"
+      :title="currentAccountType.productName"
+      :visible.sync="productDefaultRoleDrawer"
+      direction="rtl"
+      size="50%"
+    >
+      <el-row>
+        <el-col :span="24" style="padding:0 20px 20px;">
+          <el-row>
+            <el-col :span="24">
+              <span
+                style="font-size:16px;font-weight:bold;"
+              >默认用户角色配置</span>
+            </el-col>
+          </el-row>
+          <el-row style="margin-top:20px;">
+            <el-col :span="24">
+              <vxe-grid
+                ref="permissionGrid"
+                class="custom-table-scrollbar"
+                v-bind="defaultRoleGridOptions"
+              >
+                <!--工具栏按钮-->
+                <template v-slot:toolbar_buttons>
+                  <el-button-group>
+                    <el-button
+                      @click.native.prevent="handleAccountTypeCreate()"
+                    >新增</el-button>
+                    <el-button
+                      type="primary"
+                      @click.native.prevent="handleAccountTypeBatchDelete()"
+                    >批量删除</el-button>
+                  </el-button-group>
+                </template>
+
+                <template v-slot:tools>
+                  <el-form
+                    ref="permissionForm"
+                    :inline="true"
+                    :model="formInline"
+                    class="demo-form-inline"
+                  >
+                    <el-form-item style="margin-bottom: 0;">
+                      <el-input
+                        v-model="searchAccountTypeFormData.typeName"
+                        placeholder="输入账户类型名称或代码模糊查询"
+                        clearable
+                      />
+                    </el-form-item>
+                    <el-form-item style="margin-bottom: 0;">
+                      <el-button
+                        type="primary"
+                        @click="submitPermissionForm('permissionForm')"
+                      >查询</el-button>
+                    </el-form-item>
+                  </el-form>
+                </template>
+
+                <!--数据行操作-->
+                <template v-slot:operate="{ row }">
+                  <el-button
+                    type="text"
+                    @click="handleAccountTypeUpdate(row)"
+                  >修改</el-button>
+                  <el-divider direction="vertical" />
+                  <el-button
+                    type="text"
+                    @click="handleAccountTypeDelete(row)"
+                  >删除</el-button>
+                </template>
+                <!--自定义空数据模板-->
+                <template v-slot:empty>
+                  <span>
+                    <p>没有找到匹配的记录</p>
+                  </span>
+                </template>
+              </vxe-grid>
+            </el-col>
+          </el-row>
+        </el-col>
+      </el-row>
+    </el-drawer>
   </div>
 </template>
 
@@ -375,6 +465,13 @@ import {
   batchDeleteAccountType,
   updateAccountType
 } from '@/api/platform-product'
+import {
+  listPlatformDefaultRole,
+  savePlatformDefaultRole,
+  deletePlatformDefaultRole,
+  batchDeletePlatformDefaultRole,
+  updatePlatformDefaultRole
+} from '@/api/product-default-role'
 
 export default {
   data() {
@@ -407,6 +504,7 @@ export default {
         end: ''
       },
       productAccountTypeDetailDrawer: false,
+      productDefaultRoleDrawer: false,
       currentAccountType: {},
       rules: {
         productName: [
@@ -493,7 +591,7 @@ export default {
           remote: true
         },
         pagerConfig: {
-          autoHidden: true,
+          autoHidden: false,
           pageSize: 10,
           pageSizes: [10, 20, 50, 80, 100],
           layouts: [
@@ -650,6 +748,183 @@ export default {
           showStatus: true
         }
       },
+      defaultRoleGridOptions: {
+        border: 'default',
+        size: formatTableSize(),
+        resizable: true,
+        autoResize: true,
+        showHeaderOverflow: true,
+        showOverflow: true,
+        highlightHoverRow: true,
+        highlightHoverColumn: true,
+        highlightCurrentColumn: true,
+        keepSource: true,
+        id: 'full_edit_1',
+        rowId: 'id',
+        height: 500,
+        headerAlign: 'center',
+        scrollY: { gt: -1 },
+        filterConfig: {
+          remote: true
+        },
+        pagerConfig: {
+          autoHidden: false,
+          pageSize: 10,
+          pageSizes: [10, 20, 50, 80, 100],
+          layouts: [
+            'Total',
+            'Sizes',
+            'PrevJump',
+            'PrevPage',
+            'Number',
+            'NextPage',
+            'NextJump',
+            'FullJump'
+          ]
+        },
+        radioConfig: {
+          range: true,
+          reserve: true,
+          highlight: true
+        },
+        proxyConfig: {
+          seq: true, // 启用动态序号代理
+          sort: true, // 启用排序代理
+          filter: true, // 启用筛选代理
+          form: true, // 启用表单代理
+          props: {
+            result: 'rows',
+            total: 'total'
+          },
+          ajax: {
+
+            query: ({ page, sort, filters }) => {
+              // 查询条件
+              const searchData = {}
+              const searchFormData = this.searchAccountTypeFormData
+              for (var key in searchFormData) {
+                const value = searchFormData[key]
+                if (!(typeof value === 'undefined' || value === null || value === '')) {
+                  searchData[key] = value
+                }
+              }
+
+              // 处理排序条件
+              const sortParams = Object.assign({
+                sort: sort.property,
+                order: sort.order
+              })
+              // 处理筛选条件
+              filters.forEach(({ property, values, column }) => {
+                if (values) {
+                  if (column.filterMultiple) {
+                    sortParams[property] = values
+                  } else {
+                    sortParams[property] = values[0]
+                  }
+                }
+              })
+              const pageData = Object.assign({
+                offset:
+                  page.currentPage >= 0
+                    ? (page.currentPage - 1) * page.pageSize
+                    : 0,
+                limit: page.pageSize
+              })
+              const result = Object.assign(pageData, searchData, sortParams)
+              result.productId = this.currentAccountType.id
+              return listPlatformDefaultRole(result)
+            }
+          }
+        },
+        toolbar: {
+          slots: {
+            buttons: 'toolbar_buttons'
+          }
+        },
+        columns: [
+          { type: 'checkbox',
+            width: 40,
+            align: 'center' },
+          {
+            field: 'id',
+            title: '编号',
+            width: 140,
+            align: 'center',
+            headerAlign: 'center',
+            visible: false
+          },
+          {
+            field: 'paltformProductId',
+            title: '产品编号',
+            width: 160,
+            align: 'center',
+            headerAlign: 'center',
+            visible: false
+          },
+          {
+            field: 'typeName',
+            title: '账户类型名称',
+            align: 'left',
+            headerAlign: 'center',
+            minWidth: 200
+          },
+          {
+            field: 'typeCode',
+            title: '账户类型代码',
+            align: 'center',
+            headerAlign: 'center',
+            minWidth: 200
+          },
+          {
+            field: 'type',
+            title: '账户类型',
+            align: 'center',
+            headerAlign: 'center',
+            width: 100
+          },
+          {
+            title: '操作',
+            width: 120,
+            align: 'center',
+            headerAlign: 'center',
+            fixed: 'right',
+            slots: { default: 'operate' }
+          }
+        ],
+        importConfig: {
+          remote: true,
+          importMethod: this.importMethod,
+          types: ['xlsx'],
+          modes: ['insert']
+        },
+        exportConfig: {
+          // 默认选中类型
+          type: 'csv',
+          // 局部自定义类型
+          types: ['xlsx', 'csv', 'html', 'xml', 'txt'],
+          // 自定义数据量列表
+          modes: ['current', 'all']
+        },
+        checkboxConfig: {
+          reserve: true,
+          highlight: true,
+          range: true
+        },
+        editRules: {
+          groupName: [
+            { required: true, message: 'app.body.valid.rName' },
+            { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
+          ],
+          email: [{ required: true, message: '邮件必须填写' }],
+          role: [{ required: true, message: '角色必须填写' }]
+        },
+        editConfig: {
+          trigger: 'click',
+          mode: 'row',
+          showStatus: true
+        }
+      },
       gridOptions: {
         border: 'default',
         size: formatTableSize(),
@@ -684,7 +959,7 @@ export default {
           remote: true
         },
         pagerConfig: {
-          autoHidden: true,
+          autoHidden: false,
           pageSize: 10,
           pageSizes: [10, 20, 50, 80, 100],
           layouts: [
@@ -799,7 +1074,7 @@ export default {
           },
           {
             title: '操作',
-            width: 220,
+            width: 360,
             align: 'center',
             headerAlign: 'center',
             fixed: 'right',
@@ -948,64 +1223,6 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
-    handleDisable(row) {
-      this.$confirm('停用[ <span style="color:red;font-weight:bold;">' + row.name + '(' + row.phone + ')' + '</span> ]微信小程序账号吗, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        dangerouslyUseHTMLString: true,
-        type: 'warning'
-      }).then(() => {
-        const { id, version } = row
-        const tempData = Object.assign({
-          id: id,
-          version: version
-        })
-        disablePlatformProduct(tempData)
-          .then(response => {
-            const result = response.data
-            if (result) {
-              this.$message({
-                type: 'success',
-                message: '停用账号操作成功'
-              })
-            } else {
-              this.$message.error('停用账号操作失败')
-            }
-            this.$refs.dataGrid.commitProxy('reload')
-          })
-          .catch(e => {
-            this.loading = false
-          })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消操作'
-        })
-      })
-    },
-    handleEnable(row) {
-      const { id, version } = row
-      const tempData = Object.assign({
-        id: id,
-        version: version
-      })
-      enablePlatformProduct(tempData)
-        .then(response => {
-          const result = response.data
-          if (result) {
-            this.$message({
-              type: 'success',
-              message: '停用账号操作成功'
-            })
-          } else {
-            this.$message.error('停用账号操作失败')
-          }
-          this.$refs.dataGrid.commitProxy('reload')
-        })
-        .catch(e => {
-          this.loading = false
-        })
-    },
     initFormSafeSubmitConfig() {
       this.loadingSubmitButton = false
       this.submitButtonText = '提交'
@@ -1132,6 +1349,11 @@ export default {
       this.currentAccountType = row
       // this.listAllPermissions4Group(row.id)
       this.productAccountTypeDetailDrawer = true
+    },
+    handleProductDefaultRole(row) {
+      this.currentAccountType = row
+      // this.listAllPermissions4Group(row.id)
+      this.productDefaultRoleDrawer = true
     },
     submitPermissionForm(formName) {
       this.$refs[formName].validate((valid) => {

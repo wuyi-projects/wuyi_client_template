@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <!--查询条件-->
-    <el-card class="box-card" shadow="never" style="margin-bottom:16px;">
+    <el-card class="box-card" shadow="never" style="margin-bottom: 16px">
       <el-form
         ref="searchForm"
         :model="searchFormData"
@@ -22,7 +22,7 @@
                   v-model="searchFormData.start"
                   type="date"
                   placeholder="起始日期"
-                  style="width: 100%;"
+                  style="width: 100%"
                   :picker-options="pickerOptions"
                   value-format="yyyy-MM-dd"
                 />
@@ -35,7 +35,7 @@
                   v-model="searchFormData.end"
                   type="date"
                   placeholder="结束时间"
-                  style="width: 100%;"
+                  style="width: 100%"
                   :picker-options="pickerOptions"
                   value-format="yyyy-MM-dd"
                 />
@@ -44,7 +44,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item style="float: right;" label-width="0">
+          <el-form-item style="float: right" label-width="0">
             <el-button @click="resetForm('searchForm')">重 置</el-button>
             <el-button
               type="primary"
@@ -56,7 +56,7 @@
     </el-card>
 
     <!--数据展示-->
-    <el-card class="box-card" shadow="never" :style="{height:defaultHeight}">
+    <el-card class="box-card" shadow="never" :style="{ height: defaultHeight }">
       <vxe-grid
         ref="dataGrid"
         class="custom-table-scrollbar"
@@ -134,7 +134,7 @@
         :model="temp"
         label-position="right"
         label-width="100px"
-        style="width: 100%; padding:10px;"
+        style="width: 100%; padding: 10px"
       >
         <el-row>
           <el-col :span="24">
@@ -160,11 +160,8 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <template v-if="dialogStatus !== 'detail'">
-          <el-button @click="resetForm('dataForm')">
-            重置
-          </el-button>
+          <el-button @click="resetForm('dataForm')"> 重置 </el-button>
           <el-button
-
             type="primary"
             :loading="loadingSubmitButton"
             :disabled="loadingSubmitButton"
@@ -185,14 +182,14 @@
       size="50%"
     >
       <el-row>
-        <el-col :span="24" style="padding:0 20px 20px;">
+        <el-col :span="24" style="padding: 0 20px 20px">
           <el-row>
             <el-col :span="24">
-              <span style="font-size:16px;font-weight:bold;">权限列表</span>
+              <span style="font-size: 16px; font-weight: bold">权限列表</span>
               <el-button
                 v-if="currentGroupAllPermissions.length > 0"
                 type="text"
-                style="margin-left:10px;"
+                style="margin-left: 10px"
                 @click="test()"
               >[清除全部]</el-button>
             </el-col>
@@ -214,7 +211,7 @@
               }}</el-tag>
             </el-col>
           </el-row>
-          <el-row style="margin-top:20px;">
+          <el-row style="margin-top: 20px">
             <el-col :span="24">
               <vxe-grid
                 ref="permissionGrid"
@@ -236,14 +233,14 @@
                     :model="formInline"
                     class="demo-form-inline"
                   >
-                    <el-form-item style="margin-bottom: 0;">
+                    <el-form-item style="margin-bottom: 0">
                       <el-input
                         v-model="searchPermissionFormData.permission"
                         placeholder="输入权限名或代码模糊查询"
                         clearable
                       />
                     </el-form-item>
-                    <el-form-item style="margin-bottom: 0;">
+                    <el-form-item style="margin-bottom: 0">
                       <el-button
                         type="primary"
                         @click="submitPermissionForm('permissionForm')"
@@ -274,7 +271,7 @@
   </div>
 </template>
 
-<style scoped>
+<style>
 .el-dropdown-link {
   cursor: pointer;
   color: #409eff;
@@ -286,14 +283,57 @@
   margin-top: 10px;
   margin-right: 5px;
 }
-.el-drawer.rtl {
+/* .el-drawer.rtl {
   overflow: scroll;
+} */
+
+.el-drawer__body {
+  overflow: auto;
+}
+
+/*滚动条整体部分*/
+.el-drawer__container ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+/*滚动条的轨道*/
+.el-drawer__container ::-webkit-scrollbar-track {
+  background-color: #FFFFFF;
+}
+/*滚动条里面的小方块，能向上向下移动*/
+.el-drawer__container ::-webkit-scrollbar-thumb {
+  background-color: #bfbfbf;
+  border-radius: 5px;
+  border: 1px solid #F1F1F1;
+  box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+}
+.el-drawer__container ::-webkit-scrollbar-thumb:hover {
+  background-color: #A8A8A8;
+}
+.el-drawer__container ::-webkit-scrollbar-thumb:active {
+  background-color: #787878;
+}
+/*边角，即两个滚动条的交汇处*/
+.el-drawer__container ::-webkit-scrollbar-corner {
+  background-color: #FFFFFF;
 }
 </style>
 
 <script>
 import formatTableSize from '@/utils/size'
-import { listPermissionGroupInfoByPage, savePermissionGroupInfo, batchDeletePermissionGroupInfo, deletePermissionGroupInfo, updatePermissionGroupInfo, listPermissions4UngroupedWithPage, listAllPermissions4Group, setGroupInfo4Permission, setGroupInfo4Permissions, clearGroupInfo4AllPermissions, clearGroupInfo4Permission } from '@/api/permission'
+import {
+  listPermissionGroupInfoByPage,
+  savePermissionGroupInfo,
+  batchDeletePermissionGroupInfo,
+  deletePermissionGroupInfo,
+  updatePermissionGroupInfo,
+  listPermissions4UngroupedWithPage,
+  listAllPermissions4Group,
+  setGroupInfo4Permission,
+  setGroupInfo4Permissions,
+  clearGroupInfo4AllPermissions,
+  clearGroupInfo4Permission
+} from '@/api/permission'
 
 export default {
   data() {
@@ -302,8 +342,8 @@ export default {
         user: '',
         region: ''
       },
-      defaultHeight:'500px',
-      tableHeight:'460px',
+      defaultHeight: '500px',
+      tableHeight: '460px',
       permissionGroupDetailDrawer: false,
       dialogFormVisible: false,
       loadingSubmitButton: false,
@@ -317,7 +357,13 @@ export default {
       rules: {
         groupName: [
           { required: true, message: '权限分组名称必填', trigger: 'blur' },
-          { min: 4, max: 10, message: '长度在 5 到 10 个字符', trigger: 'blur' }]
+          {
+            min: 4,
+            max: 10,
+            message: '长度在 5 到 10 个字符',
+            trigger: 'blur'
+          }
+        ]
       },
       temp: {
         id: undefined,
@@ -346,26 +392,30 @@ export default {
         disabledDate(time) {
           return time.getTime() > Date.now()
         },
-        shortcuts: [{
-          text: '今天',
-          onClick(picker) {
-            picker.$emit('pick', new Date())
+        shortcuts: [
+          {
+            text: '今天',
+            onClick(picker) {
+              picker.$emit('pick', new Date())
+            }
+          },
+          {
+            text: '昨天',
+            onClick(picker) {
+              const date = new Date()
+              date.setTime(date.getTime() - 3600 * 1000 * 24)
+              picker.$emit('pick', date)
+            }
+          },
+          {
+            text: '一周前',
+            onClick(picker) {
+              const date = new Date()
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', date)
+            }
           }
-        }, {
-          text: '昨天',
-          onClick(picker) {
-            const date = new Date()
-            date.setTime(date.getTime() - 3600 * 1000 * 24)
-            picker.$emit('pick', date)
-          }
-        }, {
-          text: '一周前',
-          onClick(picker) {
-            const date = new Date()
-            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
-            picker.$emit('pick', date)
-          }
-        }]
+        ]
       },
       permissionGridOptions: {
         border: 'default',
@@ -387,7 +437,7 @@ export default {
           remote: true
         },
         pagerConfig: {
-          autoHidden: true,
+          autoHidden: false,
           pageSize: 10,
           pageSizes: [10, 20, 50, 80, 100],
           layouts: [
@@ -416,14 +466,19 @@ export default {
             total: 'total'
           },
           ajax: {
-
             query: ({ page, sort, filters }) => {
               // 查询条件
               const searchData = {}
               const searchFormData = this.searchPermissionFormData
               for (var key in searchFormData) {
                 const value = searchFormData[key]
-                if (!(typeof value === 'undefined' || value === null || value === '')) {
+                if (
+                  !(
+                    typeof value === 'undefined' ||
+                    value === null ||
+                    value === ''
+                  )
+                ) {
                   searchData[key] = value
                 }
               }
@@ -462,9 +517,7 @@ export default {
           }
         },
         columns: [
-          { type: 'checkbox',
-            width: 40,
-            align: 'center' },
+          { type: 'checkbox', width: 40, align: 'center' },
           {
             field: 'id',
             title: '编号',
@@ -563,7 +616,7 @@ export default {
           remote: true
         },
         pagerConfig: {
-          autoHidden: true,
+          autoHidden: false,
           pageSize: 10,
           pageSizes: [10, 20, 50, 80, 100],
           layouts: [
@@ -598,14 +651,19 @@ export default {
             total: 'total'
           },
           ajax: {
-
             query: ({ page, sort, filters }) => {
               // 查询条件
               const searchData = {}
               const searchFormData = this.searchFormData
               for (var key in searchFormData) {
                 const value = searchFormData[key]
-                if (!(typeof value === 'undefined' || value === null || value === '')) {
+                if (
+                  !(
+                    typeof value === 'undefined' ||
+                    value === null ||
+                    value === ''
+                  )
+                ) {
                   searchData[key] = value
                 }
               }
@@ -638,9 +696,7 @@ export default {
           }
         },
         columns: [
-          { type: 'checkbox',
-            width: 40,
-            align: 'center' },
+          { type: 'checkbox', width: 40, align: 'center' },
           {
             field: 'id',
             title: '编号',
@@ -707,16 +763,15 @@ export default {
       }
     }
   },
-  computed: {
-  },
+  computed: {},
   created() {
-    window.addEventListener('resize',this.getHeight)
+    window.addEventListener('resize', this.getHeight)
     this.getHeight()
   },
   methods: {
-    getHeight(){
-      this.defaultHeight=window.innerHeight-180+'px'
-      this.tableHeight=window.innerHeight-220+'px'
+    getHeight() {
+      this.defaultHeight = window.innerHeight - 180 + 'px'
+      this.tableHeight = window.innerHeight - 220 + 'px'
     },
     checkColumnMethod({ column }) {
       if (['nickname', 'role'].includes(column.property)) {
@@ -764,34 +819,36 @@ export default {
         cancelButtonText: '取消',
         dangerouslyUseHTMLString: true,
         type: 'warning'
-      }).then(() => {
-        const { id, version } = row
-        const tempData = Object.assign({
-          id: id,
-          version: version
-        })
-        deletePermissionGroupInfo(tempData)
-          .then(response => {
-            const result = response.data
-            if (result) {
-              this.$message({
-                type: 'success',
-                message: '删除成功'
-              })
-            } else {
-              this.$message.error('删除失败')
-            }
-            this.$refs.dataGrid.commitProxy('reload')
-          })
-          .catch(e => {
-            this.loading = false
-          })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
       })
+        .then(() => {
+          const { id, version } = row
+          const tempData = Object.assign({
+            id: id,
+            version: version
+          })
+          deletePermissionGroupInfo(tempData)
+            .then((response) => {
+              const result = response.data
+              if (result) {
+                this.$message({
+                  type: 'success',
+                  message: '删除成功'
+                })
+              } else {
+                this.$message.error('删除失败')
+              }
+              this.$refs.dataGrid.commitProxy('reload')
+            })
+            .catch((e) => {
+              this.loading = false
+            })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
     viewRow(row) {
       this.temp = Object.assign({}, row)
@@ -829,44 +886,57 @@ export default {
     handleBatchDelete() {
       const selectRecords = this.$refs.dataGrid.getCheckboxRecords()
       const batchDeleteData = []
-      if (!(typeof selectRecords === 'undefined' || selectRecords === null || selectRecords === '' || selectRecords.length === 0)) {
+      if (
+        !(
+          typeof selectRecords === 'undefined' ||
+          selectRecords === null ||
+          selectRecords === '' ||
+          selectRecords.length === 0
+        )
+      ) {
         this.$confirm('永久删除记录吗, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           dangerouslyUseHTMLString: true,
           type: 'warning'
-        }).then(() => {
-          for (let index = 0, len = selectRecords.length; index < len; index++) {
-            const id = selectRecords[index].['id']
-            const version = selectRecords[index].['version']
-            const temp = {
-              id: id,
-              version: version
-            }
-            batchDeleteData.push(temp)
-          }
-          batchDeletePermissionGroupInfo(batchDeleteData)
-            .then(response => {
-              const result = response.data
-              if (result) {
-                this.$message({
-                  type: 'success',
-                  message: '删除成功'
-                })
-              } else {
-                this.$message.error('删除失败')
-              }
-              this.$refs.dataGrid.commitProxy('reload')
-            })
-            .catch(e => {
-              this.loading = false
-            })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
         })
+          .then(() => {
+            for (
+              let index = 0, len = selectRecords.length;
+              index < len;
+              index++
+            ) {
+              const id = selectRecords[index]['id']
+              const version = selectRecords[index]['version']
+              const temp = {
+                id: id,
+                version: version
+              }
+              batchDeleteData.push(temp)
+            }
+            batchDeletePermissionGroupInfo(batchDeleteData)
+              .then((response) => {
+                const result = response.data
+                if (result) {
+                  this.$message({
+                    type: 'success',
+                    message: '删除成功'
+                  })
+                } else {
+                  this.$message.error('删除失败')
+                }
+                this.$refs.dataGrid.commitProxy('reload')
+              })
+              .catch((e) => {
+                this.loading = false
+              })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            })
+          })
       } else {
         this.$message({
           showClose: true,
@@ -885,7 +955,7 @@ export default {
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.temp)
           savePermissionGroupInfo(tempData)
-            .then(response => {
+            .then((response) => {
               const result = response.data
               if (result) {
                 this.$message({
@@ -900,7 +970,7 @@ export default {
                 this.initFormSafeSubmitConfig()
               }
             })
-            .catch(e => {
+            .catch((e) => {
               this.loading = false
               this.initFormSafeSubmitConfig()
             })
@@ -914,7 +984,7 @@ export default {
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.temp)
           updatePermissionGroupInfo(tempData)
-            .then(response => {
+            .then((response) => {
               const result = response.data
               if (result) {
                 this.$message({
@@ -929,19 +999,16 @@ export default {
                 this.initFormSafeSubmitConfig()
               }
             })
-            .catch(e => {
+            .catch((e) => {
               this.loading = false
               this.initFormSafeSubmitConfig()
             })
         }
       })
     },
-    handleClick() {
-    },
-    handleDownload() {
-    },
-    handleImport() {
-    },
+    handleClick() {},
+    handleDownload() {},
+    handleImport() {},
     submitPermissionForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -955,61 +1022,74 @@ export default {
       listAllPermissions4Group({
         permissionGroupInfoId: currentGroupid
       })
-        .then(response => {
+        .then((response) => {
           const data = response.data
           this.currentGroupAllPermissions = data
         })
-        .catch(e => {
+        .catch((e) => {
           this.loading = false
         })
     },
     handleBatchSetGroupInfo() {
       const selectRecords = this.$refs.permissionGrid.getCheckboxRecords()
       const batchSetGroupInfoData = []
-      if (!(typeof selectRecords === 'undefined' || selectRecords === null || selectRecords === '' || selectRecords.length === 0)) {
+      if (
+        !(
+          typeof selectRecords === 'undefined' ||
+          selectRecords === null ||
+          selectRecords === '' ||
+          selectRecords.length === 0
+        )
+      ) {
         this.$confirm('批量加入分组吗, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           dangerouslyUseHTMLString: true,
           type: 'warning'
-        }).then(() => {
-          for (let index = 0, len = selectRecords.length; index < len; index++) {
-            const id = selectRecords[index].['id']
-            const version = selectRecords[index].['version']
-            const temp = {
-              id: id,
-              permissionGroupInfoId: this.currentGroupInfo.id,
-              version: version
-            }
-            batchSetGroupInfoData.push(temp)
-          }
-
-          setGroupInfo4Permissions(batchSetGroupInfoData)
-            .then(response => {
-              const result = response.data
-              if (result) {
-                this.$message({
-                  type: 'success',
-                  message: '批量加入分组成功'
-                })
-                this.listAllPermissions4Group(this.currentGroupInfo.id)
-                this.$refs.permissionGrid.commitProxy('reload')
-              } else {
-                this.$message.error('批量加入分组失败')
-              }
-            })
-            .catch(e => {
-              this.$message({
-                type: 'info',
-                message: '已取消操作'
-              })
-            })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
         })
+          .then(() => {
+            for (
+              let index = 0, len = selectRecords.length;
+              index < len;
+              index++
+            ) {
+              const id = selectRecords[index]['id']
+              const version = selectRecords[index]['version']
+              const temp = {
+                id: id,
+                permissionGroupInfoId: this.currentGroupInfo.id,
+                version: version
+              }
+              batchSetGroupInfoData.push(temp)
+            }
+
+            setGroupInfo4Permissions(batchSetGroupInfoData)
+              .then((response) => {
+                const result = response.data
+                if (result) {
+                  this.$message({
+                    type: 'success',
+                    message: '批量加入分组成功'
+                  })
+                  this.listAllPermissions4Group(this.currentGroupInfo.id)
+                  this.$refs.permissionGrid.commitProxy('reload')
+                } else {
+                  this.$message.error('批量加入分组失败')
+                }
+              })
+              .catch((e) => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消操作'
+                })
+              })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            })
+          })
       } else {
         this.$message({
           showClose: true,
@@ -1023,7 +1103,7 @@ export default {
         permissionGroupInfoId: this.currentGroupInfo.id,
         version: row.version
       })
-        .then(response => {
+        .then((response) => {
           const result = response.data
           if (result) {
             this.$message({
@@ -1036,85 +1116,107 @@ export default {
             this.$message.error('加入分组失败')
           }
         })
-        .catch(e => {
+        .catch((e) => {
           this.loading = false
         })
     },
     handleClearGroupInfo(permission) {
-      if (!(typeof permission === 'undefined' || permission === null || permission === '')) {
-        this.$confirm('清除 <strong style="color:red;">' + permission.description + '</strong> 权限分组信息吗, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          dangerouslyUseHTMLString: true,
-          type: 'warning'
-        }).then(() => {
-          clearGroupInfo4Permission(permission)
-            .then(response => {
-              const result = response.data
-              if (result) {
-                this.$message({
-                  type: 'success',
-                  message: '清除权限分组信息成功'
-                })
-                this.listAllPermissions4Group(this.currentGroupInfo.id)
-                this.$refs.permissionGrid.commitProxy('reload')
-              } else {
-                this.$message.error('清除权限分组信息失败')
-              }
-            })
-            .catch(e => {
-              this.$message({
-                type: 'info',
-                message: '已取消操作'
+      if (
+        !(
+          typeof permission === 'undefined' ||
+          permission === null ||
+          permission === ''
+        )
+      ) {
+        this.$confirm(
+          '清除 <strong style="color:red;">' +
+            permission.description +
+            '</strong> 权限分组信息吗, 是否继续?',
+          '提示',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            dangerouslyUseHTMLString: true,
+            type: 'warning'
+          }
+        )
+          .then(() => {
+            clearGroupInfo4Permission(permission)
+              .then((response) => {
+                const result = response.data
+                if (result) {
+                  this.$message({
+                    type: 'success',
+                    message: '清除权限分组信息成功'
+                  })
+                  this.listAllPermissions4Group(this.currentGroupInfo.id)
+                  this.$refs.permissionGrid.commitProxy('reload')
+                } else {
+                  this.$message.error('清除权限分组信息失败')
+                }
               })
-            })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消操作'
+              .catch((e) => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消操作'
+                })
+              })
           })
-        })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消操作'
+            })
+          })
       }
-    }, test() {
+    },
+    test() {
       const temp = this.currentGroupInfo
       if (!(typeof temp === 'undefined' || temp === null || temp === '')) {
-        this.$confirm('清除 <strong style="color:red;">' + temp.groupName + '</strong> 分组下属全部权限的分组信息吗, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          dangerouslyUseHTMLString: true,
-          type: 'warning'
-        }).then(() => {
-          clearGroupInfo4AllPermissions({
-            permissionGroupInfoId: temp.id
-          })
-            .then(response => {
-              const result = response.data
-              if (result) {
-                this.$message({
-                  type: 'success',
-                  message: '清除下属权限全部分组信息成功'
-                })
-                this.listAllPermissions4Group(this.currentGroupInfo.id)
-                this.$refs.permissionGrid.commitProxy('reload')
-              } else {
-                this.$message.error('清除下属权限全部分组信息失败')
-              }
+        this.$confirm(
+          '清除 <strong style="color:red;">' +
+            temp.groupName +
+            '</strong> 分组下属全部权限的分组信息吗, 是否继续?',
+          '提示',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            dangerouslyUseHTMLString: true,
+            type: 'warning'
+          }
+        )
+          .then(() => {
+            clearGroupInfo4AllPermissions({
+              permissionGroupInfoId: temp.id
             })
-            .catch(e => {
-              this.$message({
-                type: 'info',
-                message: '已取消操作'
+              .then((response) => {
+                const result = response.data
+                if (result) {
+                  this.$message({
+                    type: 'success',
+                    message: '清除下属权限全部分组信息成功'
+                  })
+                  this.listAllPermissions4Group(this.currentGroupInfo.id)
+                  this.$refs.permissionGrid.commitProxy('reload')
+                } else {
+                  this.$message.error('清除下属权限全部分组信息失败')
+                }
               })
-            })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消操作'
+              .catch((e) => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消操作'
+                })
+              })
           })
-        })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消操作'
+            })
+          })
       }
     }
-
   }
 }
 </script>
