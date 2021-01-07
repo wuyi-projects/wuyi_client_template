@@ -19,7 +19,6 @@ import calendarRouter from './modules/calendar'
 import companyRouter from './modules/company'
 import wechatMiniprogramConfigRouter from './modules/wechat-miniprogram-config'
 import profileRouter from './modules/profile'
-import homeRouter from './modules/home'
 
 /**
  * constantRoutes
@@ -49,6 +48,17 @@ export const constantRoutes = [{
         hidden: true
     },
     {
+        //   path: '/',
+        //   component: Layout,
+        //   redirect: '/dashboard',
+        //   children: [{
+        //     path: 'dashboard',
+        //     name: 'Dashboard',
+        //     component: () =>
+        //       import ('@/views/dashboard/index'),
+        //     meta: { title: '首页', icon: 'dashboard' }
+        //   }
+
         path: '/',
         component: Layout,
         redirect: '/dashboard',
@@ -56,11 +66,12 @@ export const constantRoutes = [{
             path: 'dashboard',
             name: 'Dashboard',
             component: () =>
-                import ('@/views/dashboard/index'),
-            meta: { title: '首页', icon: 'dashboard' }
+                import ('@/views/home/home'),
+            meta: { title: '首页', icon: 'me' }
         }]
     }
 ]
+
 
 export const asyncRoutes = [
     taskRouter,
@@ -75,7 +86,6 @@ export const asyncRoutes = [
     companyRouter,
     wechatMiniprogramConfigRouter,
     profileRouter,
-    homeRouter,
     { path: '*', redirect: '/404', hidden: true }
 ]
 
