@@ -225,7 +225,15 @@ export default {
   },
   methods: {
     handleOperate(id) {
-      alert('这是发票服务' + id + '事件')
+      console.log(id);
+      if (id === 1) {
+        this.$router.push({
+          name: 'fapiao-input',
+          query: {
+            id: id
+          }
+        })
+      }
     },
     handleOperate1() {
       alert('这是发票服务操作1事件')
