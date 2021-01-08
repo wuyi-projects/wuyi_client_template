@@ -92,25 +92,11 @@
         <!--工具栏按钮-->
         <template v-slot:buttons>
           <el-button-group style="margin-bottom:2px">
-            <el-button @click.native.prevent="handleCreate()">新增</el-button>
             <el-button
               type="primary"
               @click.native.prevent="handleBatchDelete()"
-            >批量删除</el-button>
-            <el-button
-              type="primary"
-              @click.native.prevent="handleFapiaoUpload()"
-            >上传电子发票</el-button>
-            <el-button
-              type="primary"
-              @click.native.prevent="handleImageUpload()"
-            >上传图片</el-button>
+            >发票上传通过</el-button>
           </el-button-group>
-          <el-button
-            style="margin:0 10px;"
-            type="primary"
-            @click.native.prevent="handleUpload()"
-          >上传文件</el-button>
         </template>
 
         <!--是否可用展示-->
@@ -128,9 +114,12 @@
           <el-button
             type="text"
             :command="beforeHandleCommand('handleDelete', row)"
-          >删除</el-button>
+          >审核通过</el-button>
           <el-divider direction="vertical" />
-          <el-button type="text" @click="handleViewDetail(row)">详情</el-button>
+          <el-button
+            type="text"
+            @click="handleViewDetail(row)"
+          >审核未通过</el-button>
         </template>
         <!--自定义空数据模板-->
         <template v-slot:empty>
@@ -140,109 +129,6 @@
         </template>
       </vxe-grid>
     </el-card>
-
-    <!-- 创建/修改表单 -->
-    <el-dialog
-      v-if="dialogFormVisible"
-      :title="textMap[dialogStatus]"
-      :center="true"
-      width="40%"
-      :visible.sync="dialogFormVisible"
-    >
-      <el-form
-        ref="dataForm"
-        :rules="rules"
-        :model="temp"
-        label-position="right"
-        label-width="80px"
-        style="width: 100%; padding: 10px"
-      >
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="权限名称" prop="permission">
-              <el-input v-model="temp.permission" clearable />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="权限描述" prop="description">
-              <el-input v-model="temp.description" type="textarea" clearable />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="权限分组" prop="permissionGroupInfoId">
-              <el-select
-                v-model="temp.permissionGroupInfoId"
-                placeholder="请选择权限分组"
-                style="width: 100%"
-              >
-                <el-option
-                  v-for="item in permissionGroupInfoOptions"
-                  :key="item.id"
-                  :label="item.groupName"
-                  :value="item.id"
-                />
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="是否可用" prop="available">
-              <el-switch
-                v-model="temp.available"
-                :active-value="1"
-                :inactive-value="0"
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <template v-if="dialogStatus !== 'detail'">
-          <el-button @click="resetForm('dataForm')"> 重置 </el-button>
-          <el-button
-            type="primary"
-            :loading="loadingSubmitButton"
-            :disabled="loadingSubmitButton"
-            @click="dialogStatus === 'create' ? createData() : updateData()"
-          >
-            {{ submitButtonText }}
-          </el-button>
-        </template>
-      </div>
-    </el-dialog>
-
-    <!-- 上传电子发票 -->
-    <el-dialog
-      v-if="importFapiaoFormVisible"
-      title="上传电子发票"
-      :center="true"
-      width="410px"
-      :visible.sync="importFapiaoFormVisible"
-    >
-      <el-form :model="fapiao">
-        <ElectronicFapiaoUpload v-model="uploadUrl" />
-      </el-form>
-      {{ fapiao.url }}
-    </el-dialog>
-
-    <!-- 上传电子发票 -->
-    <el-dialog
-      v-if="importImageFormVisible"
-      title="上传图片"
-      :center="true"
-      width="410px"
-      :visible.sync="importImageFormVisible"
-    >
-      <el-form :model="images">
-        <SingleUpload v-model="uploadImageLoadUrl" />
-      </el-form>
-      {{ fapiao.url }}
-    </el-dialog>
   </div>
 </template>
 
@@ -250,8 +136,6 @@
 
 <script>
 import formatTableSize from '@/utils/size'
-import ElectronicFapiaoUpload from '@/components/Upload/ElectronicFapiaoUpload'
-import SingleUpload from '@/components/Upload/SingleUpload'
 
 import {
   saveFapiaoManagement,
@@ -262,25 +146,12 @@ import {
 } from '@/api/fapiao-management'
 
 export default {
-  components: {
-    ElectronicFapiaoUpload,
-    SingleUpload
-  },
   data() {
     return {
-      fapiao: {},
-      uploadUrl: '',
-      images: {},
-      uploadImageLoadUrl: '',
-      importFapiaoFormVisible: false,
-      importImageFormVisible: false,
-      dialogImageUrl: '',
-      dialogVisible: false,
       defaultHeight: '500px',
       tableHeight: '460px',
       permissionGroupInfoOptions: [],
       folding: false,
-      dialogFormVisible: false,
       loadingSubmitButton: false,
       submitButtonText: '提交',
       allFapiaoManagementGroup: [],
@@ -552,7 +423,7 @@ export default {
           },
           {
             field: 'purchaserAddressPhone',
-            title: '购买方电话',
+            title: '购买方地址、电话',
             width: 200,
             align: 'center',
             headerAlign: 'center'
@@ -840,42 +711,13 @@ export default {
     }
   },
   computed: {},
-  watch: {
-    uploadUrl: function(val) {
-      if (val) {
-        this.importFapiaoFormVisible = false
-        this.$message({
-          type: 'success',
-          message: '上传成功'
-        })
-      } else {
-        this.importFapiaoFormVisible = true
-      }
-    },
-    uploadImageLoadUrl: function(val) {
-      if (val) {
-        this.importImageFormVisible = false
-        this.$message({
-          type: 'success',
-          message: '上传成功'
-        })
-      } else {
-        this.importImageFormVisible = true
-      }
-    }
-  },
+
   created() {
     window.addEventListener('resize', this.getHeight)
     this.getHeight()
   },
 
   methods: {
-    handleFapiaoUpload() {
-      this.importFapiaoFormVisible = true
-    },
-    handleImageUpload() {
-      this.importImageFormVisible = true
-    },
     handleViewDetail(row) {
       this.$router.push({
         name: 'fapiao-info',
@@ -985,76 +827,7 @@ export default {
         })
       }
     },
-    handleUpdate(row) {
-      this.temp = Object.assign({}, row)
-      this.dialogStatus = 'update'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-    },
-    initFormSafeSubmitConfig() {
-      this.loadingSubmitButton = false
-      this.submitButtonText = '提交'
-    },
-    createData() {
-      this.$refs['dataForm'].validate(valid => {
-        if (valid) {
-          this.loadingSubmitButton = true
-          this.submitButtonText = '执行中...'
-          const tempData = Object.assign({}, this.temp)
-          saveFapiaoManagement(tempData)
-            .then(response => {
-              const result = response.data
-              if (result) {
-                this.$message({
-                  message: '新增成功',
-                  type: 'success'
-                })
-                this.initFormSafeSubmitConfig()
-                this.dialogFormVisible = false
-                this.$refs.dataGrid.commitProxy('reload')
-              } else {
-                this.$message.error('新增失败')
-                this.initFormSafeSubmitConfig()
-              }
-            })
-            .catch(e => {
-              this.loading = false
-              this.initFormSafeSubmitConfig()
-            })
-        }
-      })
-    },
-    updateData() {
-      this.$refs['dataForm'].validate(valid => {
-        if (valid) {
-          this.loadingSubmitButton = true
-          this.submitButtonText = '执行中...'
-          const tempData = Object.assign({}, this.temp)
-          updateFapiaoManagement(tempData)
-            .then(response => {
-              const result = response.data
-              if (result) {
-                this.$message({
-                  message: '修改操作成功',
-                  type: 'success'
-                })
-                this.initFormSafeSubmitConfig()
-                this.dialogFormVisible = false
-                this.$refs.dataGrid.commitProxy('reload')
-              } else {
-                this.$message.error('修改操作失败')
-                this.initFormSafeSubmitConfig()
-              }
-            })
-            .catch(e => {
-              this.loading = false
-              this.initFormSafeSubmitConfig()
-            })
-        }
-      })
-    },
+
     handleDelete(row) {
       this.$confirm('永久删除该条记录吗, 是否继续?', '提示', {
         confirmButtonText: '确定',

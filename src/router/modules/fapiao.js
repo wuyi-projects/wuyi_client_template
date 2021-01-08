@@ -24,7 +24,7 @@ const fapiaoRouter = {
                 title: '发票详情',
                 roles: ['PermissionAdministrator']
             },
-            hidden: true,
+            hidden: true
         },
         {
             path: 'smart-parsing',
@@ -43,9 +43,51 @@ const fapiaoRouter = {
             name: 'smart-info',
             meta: {
                 title: '解析详情',
-                roles: ['PermissionAdministrator', 'PermissionAssignmentAdministrator']
+                roles: ['PermissionAdministrator']
             },
-            hidden: true,
+            hidden: true
+        },
+        {
+            path: 'fapiao-audit',
+            component: () =>
+                import ('@/views/fapiao/fapiao-audit'),
+            name: 'fapiao-audit',
+            meta: {
+                title: '发票审核',
+                roles: ['PermissionAdministrator']
+            },
+            // hidden: true
+        },
+        {
+            path: 'fapiao-input',
+            component: () =>
+                import ('@/views/fapiao/fapiao-input'),
+            name: 'fapiao-input',
+            meta: {
+                title: '发票录入',
+                roles: ['PermissionAdministrator']
+            },
+            hidden: true
+        },
+        {
+            path: 'me-fapiao',
+            component: () =>
+                import ('@/views/fapiao/me-fapiao'),
+            name: 'me-fapiao',
+            meta: {
+                title: '我的发票',
+                roles: ['PermissionAdministrator']
+            }
+        },
+        {
+            path: 'fapiaoreview',
+            component: () =>
+                import ('@/views/fapiao/fapiaoreview'),
+            name: 'fapiaoreview',
+            meta: {
+                title: '待审核发票',
+                roles: ['PermissionAdministrator', 'PermissionAssignmentAdministrator']
+            }
         }
     ]
 }

@@ -149,7 +149,7 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="onSubmit">编辑</el-button>
-              <el-button @click="onDelete">删除</el-button>
+              <el-button @click="onDelete(currentEvent.id)">删除</el-button>
             </el-form-item>
           </el-form>
         </el-col>
@@ -293,9 +293,7 @@ export default {
         },
         events: []
       },
-      currentEvent: {
-
-      }
+      currentEvent: {}
     }
   },
   computed: {},
@@ -393,6 +391,7 @@ export default {
     handleEventClick(info) {
       this.drawer = true
       console.log(JSON.stringify(info))
+      this.currentEvent.id=info.event.id
       this.currentEvent.title = info.event.title
       this.currentEvent.start = info.event.start
       this.currentEvent.end = info.event.end
@@ -454,8 +453,8 @@ export default {
         }
       }) */
     },
-    onDelete() {
-      console.log(this.calendardata.events.id)
+    onDelete(id) {
+      console.log(id)
     }
   }
 }

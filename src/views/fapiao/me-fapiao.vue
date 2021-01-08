@@ -552,7 +552,7 @@ export default {
           },
           {
             field: 'purchaserAddressPhone',
-            title: '购买方电话',
+            title: '购买方地址、电话',
             width: 200,
             align: 'center',
             headerAlign: 'center'
