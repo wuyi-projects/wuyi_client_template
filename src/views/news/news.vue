@@ -332,7 +332,7 @@ export default {
           remote: true
         },
         pagerConfig: {
-          autoHidden: true,
+          autoHidden: false,
           pageSize: 10,
           pageSizes: [10, 20, 50, 80, 100],
           layouts: [
