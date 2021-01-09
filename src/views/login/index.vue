@@ -1,13 +1,7 @@
 <template>
-  <div
-    class="login"
-  >
+  <div class="login">
     <el-row style="padding-top:150px;">
-      <el-col
-        :span="
-          8"
-        :offset="16"
-      >
+      <el-col :span="8" :offset="16">
         <el-card style="margin-right:50px;">
           <el-container class="login-container">
             <el-form
@@ -22,7 +16,10 @@
                 <h3 class="title">智慧办公管家登录</h3>
               </div>
 
-              <el-form-item prop="phone">
+              <el-form-item
+                prop="phone"
+                :class="focusText == 'phone' ? 'custom-focus' : 'custom-blur'"
+              >
                 <span class="svg-container">
                   <svg-icon icon-class="user" />
                 </span>
@@ -34,10 +31,16 @@
                   type="text"
                   tabindex="1"
                   auto-complete="off"
+                  @focus="onInputFocus"
+                  @blur="onInputBlur"
                 />
               </el-form-item>
 
-              <el-form-item prop="password">
+              <el-form-item
+                prop="password"
+                :class="focusText == 'password' ? 'custom-focus' : 'custom-blur'"
+                @click="handlePassword()"
+              >
                 <span class="svg-container">
                   <svg-icon icon-class="password" />
                 </span>
@@ -51,10 +54,14 @@
                   tabindex="2"
                   auto-complete="off"
                   @keyup.enter.native="handleLogin"
+                  @focus="onPasswordInputFocus"
+                  @blur="onPasswordInputBlur"
                 />
                 <span class="show-pwd" @click="showPwd">
                   <svg-icon
-                    :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"
+                    :icon-class="
+                      passwordType == 'password' ? 'eye' : 'eye-open'
+                    "
                   />
                 </span>
               </el-form-item>
@@ -73,10 +80,8 @@
             </el-form>
           </el-container>
         </el-card>
-
       </el-col>
     </el-row>
-
   </div>
 </template>
 
@@ -101,6 +106,8 @@ export default {
       }
     }
     return {
+      thisStyle:null,
+      focusText: '',
       loginForm: {
         phone: '',
         password: ''
@@ -127,6 +134,18 @@ export default {
     }
   },
   methods: {
+    onInputFocus() {
+      this.focusText = 'phone'
+    },
+    onInputBlur() {
+      this.focusText = ''
+    },
+    onPasswordInputFocus() {
+      this.focusText = 'password'
+    },
+    onPasswordInputBlur() {
+      this.focusText = ''
+    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -204,6 +223,12 @@ $cursor: #fff;
     border-radius: 5px;
     color: #454545;
   }
+  .custom-focus {
+    border: 2px solid #1890ff;
+  }
+  .custom-blur {
+    border: 2px solid #E8F0FE;
+  }
 }
 </style>
 
@@ -213,22 +238,22 @@ $dark_gray: #889aa4;
 $light_gray: #454545;
 
 .login {
-    width: 100%;
-    height: 100vh;
-    vertical-align:middle;
-  }
+  width: 100%;
+  height: 100vh;
+  vertical-align: middle;
+}
 
-  .login::after {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: -1;
-    content: "";
-    background-image: url("../../assets/images/login-bg.jpg");
-    opacity: 0.6;
-  }
+.login::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  content: '';
+  background-image: url('../../assets/images/login-bg.jpg');
+  opacity: 0.6;
+}
 
 .login-container {
   width: 100%;

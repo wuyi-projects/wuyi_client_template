@@ -650,7 +650,7 @@ export default {
             field: 'companyLogo',
             title: '公司Logo ',
             width: 200,
-            height:200,
+            height: 200,
             align: 'center',
             headerAlign: 'center',
             slots: { default: 'companyLogo_default' }
@@ -733,8 +733,7 @@ export default {
             width: 200,
             align: 'center',
             headerAlign: 'center'
-          },
-          {
+          }, /* ,          {
             field: 'auditorId',
             title: '审核人编号 ',
             width: 200,
@@ -768,7 +767,7 @@ export default {
             width: 200,
             align: 'center',
             headerAlign: 'center'
-          },
+          }, */
           {
             title: '操作',
             width: 140,
