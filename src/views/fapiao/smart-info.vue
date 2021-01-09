@@ -153,8 +153,8 @@
           </el-col>
         </div>
       </el-row>
-      
-        <!-- <el-col :span="8">
+
+      <!-- <el-col :span="8">
             <span style="font-weight: bold">购买方地址 ：</span>{{ currentBillInfo.purchaserAddress }}
           </el-col>
           <el-col :span="8">
@@ -220,6 +220,9 @@ export default {
     }
   },
   methods: {
+    getProgress(e) {
+      console.log('加载进度：', e)
+    },
     getFapiaoDisplayWidth() {
       const width = parseInt((window.innerWidth - 210 - 20 * 2) * 0.4)
       this.fapiaoDisplayWidth =

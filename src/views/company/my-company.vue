@@ -112,7 +112,7 @@
                 <el-image
                   :src="row.companyLogo"
                   fit="contain"
-                  style="width:50%!important;"
+                  style="width:80px;"
                 />
               </el-col>
             </el-row>
@@ -650,6 +650,7 @@ export default {
             field: 'companyLogo',
             title: '公司Logo ',
             width: 200,
+            height:200,
             align: 'center',
             headerAlign: 'center',
             slots: { default: 'companyLogo_default' }
@@ -1003,6 +1004,7 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.company)
+          tempData.companyLogo = this.uploadImageLoadUrl
           updateCompany(tempData)
             .then(response => {
               const result = response.data

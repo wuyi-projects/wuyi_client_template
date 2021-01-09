@@ -1003,6 +1003,7 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.company)
+          tempData.companyLogo = this.uploadImageLoadUrl
           updateCompany(tempData)
             .then(response => {
               const result = response.data

@@ -309,7 +309,7 @@ export default {
     const id = that.$route.query.id
     if (id) {
       that.id = id
-      that.getSmartInfo()
+      that.getSmartParsing()
     }
   },
   methods: {
@@ -327,6 +327,9 @@ export default {
     initFormSafeSubmitConfig() {
       this.loadingSubmitButton = false
       this.submitButtonText = '提交'
+    },
+    getProgress(e) {
+      console.log('加载进度：', e)
     },
     createData() {
       this.$refs['dataForm'].validate(valid => {
@@ -366,7 +369,7 @@ export default {
     getMainWidth() {
       this.mainWidth = window.innerWidth - 210 - 20 * 2 + 'px'
     },
-    getSmartInfo() {
+    getSmartParsing() {
       const that = this
       const id = that.id
       if (id) {
