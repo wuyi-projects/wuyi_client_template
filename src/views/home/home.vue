@@ -55,10 +55,20 @@
     <el-row :gutter="20">
       <el-col :span="12">
         <!-- 发票服务 -->
-        <el-card class="box-card" shadow="never" style="margin-top: 10px">
-          <div slot="header" class="clearfix">
+        <el-card
+          class="box-card"
+          body-style="padding:20px;"
+          shadow="never"
+          style="margin-top:10px;"
+        >
+          <!-- <div slot="header" class="clearfix">
             <span style="font-weight:bold">发票服务</span>
-          </div>
+          </div> -->
+          <el-row>
+            <el-col style="padding-bottom:10px;">
+              <span style="font-weight:bold">发票服务</span>
+            </el-col>
+          </el-row>
           <!-- 详情栏 -->
           <!-- <el-card class="box-card" :style="{ height: defaultHeight }"> -->
           <el-row :gutter="20">
@@ -66,7 +76,6 @@
               v-for="data in Data"
               :key="data.id"
               :span="6"
-              style="margin-bottom:20px"
               @click.native="handleOperate(data.id)"
             >
               <el-card shadow="hover" body-style="padding:0">
@@ -113,10 +122,17 @@
       </el-col>
       <el-col :span="12">
         <!-- 我的工具 -->
-        <el-card class="box-card" shadow="never" style="margin-top: 10px">
-          <div slot="header" class="clearfix">
-            <span style="font-weight:bold">我的工具</span>
-          </div>
+        <el-card
+          class="box-card"
+          body-style="padding:20px;"
+          shadow="never"
+          style="margin-top:10px;"
+        >
+          <el-row>
+            <el-col style="padding-bottom:10px;">
+              <span style="font-weight:bold">我的工具</span>
+            </el-col>
+          </el-row>
           <!-- 详情栏 -->
           <!-- <el-card class="box-card" :style="{ height: defaultHeight }"> -->
           <el-row :gutter="20">
@@ -124,7 +140,6 @@
               v-for="data in Data"
               :key="data.id"
               :span="6"
-              style="margin-bottom:20px"
               @click.native="handleTool(data.id)"
             >
               <el-card shadow="hover" body-style="padding:0">
