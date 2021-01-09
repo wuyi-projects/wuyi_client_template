@@ -9,12 +9,6 @@ const companyRouter = {
         roles: ['PermissionAdministrator', 'PermissionAssignmentAdministrator']
     },
     children: [{
-        path: 'company',
-        component: () =>
-            import ('@/views/company/company'),
-        name: 'company',
-        meta: { title: '公司信息', roles: ['PermissionAdministrator'] }
-    }, {
         path: 'my-company',
         component: () =>
             import ('@/views/company/my-company'),

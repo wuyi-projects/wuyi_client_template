@@ -24,7 +24,7 @@ export default {
   },
   data() {
     return {
-      title: '物一智慧中台',
+      title: '智能办公管家',
       logo: require('../../../assets/logo.png')
     }
   }

@@ -7,17 +7,10 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 /* Router Modules */
-import userRouter from './modules/user'
-import permissionRouter from './modules/permission'
-import oaRouter from './modules/oa'
-import taskRouter from './modules/task'
-import newsRouter from './modules/news'
-import configRouter from './modules/config'
-import fileRouter from './modules/file'
+import settingRouter from './modules/permission'
 import fapiaoRouter from './modules/fapiao'
 import calendarRouter from './modules/calendar'
 import companyRouter from './modules/company'
-import wechatMiniprogramConfigRouter from './modules/wechat-miniprogram-config'
 import profileRouter from './modules/profile'
 
 /**
@@ -74,18 +67,11 @@ export const constantRoutes = [{
 
 
 export const asyncRoutes = [
-    taskRouter,
-    newsRouter,
-    oaRouter,
-    userRouter,
-    configRouter,
-    fileRouter,
-    fapiaoRouter,
-    permissionRouter,
-    calendarRouter,
     companyRouter,
-    wechatMiniprogramConfigRouter,
+    fapiaoRouter,
+    // calendarRouter,
     profileRouter,
+    settingRouter,
     { path: '*', redirect: '/404', hidden: true }
 ]
 
