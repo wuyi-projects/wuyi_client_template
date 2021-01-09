@@ -81,8 +81,7 @@ export default {
     ErrorLog,
     Screenfull,
     SizeSelect,
-    Search,
-    index
+    Search
   },
   data() {
     return {
@@ -131,7 +130,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['sidebar', 'avatar', 'device', 'index'])
+    ...mapGetters(['sidebar', 'avatar', 'device'])
   },
   methods: {
     handleSwitchCompany(index) {
