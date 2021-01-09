@@ -364,7 +364,7 @@ export default {
       this.origWidth4Pdf = this.fapiaoDisplayWidth
     },
     getMainWidth() {
-      this.mainWidth = window.innerWidth - 230 - 20 * 2 + 'px'
+      this.mainWidth = window.innerWidth - 210 - 20 * 2 + 'px'
     },
     getSmartInfo() {
       const that = this

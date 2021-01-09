@@ -225,10 +225,18 @@ export default {
   },
   methods: {
     handleOperate(id) {
-      console.log(id);
+      console.log(id)
       if (id === 1) {
         this.$router.push({
           name: 'fapiao-input',
+          query: {
+            id: id
+          }
+        })
+      }
+      if (id === 2) {
+        this.$router.push({
+          name: 'fapiao-audit',
           query: {
             id: id
           }

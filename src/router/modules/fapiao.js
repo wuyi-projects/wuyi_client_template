@@ -56,7 +56,7 @@ const fapiaoRouter = {
                 title: '发票审核',
                 roles: ['PermissionAdministrator']
             },
-            // hidden: true
+            hidden: true
         },
         {
             path: 'fapiao-input',
