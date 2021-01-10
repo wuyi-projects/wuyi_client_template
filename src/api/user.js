@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function loginByUsername(data) {
   return request({
-    url: '/wuyi_uas/platform/admin/login.json',
+    url: '/wuyi_uas/assistant/user/login.json',
     method: 'post',
     data
   })

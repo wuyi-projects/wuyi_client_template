@@ -16,8 +16,10 @@ service.interceptors.request.use(
     config.headers['Content-Type'] = 'application/json;charset=utf-8'
     if (store.getters.token) {
       config.headers['Open-ID'] = getOpenID()
-      config.headers['Product-Code'] = 'platform'
+      config.headers['Product-Code'] = 'assistant'
       config.headers['Access-Token'] = getToken()
+      config.headers['Team-Number'] = 999999999
+      
     }
     return config
   },

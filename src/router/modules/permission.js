@@ -1,7 +1,7 @@
 import Layout from '@/layout'
 
 const settingRouter = {
-    path: '/permission',
+    path: '/setting',
     component: Layout,
     meta: {
         title: '基础设置',
@@ -9,17 +9,17 @@ const settingRouter = {
         roles: ['PermissionAdministrator', 'PermissionAssignmentAdministrator']
     },
     children: [{
-            path: 'permission-log',
+            path: 'login-log',
             component: () =>
-                import ('@/views/permission/permission-log'),
-            name: 'permission-log',
+                import ('@/views/setting/login-log'),
+            name: 'login-log',
             meta: { title: '系统登录日志', roles: ['PermissionAdministrator'] }
         },
         {
-            path: 'permission-importance',
+            path: 'operate-log',
             component: () =>
-                import ('@/views/permission/permission-importance'),
-            name: 'permission-importance',
+                import ('@/views/setting/operate-log'),
+            name: 'operate-log',
             meta: { title: '重要操作日志', roles: ['PermissionAdministrator'] }
         }
     ]
