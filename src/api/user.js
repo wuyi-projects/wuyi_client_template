@@ -17,7 +17,7 @@ export function isLogin() {
 
 export function getInfo(token) {
   return request({
-    url: '/wuyi_uas/v1/userInfo/getInfo.json',
+    url: '/wuyi_uas/v1/userInfo/getInfo2.json',
     method: 'post',
     token
   })

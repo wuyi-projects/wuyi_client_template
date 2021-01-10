@@ -6,14 +6,14 @@ const companyRouter = {
     meta: {
         title: '公司信息',
         icon: 'tree',
-        roles: ['PermissionAdministrator', 'PermissionAssignmentAdministrator']
+        roles: ['FapiaoUser']
     },
     children: [{
         path: 'my-company',
         component: () =>
             import ('@/views/company/my-company'),
         name: 'my-company',
-        meta: { title: '我的公司', roles: ['PermissionAdministrator'] }
+        meta: { title: '我的公司', roles: ['FapiaoUser'] }
     }]
 }
 export default companyRouter

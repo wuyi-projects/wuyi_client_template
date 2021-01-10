@@ -6,7 +6,7 @@ const fapiaoRouter = {
     meta: {
         title: '发票管理',
         icon: 'fapiao',
-        roles: ['PermissionAdministrator', 'BusinessAdmistrator']
+        roles: ['FapiaoUser']
     },
     children: [{
             path: 'fapiao-audit',
@@ -15,7 +15,7 @@ const fapiaoRouter = {
             name: 'fapiao-audit',
             meta: {
                 title: '发票审核',
-                roles: ['PermissionAdministrator']
+                roles: ['FapiaoUser']
             },
             hidden: true
         },
@@ -26,7 +26,7 @@ const fapiaoRouter = {
             name: 'fapiao-input',
             meta: {
                 title: '发票录入',
-                roles: ['PermissionAdministrator']
+                roles: ['FapiaoUser']
             },
             hidden: true
         },
@@ -37,7 +37,7 @@ const fapiaoRouter = {
             name: 'me-fapiao',
             meta: {
                 title: '我的发票',
-                roles: ['PermissionAdministrator']
+                roles: ['FapiaoUser']
             }
         },
         {
@@ -47,7 +47,7 @@ const fapiaoRouter = {
             name: 'fapiaoreview',
             meta: {
                 title: '待审核发票',
-                roles: ['PermissionAdministrator', 'PermissionAssignmentAdministrator']
+                roles: ['FapiaoUser']
             }
         }
     ]
