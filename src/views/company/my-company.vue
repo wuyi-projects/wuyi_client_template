@@ -279,26 +279,7 @@
               <el-input v-model="company.introduction" clearable />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="操作人编号" prop="operatorId">
-              <el-input v-model="company.operatorId" clearable />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="录用人" prop="operatorName">
-              <el-input v-model="company.operatorName" clearable />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="审核人" prop="auditorName">
-              <el-input v-model="company.auditorName" clearable />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="审核人编号" prop="auditorId">
-              <el-input v-model="company.auditorId" clearable />
-            </el-form-item>
-          </el-col>
+          
           <el-col :span="12">
             <el-form-item label="备注" prop="note">
               <el-input v-model="company.note" clearable />
@@ -356,12 +337,12 @@
 import formatTableSize from '@/utils/size'
 import SingleUpload from '@/components/Upload/SingleUpload'
 import {
-  saveCompany,
-  deleteCompany,
-  batchDeleteCompany,
-  updateCompany,
-  listCompany,
-  getCompany
+  saveCompany4Me,
+  deleteCompany4Me,
+  batchDeleteCompany4Me,
+  updateCompany4Me,
+  listCompany4Me,
+  getCompany4Me
 } from '@/api/company'
 
 export default {
@@ -471,12 +452,8 @@ export default {
         companyShortName: '',
         companyLogo: '',
         website: '',
-        operatorId: '',
-        operatorName: '',
-        auditorId: '',
         note: '',
         introduction: '',
-        auditorName: '',
         financingStage: null,
         scale: null
       },
@@ -626,7 +603,7 @@ export default {
                 limit: page.pageSize
               })
               const result = Object.assign(pageData, searchData, sortParams)
-              return listCompany(result)
+              return listCompany4Me(result)
             }
           }
         },
@@ -925,7 +902,7 @@ export default {
               }
               batchDeleteData.push(company)
             }
-            batchDeleteCompany(batchDeleteData)
+            batchDeleteCompany4Me(batchDeleteData)
               .then(response => {
                 const result = response.data
                 if (result) {
@@ -974,7 +951,7 @@ export default {
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.company)
           tempData.companyLogo = this.uploadImageLoadUrl
-          saveCompany(tempData)
+          saveCompany4Me(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -1004,7 +981,7 @@ export default {
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.company)
           tempData.companyLogo = this.uploadImageLoadUrl
-          updateCompany(tempData)
+          updateCompany4Me(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -1040,7 +1017,7 @@ export default {
             id: id,
             version: version
           })
-          deleteCompany(tempData)
+          deleteCompany4Me(tempData)
             .then(response => {
               const result = response.data
               if (result) {

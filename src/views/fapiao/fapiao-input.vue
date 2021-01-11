@@ -11,39 +11,49 @@
         style="width: 100%; padding:10px;"
       >
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="公司编号" prop="companyId">
-              <el-input v-model="temp.companyId" clearable />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="凭证分类" prop="voucherType">
-              <el-input v-model="temp.voucherType" clearable />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="凭证类型代码" prop="voucherTypeCode">
-              <el-select
-                v-model="temp.voucherTypeCode"
-                placeholder="请选择"
-                style="width:100%;"
-              >
-                <el-option
-                  v-for="item in voucherTypeCode"
-                  :key="item.code"
-                  :label="item.name"
-                  :value="item.code"
-                />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="发票号码" prop="voucherNumber">
-              <el-input v-model="temp.voucherNumber" clearable />
-            </el-form-item>
-          </el-col>
-          <el-row v-if="folding">
-            <el-col :span="12">
+          <div
+            style="height:60px;border:1px solid #D5D8DF;border-radius:2px;line-height:60px;padding-left:20px;margin-bottom:20px"
+          >
+            <span>基本信息</span>
+          </div>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="公司编号" prop="companyId">
+                <el-input v-model="temp.companyId" clearable />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="凭证分类" prop="voucherType">
+                <el-input v-model="temp.voucherType" clearable />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="凭证类型代码" prop="voucherTypeCode">
+                <el-select
+                  v-model="temp.voucherTypeCode"
+                  placeholder="请选择"
+                  style="width:100%;"
+                >
+                  <el-option
+                    v-for="item in voucherTypeCode"
+                    :key="item.code"
+                    :label="item.name"
+                    :value="item.code"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="发票代码" prop="voucherCode">
+                <el-input v-model="temp.voucherCode" clearable />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="发票号码" prop="voucherNumber">
+                <el-input v-model="temp.voucherNumber" clearable />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
               <el-form-item label="开票日期">
                 <el-col :span="24">
                   <el-form-item prop="voucherDate">
@@ -59,27 +69,76 @@
                 </el-col>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
-              <el-form-item label="密码区" prop="hash">
-                <el-input v-model="temp.hash" clearable />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item label="校验码" prop="checkCode">
                 <el-input v-model="temp.checkCode" clearable />
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="16" :offset="16" />
+            <el-col :span="8">
+              <el-form-item label="金额" prop="amount">
+                <el-input v-model="temp.amount" clearable />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="税率" prop="taxRate">
+                <el-input v-model="temp.taxRate" clearable />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="税额" prop="taxAmount">
+                <el-input v-model="temp.taxAmount" clearable />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="价税合计" prop="totalAmount">
+                <el-input v-model="temp.totalAmount" clearable />
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
+            <div
+              style="height:60px;border:1px solid #D5D8DF;border-radius:2px;line-height:60px;padding-left:20px;margin-bottom:20px"
+            >
+              <span>附件</span>
+            </div>
+            <el-col :span="8">
+              <el-form-item label="发票格式" prop="format">
+                <el-input v-model="temp.format" clearable />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="发票地址" prop="adress">
+                <el-input v-model="temp.adress" clearable />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <template v-if="folding" style="margin-top:20px">
+            <el-row>
+              <div
+                style="height:60px;border:1px solid #D5D8DF;border-radius:2px;line-height:60px;padding-left:20px;margin-bottom:20px"
+              >
+                <span>销售方信息</span>
+              </div>
+            </el-row>
+            <el-col :span="8">
+              <el-form-item label="密码区" prop="hash">
+                <el-input v-model="temp.hash" clearable />
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="8">
               <el-form-item label="机器编号" prop="machineNumber">
                 <el-input v-model="temp.machineNumber" clearable />
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item label="购买方名称" prop="purchaserName">
                 <el-input v-model="temp.purchaserName" clearable />
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item
                 label="购买方纳税人识别号"
                 prop="purchaserRegistrationNumber"
@@ -90,47 +149,33 @@
                 />
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item label="购买方电话" prop="purchaserAddressPhone">
                 <el-input v-model="temp.purchaserAddressPhone" clearable />
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item label="购买方地址" prop=" purchaserAddress">
                 <el-input v-model="temp.purchaserAddress" clearable />
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item label="电子支付标识" prop="paymentIdentification">
                 <el-input v-model="temp.paymentIdentification" clearable />
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item label="凭证明细" prop="voucherContent">
                 <el-input v-model="temp.voucherContent" clearable />
               </el-form-item>
             </el-col>
-            <el-col :span="12">
-              <el-form-item label="税率" prop="taxRate">
-                <el-input v-model="temp.taxRate" clearable />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="税额" prop="taxAmount">
-                <el-input v-model="temp.taxAmount" clearable />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="价税合计" prop="totalAmount">
-                <el-input v-model="temp.totalAmount" clearable />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
+
+            <el-col :span="8">
               <el-form-item label="销售方名称" prop="sellerName     ">
                 <el-input v-model="temp.sellerName" clearable />
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item
                 label="销售方纳税人识别号"
                 prop="sellerRegistrationNumber"
@@ -138,59 +183,59 @@
                 <el-input v-model="temp.sellerRegistrationNumber" clearable />
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item label="销售方电话" prop="sellerAddressPhone">
                 <el-input v-model="temp.sellerAddressPhone" clearable />
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item label="销售方地址" prop="sellerAddress">
                 <el-input v-model="temp.sellerAddress" clearable />
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item label="销售方电话" prop="sellerPhone">
                 <el-input v-model="temp.sellerPhone" clearable />
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item label="销售方开户行及账号" prop="sellerDepositBank">
                 <el-input v-model="temp.sellerDepositBank" clearable />
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item label="发票备注" prop="voucherNote">
                 <el-input v-model="temp.voucherNote" clearable />
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item label="发票收款人" prop="voucherPayeeName">
                 <el-input v-model="temp.voucherPayeeName" clearable />
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item label="发票复核人" prop="voucherAuditorName">
                 <el-input v-model="temp.voucherAuditorName" clearable />
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item label="发票开票人" prop="voucherOperatorName">
                 <el-input v-model="temp.voucherOperatorName" clearable />
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item label="发票格式" prop="voucherFileType">
                 <el-input v-model="temp.voucherFileType" clearable />
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item label="凭证URL" prop="voucherUrl">
                 <el-input v-model="temp.voucherUrl" clearable />
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-col :span="12">
-            <el-form-item style="float: right" label-width="0">
+          </template>
+          <el-col :span="24">
+            <el-form-item style="text-align:center" label-width="0">
               <el-button
                 v-if="folding"
                 type="text"
@@ -209,7 +254,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12" :offset="1">
+          <el-col :span="8" :offset="1">
             <el-button
               type="primary"
               @click.native.prevent="handleFapiaoUpload()"
@@ -255,6 +300,14 @@
 
 .hide .el-upload--picture-card {
   display: none;
+}
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: '';
+}
+.clearfix:after {
+  clear: both;
 }
 </style>
 

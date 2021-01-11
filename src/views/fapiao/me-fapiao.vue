@@ -142,79 +142,6 @@
     </el-card>
 
     <!-- 创建/修改表单 -->
-    <el-dialog
-      v-if="dialogFormVisible"
-      :title="textMap[dialogStatus]"
-      :center="true"
-      width="40%"
-      :visible.sync="dialogFormVisible"
-    >
-      <el-form
-        ref="dataForm"
-        :rules="rules"
-        :model="temp"
-        label-position="right"
-        label-width="80px"
-        style="width: 100%; padding: 10px"
-      >
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="权限名称" prop="permission">
-              <el-input v-model="temp.permission" clearable />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="权限描述" prop="description">
-              <el-input v-model="temp.description" type="textarea" clearable />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="权限分组" prop="permissionGroupInfoId">
-              <el-select
-                v-model="temp.permissionGroupInfoId"
-                placeholder="请选择权限分组"
-                style="width: 100%"
-              >
-                <el-option
-                  v-for="item in permissionGroupInfoOptions"
-                  :key="item.id"
-                  :label="item.groupName"
-                  :value="item.id"
-                />
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="是否可用" prop="available">
-              <el-switch
-                v-model="temp.available"
-                :active-value="1"
-                :inactive-value="0"
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <template v-if="dialogStatus !== 'detail'">
-          <el-button @click="resetForm('dataForm')"> 重置 </el-button>
-          <el-button
-            type="primary"
-            :loading="loadingSubmitButton"
-            :disabled="loadingSubmitButton"
-            @click="dialogStatus === 'create' ? createData() : updateData()"
-          >
-            {{ submitButtonText }}
-          </el-button>
-        </template>
-      </div>
-    </el-dialog>
 
     <!-- 上传电子发票 -->
     <el-dialog
@@ -275,7 +202,6 @@ export default {
       importFapiaoFormVisible: false,
       importImageFormVisible: false,
       dialogImageUrl: '',
-      dialogVisible: false,
       defaultHeight: '500px',
       tableHeight: '460px',
       permissionGroupInfoOptions: [],
@@ -917,12 +843,12 @@ export default {
       this.$refs[formName].resetFields()
     },
     handleCreate() {
-      this.temp = Object.assign({}, this.initCreateData)
-      this.dialogStatus = 'create'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
+      this.$router.push({
+          name: 'fapiao-input',
+          query: {
+            id: this.id
+          }
+        })
     },
     handleBatchDelete() {
       const selectRecords = this.$refs.dataGrid.getCheckboxRecords()

@@ -39,7 +39,6 @@
               <el-form-item
                 prop="password"
                 :class="focusText == 'password' ? 'custom-focus' : 'custom-blur'"
-                @click="handlePassword()"
               >
                 <span class="svg-container">
                   <svg-icon icon-class="password" />
@@ -106,7 +105,6 @@ export default {
       }
     }
     return {
-      thisStyle:null,
       focusText: '',
       loginForm: {
         phone: '',
