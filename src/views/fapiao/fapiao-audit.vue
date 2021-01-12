@@ -205,17 +205,15 @@
         style="width: 100%; padding:10px;"
       >
         <el-row>
-          <el-col :span="16" :offset="4">
-            <el-form-item prop="groupName">
-              <label>审核不通过的原因:
-                <el-input
-                  v-model="temp.groupName"
-                  :rows="5"
-                  type="textarea"
-                  clearable
-                  label="审核不通过的原因:"
-                />
-              </label>
+          <el-col :span="20" :offset="2">
+            <el-form-item label="审核不通过的原因:" prop="groupName">
+              <el-input
+                v-model="temp.groupName"
+                :rows="5"
+                type="textarea"
+                clearable
+                label="审核不通过的原因:"
+              />
             </el-form-item>
           </el-col>
         </el-row>
