@@ -82,6 +82,15 @@
 
     <!--数据展示-->
     <el-card class="box-card" shadow="never" :style="{ height: defaultHeight }">
+      <!-- 月份 -->
+      <el-radio-group v-model="currentMonth" style="margin-bottom: 10px;">
+        <el-radio-button
+          v-for="month in months"
+          :key="month.id"
+          :label="month.month"
+        >{{ month.month }}</el-radio-button>
+      </el-radio-group>
+
       <vxe-grid
         ref="dataGrid"
         class="custom-table-scrollbar"
@@ -173,7 +182,28 @@
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.text {
+  font-size: 14px;
+}
+
+.item {
+  margin-bottom: 18px;
+}
+
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: '';
+}
+.clearfix:after {
+  clear: both;
+}
+
+.box-card {
+  width: 480px;
+}
+</style>
 
 <script>
 import formatTableSize from '@/utils/size'
@@ -195,6 +225,8 @@ export default {
   },
   data() {
     return {
+      months: [],
+      currentMonth: '',
       fapiao: {},
       uploadUrl: '',
       images: {},
@@ -385,6 +417,7 @@ export default {
                     : 0,
                 limit: page.pageSize
               })
+              searchData.currentMonth = this.currentMonth
               const result = Object.assign(pageData, searchData, sortParams)
               return listFapiaoManagement(result)
             }
@@ -793,9 +826,21 @@ export default {
   created() {
     window.addEventListener('resize', this.getHeight)
     this.getHeight()
+    this.initMonth()
   },
 
   methods: {
+    initMonth() {
+      const total = 12
+      const data = []
+      for (let index = 0; index < total; index++) {
+        data.push({
+          month: index + 1 + '月'
+        })
+      }
+      this.months = data
+      this.currentMonth = new Date().getMonth() + 1 + '月'
+    },
     handleFapiaoUpload() {
       this.importFapiaoFormVisible = true
     },
@@ -844,11 +889,11 @@ export default {
     },
     handleCreate() {
       this.$router.push({
-          name: 'fapiao-input',
-          query: {
-            id: this.id
-          }
-        })
+        name: 'fapiao-input',
+        query: {
+          id: this.id
+        }
+      })
     },
     handleBatchDelete() {
       const selectRecords = this.$refs.dataGrid.getCheckboxRecords()

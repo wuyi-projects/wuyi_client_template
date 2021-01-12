@@ -279,7 +279,7 @@
               <el-input v-model="company.introduction" clearable />
             </el-form-item>
           </el-col>
-          
+
           <el-col :span="12">
             <el-form-item label="备注" prop="note">
               <el-input v-model="company.note" clearable />
@@ -444,7 +444,7 @@ export default {
       rules: {
         companyName: [
           { required: true, message: '请输入公司名称', trigger: 'blur' },
-          { min: 5, message: '长度大于 5 个字符', trigger: 'blur' }
+          { min: 4, message: '公司全称不少于 4 个字符', trigger: 'blur' }
         ]
       },
       company: {
@@ -710,12 +710,7 @@ export default {
             width: 200,
             align: 'center',
             headerAlign: 'center'
-          }, /* ,          {
-            field: 'auditorId',
-            title: '审核人编号 ',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
+          }, /* {            field: 'auditorId',            title: '审核人编号 ',            width: 200,            align: 'center',            headerAlign: 'center'
           },
           {
             field: 'auditorName',
@@ -744,7 +739,8 @@ export default {
             width: 200,
             align: 'center',
             headerAlign: 'center'
-          }, */
+          } */
+
           {
             title: '操作',
             width: 140,
