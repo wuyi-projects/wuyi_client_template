@@ -57,23 +57,14 @@
         <el-col :span="8">
           <el-form-item style="float: right" label-width="0">
             <el-button @click="resetForm('searchForm')">重 置</el-button>
-            <el-button
-              type="primary"
-              @click="submitForm('searchForm')"
-            >查 询</el-button>
-            <el-button
-              v-if="folding"
-              type="text"
-              @click="toggleFolding()"
-            >收起<i
-              class="el-icon-arrow-up el-icon--right"
+            <el-button type="primary" @click="submitForm('searchForm')"
+              >查 询</el-button
+            >
+            <el-button v-if="folding" type="text" @click="toggleFolding()"
+              >收起<i class="el-icon-arrow-up el-icon--right"
             /></el-button>
-            <el-button
-              v-else
-              type="text"
-              @click="toggleFolding()"
-            >展开<i
-              class="el-icon-arrow-down el-icon--right"
+            <el-button v-else type="text" @click="toggleFolding()"
+              >展开<i class="el-icon-arrow-down el-icon--right"
             /></el-button>
           </el-form-item>
         </el-col>
@@ -83,12 +74,13 @@
     <!--数据展示-->
     <el-card class="box-card" shadow="never" :style="{ height: defaultHeight }">
       <!-- 月份 -->
-      <el-radio-group v-model="currentMonth" style="margin-bottom: 10px;">
+      <el-radio-group v-model="currentMonth" style="margin-bottom: 10px">
         <el-radio-button
           v-for="month in months"
           :key="month.id"
           :label="month.month"
-        >{{ month.month }}</el-radio-button>
+          >{{ month.month }}</el-radio-button
+        >
       </el-radio-group>
 
       <vxe-grid
@@ -100,26 +92,30 @@
       >
         <!--工具栏按钮-->
         <template v-slot:buttons>
-          <el-button-group style="margin-bottom:2px">
+          <el-button-group style="margin-bottom: 2px">
             <el-button @click.native.prevent="handleCreate()">新增</el-button>
             <el-button
               type="primary"
               @click.native.prevent="handleBatchDelete()"
-            >批量删除</el-button>
+              >批量删除</el-button
+            >
             <el-button
               type="primary"
               @click.native.prevent="handleFapiaoUpload()"
-            >上传电子发票</el-button>
+              >上传电子发票</el-button
+            >
             <el-button
               type="primary"
               @click.native.prevent="handleImageUpload()"
-            >上传图片</el-button>
+              >上传图片</el-button
+            >
           </el-button-group>
           <el-button
-            style="margin:0 10px;"
+            style="margin: 0 10px"
             type="primary"
             @click.native.prevent="handleUpload()"
-          >上传文件</el-button>
+            >上传文件</el-button
+          >
         </template>
 
         <!--是否可用展示-->
@@ -137,7 +133,8 @@
           <el-button
             type="text"
             :command="beforeHandleCommand('handleDelete', row)"
-          >删除</el-button>
+            >删除</el-button
+          >
           <el-divider direction="vertical" />
           <el-button type="text" @click="handleViewDetail(row)">详情</el-button>
         </template>
@@ -194,123 +191,119 @@
 .clearfix:before,
 .clearfix:after {
   display: table;
-  content: '';
+  content: "";
 }
 .clearfix:after {
   clear: both;
 }
-
-.box-card {
-  width: 480px;
-}
 </style>
 
 <script>
-import formatTableSize from '@/utils/size'
-import ElectronicFapiaoUpload from '@/components/Upload/ElectronicFapiaoUpload'
-import SingleUpload from '@/components/Upload/SingleUpload'
+import formatTableSize from "@/utils/size";
+import ElectronicFapiaoUpload from "@/components/Upload/ElectronicFapiaoUpload";
+import SingleUpload from "@/components/Upload/SingleUpload";
 
 import {
   saveFapiaoManagement,
   deleteFapiaoManagement,
   batchDeleteFapiaoManagement,
   updateFapiaoManagement,
-  listFapiaoManagement
-} from '@/api/fapiao-management'
+  listFapiaoManagement,
+} from "@/api/fapiao-management";
 
 export default {
   components: {
     ElectronicFapiaoUpload,
-    SingleUpload
+    SingleUpload,
   },
   data() {
     return {
       months: [],
-      currentMonth: '',
+      currentMonth: "",
       fapiao: {},
-      uploadUrl: '',
+      uploadUrl: "",
       images: {},
-      uploadImageLoadUrl: '',
+      uploadImageLoadUrl: "",
       importFapiaoFormVisible: false,
       importImageFormVisible: false,
-      dialogImageUrl: '',
-      defaultHeight: '500px',
-      tableHeight: '460px',
+      dialogImageUrl: "",
+      defaultHeight: "500px",
+      tableHeight: "460px",
       permissionGroupInfoOptions: [],
       folding: false,
       dialogFormVisible: false,
       loadingSubmitButton: false,
-      submitButtonText: '提交',
+      submitButtonText: "提交",
       allFapiaoManagementGroup: [],
       textMap: {
-        update: '编辑',
-        create: '创建',
-        detail: '详情'
+        update: "编辑",
+        create: "创建",
+        detail: "详情",
       },
       searchFormData: {
-        id: '',
-        name: '',
-        money: '',
-        groupName: '',
-        start: '',
-        end: '',
+        id: "",
+        name: "",
+        money: "",
+        groupName: "",
+        start: "",
+        end: "",
         type: [],
-        resource: '',
-        desc: ''
+        resource: "",
+        desc: "",
       },
       rules: {
         permission: [
-          { required: true, message: '请输入权限名称', trigger: 'blur' },
-          { min: 5, message: '长度大于 5 个字符', trigger: 'blur' }
-        ]
+          { required: true, message: "请输入权限名称", trigger: "blur" },
+          { min: 5, message: "长度大于 5 个字符", trigger: "blur" },
+        ],
       },
       temp: {
         id: null,
-        permission: '',
-        description: '',
+        permission: "",
+        description: "",
         permissionGroupInfoId: null,
         available: 1,
-        version: 0
+        version: 0,
       },
       initCreateData: {
         id: null,
-        permission: '',
-        description: '',
+        permission: "",
+        description: "",
         permissionGroupInfoId: null,
         available: 1,
-        version: 0
+        version: 0,
       },
       pickerOptions: {
         disabledDate(time) {
-          return time.getTime() > Date.now()
+          return time.getTime() > Date.now();
         },
         shortcuts: [
           {
-            text: '今天',
+            text: "今天",
             onClick(picker) {
-              picker.$emit('pick', new Date())
-            }
+              picker.$emit("pick", new Date());
+            },
           },
           {
-            text: '昨天',
+            text: "昨天",
             onClick(picker) {
-              const date = new Date()
-              date.setTime(date.getTime() - 3600 * 1000 * 24)
-              picker.$emit('pick', date)
-            }
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              picker.$emit("pick", date);
+            },
           },
           {
-            text: '一周前',
+            text: "一周前",
             onClick(picker) {
-              const date = new Date()
-              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit('pick', date)
-            }
-          }
-        ]
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", date);
+            },
+          },
+        ],
       },
       gridOptions: {
-        border: 'default',
+        border: "default",
         size: formatTableSize(),
         resizable: true,
         autoResize: true,
@@ -320,53 +313,53 @@ export default {
         highlightHoverColumn: true,
         highlightCurrentColumn: true,
         keepSource: true,
-        id: 'full_edit_1',
-        rowId: 'id',
-        headerAlign: 'center',
+        id: "full_edit_1",
+        rowId: "id",
+        headerAlign: "center",
         scrollY: { gt: -1 },
         printConfig: {
           columns: [
-            { field: 'id' },
-            { field: 'permission' },
-            { field: 'description' },
-            { field: 'available' }
-          ]
+            { field: "id" },
+            { field: "permission" },
+            { field: "description" },
+            { field: "available" },
+          ],
         },
         sortConfig: {
-          trigger: 'cell',
+          trigger: "cell",
           defaultSort: {
-            field: 'name',
-            order: 'desc'
-          }
+            field: "name",
+            order: "desc",
+          },
         },
         filterConfig: {
-          remote: true
+          remote: true,
         },
         pagerConfig: {
           autoHidden: false,
           pageSize: 10,
           pageSizes: [10, 20, 50, 80, 100],
           layouts: [
-            'Total',
-            'Sizes',
-            'PrevJump',
-            'PrevPage',
-            'Number',
-            'NextPage',
-            'NextJump',
-            'FullJump'
-          ]
+            "Total",
+            "Sizes",
+            "PrevJump",
+            "PrevPage",
+            "Number",
+            "NextPage",
+            "NextJump",
+            "FullJump",
+          ],
         },
         toolbar: {
           refresh: true,
           print: true,
           zoom: true,
-          custom: true
+          custom: true,
         },
         radioConfig: {
           range: true,
           reserve: true,
-          highlight: true
+          highlight: true,
         },
         proxyConfig: {
           seq: true, // 启用动态序号代理
@@ -374,543 +367,544 @@ export default {
           filter: true, // 启用筛选代理
           form: true, // 启用表单代理
           props: {
-            result: 'rows',
-            total: 'total'
+            result: "rows",
+            total: "total",
           },
           ajax: {
             query: ({ page, sort, filters }) => {
               // 查询条件
-              const searchData = {}
-              const searchFormData = this.searchFormData
+              const searchData = {};
+              const searchFormData = this.searchFormData;
               for (var key in searchFormData) {
-                const value = searchFormData[key]
+                const value = searchFormData[key];
                 if (
                   !(
-                    typeof value === 'undefined' ||
+                    typeof value === "undefined" ||
                     value === null ||
-                    value === ''
+                    value === ""
                   )
                 ) {
-                  searchData[key] = value
+                  searchData[key] = value;
                 }
               }
 
               // 处理排序条件
               const sortParams = Object.assign({
                 sort: sort.property,
-                order: sort.order
-              })
+                order: sort.order,
+              });
               // 处理筛选条件
               filters.forEach(({ property, values, column }) => {
                 if (values) {
                   if (column.filterMultiple) {
-                    sortParams[property] = values
+                    sortParams[property] = values;
                   } else {
-                    sortParams[property] = values[0]
+                    sortParams[property] = values[0];
                   }
                 }
-              })
+              });
               const pageData = Object.assign({
                 offset:
                   page.currentPage >= 0
                     ? (page.currentPage - 1) * page.pageSize
                     : 0,
-                limit: page.pageSize
-              })
-              searchData.currentMonth = this.currentMonth
-              const result = Object.assign(pageData, searchData, sortParams)
-              return listFapiaoManagement(result)
-            }
-          }
+                limit: page.pageSize,
+              });
+              searchData.currentMonth = this.currentMonth;
+              const result = Object.assign(pageData, searchData, sortParams);
+              return listFapiaoManagement(result);
+            },
+          },
         },
         columns: [
-          { type: 'checkbox', width: 40, align: 'center' },
+          { type: "checkbox", width: 40, align: "center" },
           {
-            field: 'companyId',
-            title: '公司编号',
+            field: "companyId",
+            title: "公司编号",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'voucherType',
-            title: '凭证分类',
+            field: "voucherType",
+            title: "凭证分类",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'voucherTypeCode',
-            title: '凭证类型代码',
+            field: "voucherTypeCode",
+            title: "凭证类型代码",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'voucherName',
-            title: '凭证名称',
+            field: "voucherName",
+            title: "凭证名称",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'voucherCode',
-            title: '发票代码',
+            field: "voucherCode",
+            title: "发票代码",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'voucherNumber',
-            title: '发票号码',
+            field: "voucherNumber",
+            title: "发票号码",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'voucherDate',
-            title: '开票日期',
+            field: "voucherDate",
+            title: "开票日期",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'hash',
-            title: '密码区',
+            field: "hash",
+            title: "密码区",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'checkCode',
-            title: '校验码',
+            field: "checkCode",
+            title: "校验码",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'machineNumber',
-            title: '机器编号',
+            field: "machineNumber",
+            title: "机器编号",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'purchaserName',
-            title: '购买方名称',
+            field: "purchaserName",
+            title: "购买方名称",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'purchaserRegistrationNumber',
-            title: '购买方纳税人识别号',
+            field: "purchaserRegistrationNumber",
+            title: "购买方纳税人识别号",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'purchaserAddressPhone',
-            title: '购买方地址、电话',
+            field: "purchaserAddressPhone",
+            title: "购买方地址、电话",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'purchaserAddress',
-            title: '购买方地址',
+            field: "purchaserAddress",
+            title: "购买方地址",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'purchaserPhone',
-            title: '购买方电话',
+            field: "purchaserPhone",
+            title: "购买方电话",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'paymentIdentification',
-            title: '电子支付标识',
+            field: "paymentIdentification",
+            title: "电子支付标识",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'voucherContent',
-            title: '凭证明细',
+            field: "voucherContent",
+            title: "凭证明细",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'taxRate',
-            title: '税率',
+            field: "taxRate",
+            title: "税率",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'taxAmount',
-            title: '税额',
+            field: "taxAmount",
+            title: "税额",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'totalAmount',
-            title: '价税合计',
+            field: "totalAmount",
+            title: "价税合计",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'sellerName',
-            title: '销售方名称',
+            field: "sellerName",
+            title: "销售方名称",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'sellerRegistrationNumber',
-            title: '销售方纳税人识别号',
+            field: "sellerRegistrationNumber",
+            title: "销售方纳税人识别号",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'sellerAddressPhone',
-            title: '销售方地址、电话',
+            field: "sellerAddressPhone",
+            title: "销售方地址、电话",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'sellerAddress',
-            title: '销售方地址',
+            field: "sellerAddress",
+            title: "销售方地址",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'sellerPhone',
-            title: '销售方电话',
+            field: "sellerPhone",
+            title: "销售方电话",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'sellerDepositBank',
-            title: '销售方开户行及账号',
+            field: "sellerDepositBank",
+            title: "销售方开户行及账号",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'voucherNote',
-            title: '发票备注',
+            field: "voucherNote",
+            title: "发票备注",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'voucherPayeeName',
-            title: '发票收款人',
+            field: "voucherPayeeName",
+            title: "发票收款人",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'voucherAuditorName',
-            title: '发票复核人',
+            field: "voucherAuditorName",
+            title: "发票复核人",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'voucherOperatorName',
-            title: '发票开票人',
+            field: "voucherOperatorName",
+            title: "发票开票人",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'voucherFileType',
-            title: '发票格式',
+            field: "voucherFileType",
+            title: "发票格式",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'voucherUrl',
-            title: '凭证URL',
+            field: "voucherUrl",
+            title: "凭证URL",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'reimbursementFlag',
-            title: '是否报销',
+            field: "reimbursementFlag",
+            title: "是否报销",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'reimbursementTime',
-            title: '报销日期',
+            field: "reimbursementTime",
+            title: "报销日期",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'reimbursementBatchNumber',
-            title: '报销批次号',
+            field: "reimbursementBatchNumber",
+            title: "报销批次号",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'accountingFlag',
-            title: '是否记账',
+            field: "accountingFlag",
+            title: "是否记账",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'accountingTime',
-            title: '记账日期',
+            field: "accountingTime",
+            title: "记账日期",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'accountingInfoId',
-            title: '记账编号',
+            field: "accountingInfoId",
+            title: "记账编号",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'voucherStatus',
-            title: '凭证状态',
+            field: "voucherStatus",
+            title: "凭证状态",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'operatorId',
-            title: '操作人编号',
+            field: "operatorId",
+            title: "操作人编号",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'operatorName',
-            title: '录入人',
+            field: "operatorName",
+            title: "录入人",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'operateTime',
-            title: '录入时间',
+            field: "operateTime",
+            title: "录入时间",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'auditorId',
-            title: '审核人编号',
+            field: "auditorId",
+            title: "审核人编号",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'auditorName',
-            title: '审核人名称',
+            field: "auditorName",
+            title: "审核人名称",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'auditTime',
-            title: '审核时间',
+            field: "auditTime",
+            title: "审核时间",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'opinion',
-            title: '审核意见',
+            field: "opinion",
+            title: "审核意见",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            field: 'note',
-            title: '备注',
+            field: "note",
+            title: "备注",
             width: 200,
-            align: 'center',
-            headerAlign: 'center'
+            align: "center",
+            headerAlign: "center",
           },
           {
-            title: '操作',
+            title: "操作",
             width: 140,
-            align: 'center',
-            headerAlign: 'center',
-            fixed: 'right',
-            slots: { default: 'operate' }
-          }
+            align: "center",
+            headerAlign: "center",
+            fixed: "right",
+            slots: { default: "operate" },
+          },
         ],
         importConfig: {
           remote: true,
           importMethod: this.importMethod,
-          types: ['xlsx'],
-          modes: ['insert']
+          types: ["xlsx"],
+          modes: ["insert"],
         },
         exportConfig: {
           // 默认选中类型
-          type: 'csv',
+          type: "csv",
           // 局部自定义类型
-          types: ['xlsx', 'csv', 'html', 'xml', 'txt'],
+          types: ["xlsx", "csv", "html", "xml", "txt"],
           // 自定义数据量列表
-          modes: ['current', 'all']
+          modes: ["current", "all"],
         },
         checkboxConfig: {
           reserve: true,
           highlight: true,
-          range: true
+          range: true,
         },
         editRules: {
           name: [
-            { required: true, message: 'app.body.valid.rName' },
-            { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
+            { required: true, message: "app.body.valid.rName" },
+            { min: 3, max: 50, message: "名称长度在 3 到 50 个字符" },
           ],
-          email: [{ required: true, message: '邮件必须填写' }],
-          role: [{ required: true, message: '角色必须填写' }]
+          email: [{ required: true, message: "邮件必须填写" }],
+          role: [{ required: true, message: "角色必须填写" }],
         },
         editConfig: {
-          trigger: 'click',
-          mode: 'row',
-          showStatus: true
-        }
-      }
-    }
+          trigger: "click",
+          mode: "row",
+          showStatus: true,
+        },
+      },
+    };
   },
   computed: {},
   watch: {
-    uploadUrl: function(val) {
+    uploadUrl: function (val) {
       if (val) {
-        this.importFapiaoFormVisible = false
+        this.importFapiaoFormVisible = false;
         this.$message({
-          type: 'success',
-          message: '上传成功'
-        })
+          type: "success",
+          message: "上传成功",
+        });
+        this.$refs.dataGrid.commitProxy("reload");
       } else {
-        this.importFapiaoFormVisible = true
+        this.importFapiaoFormVisible = true;
       }
     },
-    uploadImageLoadUrl: function(val) {
+    uploadImageLoadUrl: function (val) {
       if (val) {
-        this.importImageFormVisible = false
+        this.importImageFormVisible = false;
         this.$message({
-          type: 'success',
-          message: '上传成功'
-        })
+          type: "success",
+          message: "上传成功",
+        });
       } else {
-        this.importImageFormVisible = true
+        this.importImageFormVisible = true;
       }
-    }
+    },
   },
   created() {
-    window.addEventListener('resize', this.getHeight)
-    this.getHeight()
-    this.initMonth()
+    window.addEventListener("resize", this.getHeight);
+    this.getHeight();
+    this.initMonth();
   },
 
   methods: {
     initMonth() {
-      const total = 12
-      const data = []
+      const total = 12;
+      const data = [];
       for (let index = 0; index < total; index++) {
         data.push({
-          month: index + 1 + '月'
-        })
+          month: index + 1 + "月",
+        });
       }
-      this.months = data
-      this.currentMonth = new Date().getMonth() + 1 + '月'
+      this.months = data;
+      this.currentMonth = new Date().getMonth() + 1 + "月";
     },
     handleFapiaoUpload() {
-      this.importFapiaoFormVisible = true
+      this.importFapiaoFormVisible = true;
     },
     handleImageUpload() {
-      this.importImageFormVisible = true
+      this.importImageFormVisible = true;
     },
     handleViewDetail(row) {
       this.$router.push({
-        name: 'fapiao-info',
+        name: "fapiao-info",
         query: {
-          id: row.id
-        }
-      })
+          id: row.id,
+        },
+      });
     },
     getHeight() {
-      this.defaultHeight = window.innerHeight - 180 + 'px'
-      this.tableHeight = window.innerHeight - 180 - 40 + 'px'
+      this.defaultHeight = window.innerHeight - 180 + "px";
+      this.tableHeight = window.innerHeight - 220 - 40 + "px";
     },
     checkColumnMethod({ column }) {
-      if (['nickname', 'role'].includes(column.property)) {
-        return false
+      if (["nickname", "role"].includes(column.property)) {
+        return false;
       }
-      return true
+      return true;
     },
     importMethod({ file }) {
-      return false
+      return false;
     },
     exportMethod({ options }) {
-      return false
+      return false;
     },
     toggleFolding() {
-      this.folding = !this.folding
+      this.folding = !this.folding;
     },
     submitForm(formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$refs.dataGrid.commitProxy('reload')
+          this.$refs.dataGrid.commitProxy("reload");
         } else {
-          console.log('error submit!!')
-          return false
+          console.log("error submit!!");
+          return false;
         }
-      })
+      });
     },
     resetForm(formName) {
-      this.$refs[formName].resetFields()
+      this.$refs[formName].resetFields();
     },
     handleCreate() {
       this.$router.push({
-        name: 'fapiao-input',
+        name: "fapiao-input",
         query: {
-          id: this.id
-        }
-      })
+          id: this.id,
+        },
+      });
     },
     handleBatchDelete() {
-      const selectRecords = this.$refs.dataGrid.getCheckboxRecords()
-      const batchDeleteData = []
+      const selectRecords = this.$refs.dataGrid.getCheckboxRecords();
+      const batchDeleteData = [];
       if (
         !(
-          typeof selectRecords === 'undefined' ||
+          typeof selectRecords === "undefined" ||
           selectRecords === null ||
-          selectRecords === '' ||
+          selectRecords === "" ||
           selectRecords.length === 0
         )
       ) {
-        this.$confirm('永久删除记录吗, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+        this.$confirm("永久删除记录吗, 是否继续?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
           dangerouslyUseHTMLString: true,
-          type: 'warning'
+          type: "warning",
         })
           .then(() => {
             for (
@@ -918,176 +912,176 @@ export default {
               index < len;
               index++
             ) {
-              const id = selectRecords[index]['id']
-              const version = selectRecords[index]['version']
+              const id = selectRecords[index]["id"];
+              const version = selectRecords[index]["version"];
               const temp = {
                 id: id,
-                version: version
-              }
-              batchDeleteData.push(temp)
+                version: version,
+              };
+              batchDeleteData.push(temp);
             }
             batchDeleteFapiaoManagement(batchDeleteData)
-              .then(response => {
-                const result = response.data
+              .then((response) => {
+                const result = response.data;
                 if (result) {
                   this.$message({
-                    type: 'success',
-                    message: '删除成功'
-                  })
+                    type: "success",
+                    message: "删除成功",
+                  });
                 } else {
-                  this.$message.error('删除失败')
+                  this.$message.error("删除失败");
                 }
-                this.$refs.dataGrid.commitProxy('reload')
+                this.$refs.dataGrid.commitProxy("reload");
               })
-              .catch(e => {
-                this.loading = false
-              })
+              .catch((e) => {
+                this.loading = false;
+              });
           })
           .catch(() => {
             this.$message({
-              type: 'info',
-              message: '已取消删除'
-            })
-          })
+              type: "info",
+              message: "已取消删除",
+            });
+          });
       } else {
         this.$message({
           showClose: true,
-          message: '请先选择需要删除的记录'
-        })
+          message: "请先选择需要删除的记录",
+        });
       }
     },
     handleUpdate(row) {
-      this.temp = Object.assign({}, row)
-      this.dialogStatus = 'update'
-      this.dialogFormVisible = true
+      this.temp = Object.assign({}, row);
+      this.dialogStatus = "update";
+      this.dialogFormVisible = true;
       this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
+        this.$refs["dataForm"].clearValidate();
+      });
     },
     initFormSafeSubmitConfig() {
-      this.loadingSubmitButton = false
-      this.submitButtonText = '提交'
+      this.loadingSubmitButton = false;
+      this.submitButtonText = "提交";
     },
     createData() {
-      this.$refs['dataForm'].validate(valid => {
+      this.$refs["dataForm"].validate((valid) => {
         if (valid) {
-          this.loadingSubmitButton = true
-          this.submitButtonText = '执行中...'
-          const tempData = Object.assign({}, this.temp)
+          this.loadingSubmitButton = true;
+          this.submitButtonText = "执行中...";
+          const tempData = Object.assign({}, this.temp);
           saveFapiaoManagement(tempData)
-            .then(response => {
-              const result = response.data
+            .then((response) => {
+              const result = response.data;
               if (result) {
                 this.$message({
-                  message: '新增成功',
-                  type: 'success'
-                })
-                this.initFormSafeSubmitConfig()
-                this.dialogFormVisible = false
-                this.$refs.dataGrid.commitProxy('reload')
+                  message: "新增成功",
+                  type: "success",
+                });
+                this.initFormSafeSubmitConfig();
+                this.dialogFormVisible = false;
+                this.$refs.dataGrid.commitProxy("reload");
               } else {
-                this.$message.error('新增失败')
-                this.initFormSafeSubmitConfig()
+                this.$message.error("新增失败");
+                this.initFormSafeSubmitConfig();
               }
             })
-            .catch(e => {
-              this.loading = false
-              this.initFormSafeSubmitConfig()
-            })
+            .catch((e) => {
+              this.loading = false;
+              this.initFormSafeSubmitConfig();
+            });
         }
-      })
+      });
     },
     updateData() {
-      this.$refs['dataForm'].validate(valid => {
+      this.$refs["dataForm"].validate((valid) => {
         if (valid) {
-          this.loadingSubmitButton = true
-          this.submitButtonText = '执行中...'
-          const tempData = Object.assign({}, this.temp)
+          this.loadingSubmitButton = true;
+          this.submitButtonText = "执行中...";
+          const tempData = Object.assign({}, this.temp);
           updateFapiaoManagement(tempData)
-            .then(response => {
-              const result = response.data
+            .then((response) => {
+              const result = response.data;
               if (result) {
                 this.$message({
-                  message: '修改操作成功',
-                  type: 'success'
-                })
-                this.initFormSafeSubmitConfig()
-                this.dialogFormVisible = false
-                this.$refs.dataGrid.commitProxy('reload')
+                  message: "修改操作成功",
+                  type: "success",
+                });
+                this.initFormSafeSubmitConfig();
+                this.dialogFormVisible = false;
+                this.$refs.dataGrid.commitProxy("reload");
               } else {
-                this.$message.error('修改操作失败')
-                this.initFormSafeSubmitConfig()
+                this.$message.error("修改操作失败");
+                this.initFormSafeSubmitConfig();
               }
             })
-            .catch(e => {
-              this.loading = false
-              this.initFormSafeSubmitConfig()
-            })
+            .catch((e) => {
+              this.loading = false;
+              this.initFormSafeSubmitConfig();
+            });
         }
-      })
+      });
     },
     handleDelete(row) {
-      this.$confirm('永久删除该条记录吗, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm("永久删除该条记录吗, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
         dangerouslyUseHTMLString: true,
-        type: 'warning'
+        type: "warning",
       })
         .then(() => {
-          const { id, version } = row
+          const { id, version } = row;
           const tempData = Object.assign({
             id: id,
-            version: version
-          })
+            version: version,
+          });
           deleteFapiaoManagement(tempData)
-            .then(response => {
-              const result = response.data
+            .then((response) => {
+              const result = response.data;
               if (result) {
                 this.$message({
-                  type: 'success',
-                  message: '删除成功'
-                })
+                  type: "success",
+                  message: "删除成功",
+                });
               } else {
-                this.$message.error('删除失败')
+                this.$message.error("删除失败");
               }
-              this.$refs.dataGrid.commitProxy('reload')
+              this.$refs.dataGrid.commitProxy("reload");
             })
-            .catch(e => {
-              this.loading = false
-            })
+            .catch((e) => {
+              this.loading = false;
+            });
         })
         .catch(() => {
           this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
+            type: "info",
+            message: "已取消删除",
+          });
+        });
     },
     viewRow(row) {
-      this.temp = Object.assign({}, row)
-      this.dialogStatus = 'detail'
-      this.dialogFormVisible = true
+      this.temp = Object.assign({}, row);
+      this.dialogStatus = "detail";
+      this.dialogFormVisible = true;
       this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
+        this.$refs["dataForm"].clearValidate();
+      });
     },
     beforeHandleCommand(command, row) {
       return {
         command: command,
-        row: row
-      }
+        row: row,
+      };
     },
     handleCommand(command) {
       switch (command.command) {
-        case 'handleDelete':
-          this.handleDelete(command.row)
-          break
-        case 'viewRow':
-          this.viewRow(command.row)
-          break
+        case "handleDelete":
+          this.handleDelete(command.row);
+          break;
+        case "viewRow":
+          this.viewRow(command.row);
+          break;
         default:
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>

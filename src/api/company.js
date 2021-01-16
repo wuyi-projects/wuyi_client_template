@@ -47,3 +47,11 @@ export function getCompany4Me(data) {
         data
     })
 }
+
+export function listAll4Me(data) {
+    return request({
+        url: '/wuyi_fapiao/v1/company/listAll4Me.json',
+        method: 'post',
+        data
+    })
+}

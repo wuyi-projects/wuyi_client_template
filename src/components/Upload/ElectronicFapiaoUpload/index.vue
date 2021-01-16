@@ -20,116 +20,117 @@
       <div slot="tip">只能上传电子发票(PDF格式)，且不超过100kB</div>
     </el-upload>
     <el-dialog :visible.sync="dialogVisible">
-      <img width="100%" :src="fileList[0].url" alt="">
+      <img width="100%" :src="fileList[0].url" alt="" />
     </el-dialog>
   </div>
 </template>
 <script>
-import { date2YearMonthDay } from '@/utils/util.js'
-import { getOpenID } from '@/utils/auth'
+import { date2YearMonthDay } from "@/utils/util.js";
+import { getProductCode, getOpenID, getTeamNumber } from "@/utils/auth";
 
-import { getOssToken } from '@/api/file'
+import { getOssToken } from "@/api/file";
 
 export default {
-  name: 'SingleUpload',
+  name: "SingleUpload",
   props: {
-    value: String
+    value: String,
   },
   data() {
     return {
       dataObj: {
-        policy: '',
-        signature: '',
-        key: '',
-        ossaccessKeyId: '',
-        dir: '',
-        host: '',
-        callback: '',
-        'x:open_id': getOpenID(),
-        'x:product_code': 'fapiao',
-        'x:channel_id': 3,
-        'x:type_id': 1,
-        'x:subtype_id': 1
+        policy: "",
+        signature: "",
+        key: "",
+        ossaccessKeyId: "",
+        dir: "",
+        host: "",
+        callback: "",
+        "x:open_id": getOpenID(),
+        "x:product_code": getProductCode(),
+        "x:channel_id": 3,
+        "x:type_id": 1,
+        "x:subtype_id": 1,
+        "x:company_id": getTeamNumber(),
       },
-      dialogVisible: false
-    }
+      dialogVisible: false,
+    };
   },
   computed: {
     imageUrl() {
-      return this.value
+      return this.value;
     },
     imageName() {
-      if (this.value != null && this.value !== '') {
-        return this.value.substr(this.value.lastIndexOf('/') + 1)
+      if (this.value != null && this.value !== "") {
+        return this.value.substr(this.value.lastIndexOf("/") + 1);
       } else {
-        return null
+        return null;
       }
     },
     fileList() {
       return [
         {
           name: this.imageName,
-          url: this.imageUrl
-        }
-      ]
+          url: this.imageUrl,
+        },
+      ];
     },
     showFileList: {
-      get: function() {
+      get: function () {
         return (
-          this.value !== null && this.value !== '' && this.value !== undefined
-        )
+          this.value !== null && this.value !== "" && this.value !== undefined
+        );
       },
-      set: function(newValue) {}
-    }
+      set: function (newValue) {},
+    },
   },
   methods: {
     emitInput(val) {
-      this.$emit('input', val)
+      this.$emit("input", val);
     },
     handleRemove(file, fileList) {
-      this.emitInput('')
+      this.emitInput("");
     },
     handlePreview(file) {
-      this.dialogVisible = true
+      this.dialogVisible = true;
     },
     beforeUpload(file) {
-      const _self = this
-      const isLt100K = file.size / 1024 / 100 <= 1
+      const _self = this;
+      const isLt100K = file.size / 1024 / 100 <= 1;
       if (!isLt100K) {
-        this.$message.error('PDF超过 100kB')
+        this.$message.error("PDF超过 100kB");
       }
       return new Promise((resolve, reject) => {
         getOssToken()
           .then((response) => {
-            const data = response.data
-            _self.dataObj.policy = data.policy
-            _self.dataObj.signature = data.signature
-            _self.dataObj.ossaccessKeyId = data.accessid
+            const data = response.data;
+            _self.dataObj.policy = data.policy;
+            _self.dataObj.signature = data.signature;
+            _self.dataObj.ossaccessKeyId = data.accessid;
             _self.dataObj.key =
-              data.dir + date2YearMonthDay(new Date()) + '/${filename}'
-            _self.dataObj.dir = data.dir
-            _self.dataObj.host = data.host
-            _self.dataObj.callback = data.callback
-            resolve(true)
+              data.dir + date2YearMonthDay(new Date()) + "/${filename}";
+            _self.dataObj.dir = data.dir;
+            _self.dataObj.host = data.host;
+            _self.dataObj.callback = data.callback;
+            resolve(true);
           })
           .catch((e) => {
-            this.loading = false
-            reject(false)
-          })
-      })
+            this.loading = false;
+            reject(false);
+          });
+      });
     },
     handleUploadSuccess(res, file) {
-      this.showFileList = true
-      this.fileList.pop()
+      this.showFileList = true;
+      this.fileList.pop();
       this.fileList.push({
         name: file.name,
         url:
           this.dataObj.host +
-          '/' +
-          this.dataObj.key.replace('${filename}', file.name)
-      })
-      this.emitInput(this.fileList[0].url)
-    }
-  }
-}
+          "/" +
+          this.dataObj.key.replace("${filename}", file.name),
+      });
+      this.emitInput(this.fileList[0].url);
+    },
+  },
+};
 </script>

@@ -24,17 +24,20 @@
 
       <el-dropdown class="right-menu-item hover-effect" trigger="click">
         <div class="el-dropdown-link">
-          <span style="font-size:14px;">当前公司：</span>
-          <el-tag style="font-size:14px;">{{ currentCompany.name }}</el-tag>
+          <span style="font-size: 14px">当前公司：</span>
+          <el-tag style="font-size: 14px">{{
+            currentCompany.companyName
+          }}</el-tag>
           <i class="el-icon-arrow-right" />
         </div>
-        <el-dropdown-menu slot="dropdown">
+        <el-dropdown-menu v-if="companys" slot="dropdown">
           <template v-for="(company, index) in companys">
             <el-dropdown-item
               v-if="!company.selected"
               :key="index"
               @click.native="handleSwitchCompany(index)"
-            >{{ company.name }}</el-dropdown-item>
+              >{{ company.companyName }}</el-dropdown-item
+            >
           </template>
         </el-dropdown-menu>
       </el-dropdown>
@@ -44,7 +47,7 @@
         trigger="click"
       >
         <div class="avatar-wrapper">
-          <img :src="avatar + '?imageView2/1/w/80/h/80'" class="user-avatar">
+          <img :src="avatar + '?imageView2/1/w/80/h/80'" class="user-avatar" />
           <i class="el-icon-caret-bottom" />
         </div>
         <i class="el-icon-caret-bottom" />
@@ -56,7 +59,7 @@
             <el-dropdown-item>首页</el-dropdown-item>
           </router-link>
           <el-dropdown-item divided @click.native="logout">
-            <span style="display:block;">退出登录</span>
+            <span style="display: block">退出登录</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -65,14 +68,16 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import Breadcrumb from '@/components/Breadcrumb'
-import Hamburger from '@/components/Hamburger'
-import ErrorLog from '@/components/ErrorLog'
-import Screenfull from '@/components/Screenfull'
-import SizeSelect from '@/components/SizeSelect'
-import Search from '@/components/HeaderSearch'
-import { getCompany } from '@/api/company'
+import { mapGetters } from "vuex";
+import Breadcrumb from "@/components/Breadcrumb";
+import Hamburger from "@/components/Hamburger";
+import ErrorLog from "@/components/ErrorLog";
+import Screenfull from "@/components/Screenfull";
+import SizeSelect from "@/components/SizeSelect";
+import Search from "@/components/HeaderSearch";
+
+import { setTeamNumber } from '@/utils/auth'
+import { listAll4Me } from "@/api/company";
 
 export default {
   components: {
@@ -81,78 +86,59 @@ export default {
     ErrorLog,
     Screenfull,
     SizeSelect,
-    Search
+    Search,
   },
   data() {
     return {
       currentCompany: {
-        name: '物一技术',
-        companyId: 1,
-        selected: true
+        companyName: "发票管家用户",
+        id: 999999999,
+        selected: true,
       },
-      companys: [
-        {
-          name: '物一技术',
-          companyId: 1,
-          selected: true
-        },
-        {
-          name: '物一技术2',
-          companyId: 2,
-          selected: false
-        },
-        {
-          name: '物一技术3',
-          companyId: 3,
-          selected: false
-        },
-        {
-          name: '物一技术4',
-          companyId: 4,
-          selected: false
-        },
-        {
-          name: '物一技术5',
-          companyId: 5,
-          selected: false
-        },
-        {
-          name: '物一技术6',
-          companyId: 6,
-          selected: false
-        },
-        {
-          name: '物一技术7',
-          companyId: 7,
-          selected: false
-        }
-      ]
-    }
+      companys: [],
+    };
   },
   computed: {
-    ...mapGetters(['sidebar', 'avatar', 'device'])
+    ...mapGetters(["sidebar", "avatar", "device"]),
+  },
+  created() {
+    this.listAll4Me();
   },
   methods: {
     handleSwitchCompany(index) {
-      console.log(index)
-      const selectCompany = this.companys[index]
-      this.currentCompany = selectCompany
+      const selectCompany = this.companys[index];
+      this.currentCompany = selectCompany;
       for (let i = 0, len = this.companys.length; i < len; i++) {
-        this.companys[i].selected = false
+        this.companys[i].selected = false;
       }
-      this.companys[index].selected = true
-      // 选中公司全局赋值
-      console.log(this.companys[index].companyId)
+      this.companys[index].selected = true;
+      setTeamNumber(this.companys[index].id)
     },
     toggleSideBar() {
-      this.$store.dispatch('app/toggleSideBar')
+      this.$store.dispatch("app/toggleSideBar");
     },
     async logout() {
-      await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
-    }
-  }
-}
+      await this.$store.dispatch("user/logout");
+      this.$router.push(`/login?redirect=${this.$route.fullPath}`);
+    },
+    listAll4Me() {
+      listAll4Me()
+        .then((response) => {
+          const result = response.data;
+          if (result) {
+            // this.$message({
+            //   type: "success",
+            //   message: "删除成功",
+            // });
+            this.companys = result;
+          }
+        })
+        .catch((e) => {
+          this.loading = false;
+        });
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
