@@ -41,6 +41,17 @@ const fapiaoRouter = {
             }
         },
         {
+            path: 'fapiao-info',
+            component: () =>
+                import ('@/views/fapiao/fapiao-info'),
+            name: 'fapiao-info',
+            meta: {
+                title: '发票详情',
+                roles: ['FapiaoUser']
+            },
+            hidden: true
+        },
+        {
             path: 'fapiaoreview',
             component: () =>
                 import ('@/views/fapiao/fapiaoreview'),

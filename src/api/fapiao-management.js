@@ -79,7 +79,7 @@ export function updateFapiao4Me(data) {
 }
 export function getFapiao4Me(data) {
     return request({
-        url: '/wuyi_fapiao/v1/accountingVoucher/get4Me.json',
+        url: '/wuyi_fapiao/v1/accountingVoucher/get.json',
         method: 'post',
         data
     })

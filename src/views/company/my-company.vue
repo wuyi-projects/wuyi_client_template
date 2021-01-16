@@ -1038,11 +1038,11 @@ export default {
         })
     },
     viewRow(row) {
-      this.company = Object.assign({}, row)
-      this.dialogStatus = 'detail'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
+      this.$router.push({
+        name: 'fapiao-info',
+        query: {
+          id: row.id
+        }
       })
     },
     beforeHandleCommand(command, row) {
