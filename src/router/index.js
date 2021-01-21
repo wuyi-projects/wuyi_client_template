@@ -8,10 +8,9 @@ import Layout from '@/layout'
 
 /* Router Modules */
 import settingRouter from './modules/permission'
-import fapiaoRouter from './modules/fapiao'
-import calendarRouter from './modules/calendar'
 import companyRouter from './modules/company'
 import profileRouter from './modules/profile'
+import customerRouter from './modules/customer'
 
 /**
  * constantRoutes
@@ -41,17 +40,6 @@ export const constantRoutes = [{
         hidden: true
     },
     {
-        //   path: '/',
-        //   component: Layout,
-        //   redirect: '/dashboard',
-        //   children: [{
-        //     path: 'dashboard',
-        //     name: 'Dashboard',
-        //     component: () =>
-        //       import ('@/views/dashboard/index'),
-        //     meta: { title: '首页', icon: 'dashboard' }
-        //   }
-
         path: '/',
         component: Layout,
         redirect: '/dashboard',
@@ -65,13 +53,11 @@ export const constantRoutes = [{
     }
 ]
 
-
 export const asyncRoutes = [
     companyRouter,
-    fapiaoRouter,
-    // calendarRouter,
     profileRouter,
     settingRouter,
+    customerRouter,
     { path: '*', redirect: '/404', hidden: true }
 ]
 
