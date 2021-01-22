@@ -1,6 +1,6 @@
 module.exports = {
 
-    title: '智能发票管家',
+    title: '客户信息管理',
 
     /**
      * @type {boolean} true | false

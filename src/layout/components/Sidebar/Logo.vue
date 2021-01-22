@@ -24,7 +24,7 @@ export default {
   },
   data() {
     return {
-      title: '智能办公管家',
+      title: '客户信息管理',
       logo: require('../../../assets/logo.png')
     }
   }

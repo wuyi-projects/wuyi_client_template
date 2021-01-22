@@ -8,7 +8,7 @@ import Layout from '@/layout'
 
 /* Router Modules */
 import settingRouter from './modules/permission'
-import companyRouter from './modules/company'
+// import companyRouter from './modules/company'
 import profileRouter from './modules/profile'
 import customerRouter from './modules/customer'
 
@@ -54,10 +54,10 @@ export const constantRoutes = [{
 ]
 
 export const asyncRoutes = [
-    companyRouter,
+    // companyRouter,
+    customerRouter,
     profileRouter,
     settingRouter,
-    customerRouter,
     { path: '*', redirect: '/404', hidden: true }
 ]
 

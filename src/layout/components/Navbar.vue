@@ -22,26 +22,6 @@
         </el-tooltip>
       </template>
 
-      <el-dropdown class="right-menu-item hover-effect" trigger="click">
-        <div class="el-dropdown-link">
-          <span style="font-size: 14px">当前公司：</span>
-          <el-tag style="font-size: 14px">{{
-            currentCompany.companyName
-          }}</el-tag>
-          <i class="el-icon-arrow-right" />
-        </div>
-        <el-dropdown-menu v-if="companys" slot="dropdown">
-          <template v-for="(company, index) in companys">
-            <el-dropdown-item
-              v-if="!company.selected"
-              :key="index"
-              @click.native="handleSwitchCompany(index)"
-              >{{ company.companyName }}</el-dropdown-item
-            >
-          </template>
-        </el-dropdown-menu>
-      </el-dropdown>
-
       <el-dropdown
         class="avatar-container right-menu-item hover-effect"
         trigger="click"
@@ -90,53 +70,15 @@ export default {
   },
   data() {
     return {
-      currentCompany: {
-        companyName: "发票管家用户",
-        id: 999999999,
-        selected: true,
-      },
-      companys: [],
     };
   },
   computed: {
     ...mapGetters(["sidebar", "avatar", "device"]),
   },
   created() {
-    this.listAll4Me();
   },
   methods: {
-    handleSwitchCompany(index) {
-      const selectCompany = this.companys[index];
-      this.currentCompany = selectCompany;
-      for (let i = 0, len = this.companys.length; i < len; i++) {
-        this.companys[i].selected = false;
-      }
-      this.companys[index].selected = true;
-      setTeamNumber(this.companys[index].id)
-    },
-    toggleSideBar() {
-      this.$store.dispatch("app/toggleSideBar");
-    },
-    async logout() {
-      await this.$store.dispatch("user/logout");
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`);
-    },
-    listAll4Me() {
-      listAll4Me()
-        .then((response) => {
-          const result = response.data;
-          if (result) {
-            // this.$message({
-            //   type: "success",
-            //   message: "删除成功",
-            // });
-            this.companys = result;
-          }
-        })
-        .catch((e) => {
-          this.loading = false;
-        });
-    },
+    
   },
 };
 </script>
