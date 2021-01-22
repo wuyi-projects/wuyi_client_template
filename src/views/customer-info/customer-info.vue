@@ -151,7 +151,7 @@
           <el-col :span="24">
             <el-form-item label="体型:" prop="somatotype">
               <el-row :gutter="10">
-                <el-col v-for="bodys in body" :key="bodys.id" :span="1">
+                <el-col v-for="bodys in body" :key="bodys.id" :span="2">
                   <el-card
                     v-model="ruleForm.somatotype"
                     style="text-align:center"
@@ -203,7 +203,7 @@
 
 <style>
 .custom {
-  border: 2px solid red;
+  border: 2px solid #1890FF;
 }
 .over {
   border: 2px solid #fff;
