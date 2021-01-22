@@ -150,113 +150,40 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="体型:" prop="somatotype">
-               <el-row>
-                <el-col :span="2">
-                  <el-card style="text-align:center">
-                    <img
-                      src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" style="width:100px;height:100px;"
-                      class="image"
-                    >
-                    <el-col><span>I</span></el-col>
+              <el-row :gutter="10">
+                <el-col v-for="bodys in body" :key="bodys.id" :span="1">
+                  <el-card
+                    v-model="ruleForm.somatotype"
+                    style="text-align:center"
+                    shadow="hover"
+                    :body-style="{ padding: '0px' }"
+                    :class="bodys.checked ? 'custom' : 'over'"
+                    @click.native="focu(bodys.id)"
+                  >
+                    <el-image :src="bodys.src" fit="contain" />
+                    <el-col><span>{{ bodys.value }}</span></el-col>
                   </el-card>
                 </el-col>
-                <el-col :span="2">
-                  <el-card style="text-align:center">
-                    <img
-                      src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" style="width:100px;height:100px;"
-                      class="image"
-                    >
-                    <el-col><span>H</span></el-col>
-                  </el-card>
-                </el-col>
-                <el-col :span="2">
-                  <el-card style="text-align:center">
-                    <img
-                      src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" style="width:100px;height:100px;"
-                      class="image"
-                    >
-                    <el-col><span>A</span></el-col>
-                  </el-card>
-                </el-col>
-                <el-col :span="2">
-                  <el-card style="text-align:center">
-                    <img
-                      src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" style="width:100px;height:100px;"
-                      class="image"
-                    >
-                    <el-col><span>D</span></el-col>
-                  </el-card>
-                </el-col>
-                <el-col :span="2">
-                  <el-card style="text-align:center">
-                    <img
-                      src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" style="width:100px;height:100px;"
-                      class="image"
-                    >
-                    <el-col><span>V</span></el-col>
-                  </el-card>
-                </el-col>
-                </el-row>
+              </el-row>
             </el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item label="胸型:" prop="bosom">
-              <el-radio-group v-model="ruleForm.bosom">
-                <el-col :span="4">
-                  <el-card>
-                    <el-radio label="圆盘形" />
-                    <img
-                      src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" style="width:100px;height:100px;"
-                      class="image"
-                    >
+              <el-row :gutter="20">
+                <el-col v-for="chest in chest" :key="chest.id" :span="2">
+                  <el-card
+                    v-model="ruleForm.bosom"
+                    style="text-align:center"
+                    shadow="hover"
+                    :body-style="{ padding: '0px' }"
+                    :class="chest.checked ? 'custom' : 'over'"
+                    @click.native="chestCheck(chest.id)"
+                  >
+                    <el-image :src="chest.src" fit="contain" />
+                    <el-col><span>{{ chest.value }}</span></el-col>
                   </el-card>
                 </el-col>
-                <el-col :span="4">
-                  <el-card>
-                    <el-radio label="圆锥形" />
-                    <img
-                      src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" style="width:100px;height:100px;"
-                      class="image"
-                    >
-                  </el-card>
-                </el-col>
-                <el-col :span="4">
-                  <el-card>
-                    <el-radio label="半圆形" />
-                    <img
-                      src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" style="width:100px;height:100px;"
-                      class="image"
-                    >
-                  </el-card>
-                </el-col>
-                <el-col :span="4">
-                  <el-card>
-                    <el-radio label="纺锤形" />
-                    <img
-                      src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" style="width:100px;height:100px;"
-                      class="image"
-                    >
-                  </el-card>
-                </el-col>
-                <el-col :span="4">
-                  <el-card>
-                    <el-radio label="下垂I型" />
-                    <img
-                      src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" style="width:100px;height:100px;"
-                      class="image"
-                    >
-                  </el-card>
-                </el-col>
-                <el-col :span="4">
-                  <el-card>
-                    <el-radio label="下垂II型" />
-                    <img
-                      src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" style="width:100px;height:100px;"
-                      class="image"
-                    >
-                  </el-card>
-                </el-col>
-              </el-radio-group>
+              </el-row>
             </el-form-item>
           </el-col>
         </el-row>
@@ -274,14 +201,90 @@
   </div>
 </template>
 
-<style scoped></style>
+<style>
+.custom {
+  border: 2px solid red;
+}
+.over {
+  border: 2px solid #fff;
+}
+</style>
 
 <script>
-import formatTableSize from '@/utils/size'
-
 export default {
   data() {
     return {
+      focus: false,
+      body: [
+        {
+          id: 0,
+          value: 'I',
+          src: require('@/assets/images/body_1.png'),
+          checked: false
+        },
+        {
+          id: 1,
+          value: 'H',
+          src: require('@/assets/images/body_2.png'),
+          checked: false
+        },
+        {
+          id: 2,
+          value: 'A',
+          src: require('@/assets/images/body_3.png'),
+          checked: false
+        },
+        {
+          id: 3,
+          value: 'D',
+          src: require('@/assets/images/body_4.png'),
+          checked: false
+        },
+        {
+          id: 4,
+          value: 'V',
+          src: require('@/assets/images/body_5.png'),
+          checked: false
+        }
+      ],
+      chest: [
+        {
+          id: 0,
+          value: '圆盘型',
+          src: require('@/assets/images/chest_1.png'),
+          checked: false
+        },
+        {
+          id: 1,
+          value: '圆锥型',
+          src: require('@/assets/images/chest_2.png'),
+          checked: false
+        },
+        {
+          id: 2,
+          value: '半圆型',
+          src: require('@/assets/images/chest_3.png'),
+          checked: false
+        },
+        {
+          id: 3,
+          value: '纺锤型',
+          src: require('@/assets/images/chest_4.png'),
+          checked: false
+        },
+        {
+          id: 4,
+          value: '下垂I型',
+          src: require('@/assets/images/chest_5.png'),
+          checked: false
+        },
+        {
+          id: 5,
+          value: '下垂II型',
+          src: require('@/assets/images/chest_6.png'),
+          checked: false
+        }
+      ],
       scheme: [
         {
           code: 0,
@@ -347,6 +350,30 @@ export default {
   created() {},
 
   methods: {
+    focu(id) {
+      const current = id
+      for (let len = 0; len < 5; len++) {
+        if (current === len) {
+          this.body[len].checked = true
+        } else {
+          this.body[len].checked = false
+        }
+      }
+      (this.ruleForm.somatotype = this.body[current]),
+      console.log('body里面类型为:' + this.body[current])
+    },
+    chestCheck(id) {
+      const current = id
+      for (let len = 0; len < 6; len++) {
+        if (current === len) {
+          this.chest[len].checked = true
+        } else {
+          this.chest[len].checked = false
+        }
+      }
+      (this.ruleForm.bosom = this.chest[current]),
+      console.log('chest里面类型为:' + this.chest[current])
+    },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
