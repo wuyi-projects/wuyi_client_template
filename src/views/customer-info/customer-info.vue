@@ -169,7 +169,7 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="胸型:" prop="bosom">
-              <el-row :gutter="20">
+              <el-row :gutter="10">
                 <el-col v-for="chest in chest" :key="chest.id" :span="2">
                   <el-card
                     v-model="ruleForm.bosom"
@@ -219,31 +219,31 @@ export default {
         {
           id: 0,
           value: 'I',
-          src: require('@/assets/images/body_1.png'),
+          src: require('@/assets/images/body_1.jpg'),
           checked: false
         },
         {
           id: 1,
           value: 'H',
-          src: require('@/assets/images/body_2.png'),
+          src: require('@/assets/images/body_2.jpg'),
           checked: false
         },
         {
           id: 2,
           value: 'A',
-          src: require('@/assets/images/body_3.png'),
+          src: require('@/assets/images/body_3.jpg'),
           checked: false
         },
         {
           id: 3,
           value: 'D',
-          src: require('@/assets/images/body_4.png'),
+          src: require('@/assets/images/body_4.jpg'),
           checked: false
         },
         {
           id: 4,
           value: 'V',
-          src: require('@/assets/images/body_5.png'),
+          src: require('@/assets/images/body_5.jpg'),
           checked: false
         }
       ],
@@ -251,37 +251,37 @@ export default {
         {
           id: 0,
           value: '圆盘型',
-          src: require('@/assets/images/chest_1.png'),
+          src: require('@/assets/images/chest_1.jpg'),
           checked: false
         },
         {
           id: 1,
           value: '圆锥型',
-          src: require('@/assets/images/chest_2.png'),
+          src: require('@/assets/images/chest_2.jpg'),
           checked: false
         },
         {
           id: 2,
           value: '半圆型',
-          src: require('@/assets/images/chest_3.png'),
+          src: require('@/assets/images/chest_3.jpg'),
           checked: false
         },
         {
           id: 3,
           value: '纺锤型',
-          src: require('@/assets/images/chest_4.png'),
+          src: require('@/assets/images/chest_4.jpg'),
           checked: false
         },
         {
           id: 4,
           value: '下垂I型',
-          src: require('@/assets/images/chest_5.png'),
+          src: require('@/assets/images/chest_5.jpg'),
           checked: false
         },
         {
           id: 5,
           value: '下垂II型',
-          src: require('@/assets/images/chest_6.png'),
+          src: require('@/assets/images/chest_6.jpg'),
           checked: false
         }
       ],
