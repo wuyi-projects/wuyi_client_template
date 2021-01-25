@@ -72,8 +72,7 @@
                 type="primary"
                 style="width: 100%; margin-bottom: 30px"
                 @click.native.prevent="handleLogin"
-                >登录</el-button
-              >
+              >登录</el-button>
 
               <!-- <div class="tips">
                 <span style="margin-right:20px;">phone: admin</span>
@@ -88,101 +87,101 @@
 </template>
 
 <script>
-import { validUsername } from "@/utils/validate";
-import { setProductCode, setTeamNumber } from "@/utils/auth";
+import { validUsername } from '@/utils/validate'
+import { setProductCode, setTeamNumber } from '@/utils/auth'
 
 export default {
-  name: "Login",
+  name: 'Login',
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
-        callback(new Error("请输入正确的合法邮箱"));
+        callback(new Error('请输入正确的合法邮箱'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error("密码不能小于6位"));
+        callback(new Error('密码不能小于6位'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     return {
-      focusText: "",
+      focusText: '',
       loginForm: {
-        phone: "",
-        password: "",
+        phone: '',
+        password: ''
       },
       loginRules: {
         phone: [
-          { required: true, trigger: "blur", validator: validateUsername },
+          { required: true, trigger: 'blur', validator: validateUsername }
         ],
         password: [
-          { required: true, trigger: "blur", validator: validatePassword },
-        ],
+          { required: true, trigger: 'blur', validator: validatePassword }
+        ]
       },
       loading: false,
-      passwordType: "password",
-      redirect: undefined,
-    };
+      passwordType: 'password',
+      redirect: undefined
+    }
   },
   watch: {
     $route: {
-      handler: function (route) {
-        this.redirect = route.query && route.query.redirect;
+      handler: function(route) {
+        this.redirect = route.query && route.query.redirect
       },
-      immediate: true,
-    },
+      immediate: true
+    }
   },
   created() {
-    setProductCode("assistant");
-    setTeamNumber(999999999);
+    setProductCode('assistant')
+    setTeamNumber(999999999)
   },
   methods: {
     onInputFocus() {
-      this.focusText = "phone";
+      this.focusText = 'phone'
     },
     onInputBlur() {
-      this.focusText = "";
+      this.focusText = ''
     },
     onPasswordInputFocus() {
-      this.focusText = "password";
+      this.focusText = 'password'
     },
     onPasswordInputBlur() {
-      this.focusText = "";
+      this.focusText = ''
     },
     showPwd() {
-      if (this.passwordType === "password") {
-        this.passwordType = "";
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
       } else {
-        this.passwordType = "password";
+        this.passwordType = 'password'
       }
       this.$nextTick(() => {
-        this.$refs.password.focus();
-      });
+        this.$refs.password.focus()
+      })
     },
     handleLogin() {
-      this.$refs.loginForm.validate((valid) => {
+      this.$refs.loginForm.validate(valid => {
         if (valid) {
-          this.loading = true;
+          this.loading = true
           this.$store
-            .dispatch("user/loginByUsername", this.loginForm)
+            .dispatch('user/loginByUsername', this.loginForm)
             .then(() => {
-              this.$router.push({ path: this.redirect || "/" });
-              this.loading = false;
+              this.$router.push({ path: this.redirect || '/' })
+              this.loading = false
             })
             .catch(() => {
-              this.loading = false;
-            });
+              this.loading = false
+            })
         } else {
-          console.log("error submit!!");
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
-    },
-  },
-};
+      })
+    }
+  }
+}
 </script>
 
 <style lang="scss">
@@ -256,8 +255,8 @@ $light_gray: #454545;
   right: 0;
   bottom: 0;
   z-index: -1;
-  content: "";
-  background-image: url("../../assets/images/login-bg.jpg");
+  content: '';
+  background-image: url('../../assets/images/login-bg.jpg');
   opacity: 0.6;
 }
 

@@ -1,6 +1,9 @@
 <template>
   <div class="app-container">
     <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>客户体型信息录入</span>
+      </div>
       <el-form
         ref="ruleForm"
         :model="ruleForm"
@@ -149,9 +152,9 @@
               </el-form-item>
             </el-col>
             <el-col :span="24">
-              <el-form-item label="臀围:" prop="hipLine">
+              <el-form-item label="臂围:" prop="armGirth">
                 <el-input
-                  v-model="ruleForm.hipLine"
+                  v-model="ruleForm.armGirth"
                   type="number"
                   onmousewheel="stopScrollFun"
                   on-d-o-m-mouse-scroll="stopScrollFun"
@@ -163,23 +166,9 @@
               </el-form-item>
             </el-col>
             <el-col :span="24">
-              <el-form-item label="臀围:" prop="arm">
+              <el-form-item label="臂高:" prop="armHeight">
                 <el-input
-                  v-model="ruleForm.arm"
-                  type="number"
-                  onmousewheel="stopScrollFun"
-                  on-d-o-m-mouse-scroll="stopScrollFun"
-                  clearable
-                  @mousewheel.native.prevent
-                >
-                  <template slot="append">厘米</template>
-                </el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label="臀高:" prop="hipLineHeight">
-                <el-input
-                  v-model="ruleForm.hipLineHeight"
+                  v-model="ruleForm.armHeight"
                   type="number"
                   onmousewheel="stopScrollFun"
                   on-d-o-m-mouse-scroll="stopScrollFun"
@@ -255,19 +244,17 @@
 </template>
 
 <style>
-/* input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none !important;
-}
-input[type='number'] {
-  -moz-appearance: textfield !important;
-} */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
 input[type='number'] {
   -moz-appearance: textfield;
+}
+.title-border {
+  padding: 20px;
+  border: 1px solid #e9e9e9;
+  margin-bottom: 20px;
 }
 </style>
 
@@ -289,9 +276,8 @@ export default {
         leftThigh: 0,
         waiStline: 0,
         abdoMinal: 0,
-        hipLine: 0,
-        arm:0,
-        hipLineHeight: 0,
+        armGirth: 0,
+        armHeight: 0,
         leftThigh: 0,
         rightThigh: 0,
         date: ''
