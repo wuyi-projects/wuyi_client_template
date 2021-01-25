@@ -4,6 +4,11 @@
       <div slot="header" class="clearfix">
         <span>客户信息</span>
       </div>
+      <el-row type="flex" class="row-bg" justify="end">
+        <el-col
+          :span="6"
+        ><div>设计日期:{{ year }} 年{{ month }} 月{{ day }} 日</div></el-col>
+      </el-row>
       <el-row :gutter="20" style="margin:50px 0">
         <el-col :span="6">
           <div class="grid-content"><span>姓名：</span></div>
