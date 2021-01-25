@@ -12,7 +12,7 @@ const customerRouter = {
             path: 'customer-info',
             component: () =>
                 import ('@/views/customer-info/customer-info'),
-            name: 'clientinfo',
+            name: 'customer-info',
             meta: { title: '客户信息录入', roles: ['FapiaoUser'] }
         },
         {

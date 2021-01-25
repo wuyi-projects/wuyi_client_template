@@ -11,6 +11,7 @@ import settingRouter from './modules/permission'
 // import companyRouter from './modules/company'
 import profileRouter from './modules/profile'
 import customerRouter from './modules/customer'
+import tableRouter from './modules/table'
 
 /**
  * constantRoutes
@@ -57,6 +58,7 @@ export const asyncRoutes = [
     // companyRouter,
     customerRouter,
     profileRouter,
+    tableRouter,
     settingRouter,
     { path: '*', redirect: '/404', hidden: true }
 ]
