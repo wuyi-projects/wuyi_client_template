@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function loginByUsername(data) {
   return request({
-    url: '/wuyi_uas/assistant/user/login.json',
+    url: '/wuyi_uas/platform/login.json',
     method: 'post',
     data
   })
@@ -17,7 +17,7 @@ export function isLogin() {
 
 export function getInfo(token) {
   return request({
-    url: '/wuyi_uas/v1/userInfo/getInfo2.json',
+    url: '/wuyi_uas/v1/userInfo/getInfo.json',
     method: 'post',
     token
   })
@@ -25,7 +25,7 @@ export function getInfo(token) {
 
 export function logout() {
   return request({
-    url: '/wuyi_uas/platform/admin/logout.json',
+    url: '/wuyi_uas/platform/logout.json',
     method: 'post'
   })
 }

@@ -88,7 +88,6 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
-import { setProductCode, setTeamNumber } from '@/utils/auth'
 
 export default {
   name: 'Login',
@@ -135,8 +134,6 @@ export default {
     }
   },
   created() {
-    setProductCode('assistant')
-    setTeamNumber(999999999)
   },
   methods: {
     onInputFocus() {

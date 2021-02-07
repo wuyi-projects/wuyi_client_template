@@ -6,14 +6,14 @@ const profileRouter = {
     meta: {
         title: '用户配置',
         icon: 'index',
-        roles: ['FapiaoUser']
+        roles: ['PermissionConfigAdministrator']
     },
     children: [{
         path: 'profile-index',
         component: () =>
             import ('@/views/profile/index'),
         name: 'profile-index',
-        meta: { title: '个人中心', roles: ['FapiaoUser'] }
+        meta: { title: '个人中心', roles: ['PermissionConfigAdministrator'] }
     }]
 }
 export default profileRouter

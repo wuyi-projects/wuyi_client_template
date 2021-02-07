@@ -6,14 +6,14 @@ const tableRouter = {
     meta: {
         title: 'G2图表',
         icon: 'tree',
-        roles: ['FapiaoUser']
+        roles: ['PermissionConfigAdministrator']
     },
     children: [{
         path: 'table',
         component: () =>
             import ('@/views/table/table'),
         name: 'table',
-        meta: { title: 'G2图表', roles: ['FapiaoUser'] }
+        meta: { title: 'G2图表', roles: ['PermissionConfigAdministrator'] }
     }]
 }
 export default tableRouter

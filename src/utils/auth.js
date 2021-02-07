@@ -21,22 +21,6 @@ export function setOpenID(openId) {
   return Cookies.set(OpenID, openId, { expires: 90 })
 }
 
-export function getTeamNumber() {
-  return Cookies.get(TeamNumber)
-}
-
-export function setTeamNumber(teamNumber) {
-  return Cookies.set(TeamNumber, teamNumber, { expires: 90 })
-}
-
-export function getProductCode() {
-  return Cookies.get(ProductCode)
-}
-
-export function setProductCode(productCode) {
-  return Cookies.set(ProductCode, productCode, { expires: 90 })
-}
-
 export function removeToken() {
   return Cookies.remove(TokenKey) && Cookies.remove(OpenID) && Cookies.remove(TeamNumber)
 }

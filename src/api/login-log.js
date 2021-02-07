@@ -8,3 +8,12 @@ export function listLoginLog4Me(data) {
     data
   })
 }
+
+/** 查询权限 */
+export function listLoginLog(data) {
+  return request({
+    url: '/wuyi_uas/v1/loginLog/list.json',
+    method: 'post',
+    data
+  })
+}

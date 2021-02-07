@@ -103,7 +103,7 @@ export function deletePermission(data) {
 /** 批量删除权限 */
 export function batchDeletePermission(data) {
   return request({
-    url: '/wuyi_uas/v1/permission/batchDeletePermission.json',
+    url: '/wuyi_uas/v1/permission/batchDelete.json',
     method: 'post',
     data
   })
