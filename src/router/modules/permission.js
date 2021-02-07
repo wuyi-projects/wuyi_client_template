@@ -49,7 +49,8 @@ const settingRouter = {
       path: "operate-log",
       component: () => import("@/views/setting/operate-log"),
       name: "operate-log",
-      meta: { title: "重要操作日志", roles: ["PermissionConfigAdministrator"] }
+      meta: { title: "重要操作日志", roles: ["PermissionConfigAdministrator"] },
+      hidden: true
     }
   ]
 };

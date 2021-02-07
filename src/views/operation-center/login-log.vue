@@ -332,43 +332,29 @@ export default {
           }
         },
         columns: [
-          { type: 'checkbox', width: 40, align: 'center' },
           {
-            field: 'userId',
-            title: '用户编号',
-            width: 140,
-            align: 'center',
-            headerAlign: 'center',
-            visible: false
-          }, {
             field: 'userName',
             title: '用户',
-            width: 120,
+            width: 160,
             align: 'center',
             headerAlign: 'center'
           }, {
             field: 'status',
             title: '登录状态',
-            width: 80,
+            minWidth: 80,
             align: 'center',
             headerAlign: 'center',
             slots: { default: 'status_default' }
           }, {
             field: 'ipAddress',
-            title: '登录地址',
-            width: 120,
-            align: 'center',
-            headerAlign: 'center'
-          }, {
-            field: 'loginLocation',
-            title: '登录地点',
-            minWidth: 100,
+            title: '登录IP',
+            minWidth: 160,
             align: 'center',
             headerAlign: 'center'
           }, {
             field: 'browserInfo',
             title: '浏览器',
-            width: 120,
+            minWidth: 120,
             align: 'center',
             headerAlign: 'center'
           }, {
@@ -380,13 +366,13 @@ export default {
           }, {
             field: 'operateMessage',
             title: '登录状态',
-            width: 120,
+            minWidth: 120,
             align: 'center',
             headerAlign: 'center'
           }, {
             field: 'loginTime',
             title: '访问时间',
-            width: 160,
+            minWidth: 160,
             align: 'center',
             headerAlign: 'center'
           }

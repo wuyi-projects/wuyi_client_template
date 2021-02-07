@@ -1,78 +1,5 @@
 <template>
   <div class="app-container">
-    <!--查询条件-->
-    <el-card class="box-card" shadow="never" style="margin-bottom: 16px">
-      <el-form
-        ref="searchForm"
-        :model="searchFormData"
-        :rules="rules"
-        label-width="120px"
-        size="small"
-      >
-        <el-col :span="8">
-          <el-form-item label="用户名" prop="username">
-            <el-input v-model="searchFormData.username" clearable />
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="登录IP" prop="loginIP">
-            <el-input v-model="searchFormData.loginIP" clearable />
-          </el-form-item>
-        </el-col>
-        <!-- <el-col :span="8">
-            <el-form-item label="起止时间">
-              <el-col :span="11">
-                <el-form-item prop="start">
-                  <el-date-picker
-                    v-model="searchFormData.start"
-                    type="date"
-                    placeholder="起始日期"
-                    style="width: 100%"
-                    :picker-options="pickerOptions"
-                    value-format="yyyy-MM-dd"
-                  />
-                </el-form-item>
-              </el-col>
-              <el-col class="line" :span="2">-</el-col>
-              <el-col :span="11">
-                <el-form-item prop="end">
-                  <el-date-picker
-                    v-model="searchFormData.end"
-                    type="date"
-                    placeholder="结束时间"
-                    style="width: 100%"
-                    :picker-options="pickerOptions"
-                    value-format="yyyy-MM-dd"
-                  />
-                </el-form-item>
-              </el-col>
-            </el-form-item>
-          </el-col> -->
-        <el-col :span="8">
-          <el-form-item style="float: right" label-width="0">
-            <el-button @click="resetForm('searchForm')">重 置</el-button>
-            <el-button
-              type="primary"
-              @click="submitForm('searchForm')"
-            >查 询</el-button>
-            <!--<el-button
-              v-if="folding"
-              type="text"
-              @click="toggleFolding()"
-            >收起<i
-              class="el-icon-arrow-up el-icon--right"
-            /></el-button>
-            <el-button
-              v-else
-              type="text"
-              @click="toggleFolding()"
-            >展开<i
-              class="el-icon-arrow-down el-icon--right"
-            /></el-button>-->
-          </el-form-item>
-        </el-col>
-      </el-form>
-    </el-card>
 
     <!--数据展示-->
     <el-card class="box-card" shadow="never" :style="{height:defaultHeight}">
@@ -233,27 +160,12 @@ export default {
         rowId: 'id',
         headerAlign: 'center',
         scrollY: { gt: -1 },
-        printConfig: {
-          columns: [
-            { field: 'id' },
-            { field: 'groupName' },
-            { field: 'ip' },
-            { field: 'loginFlag' }
-          ]
-        },
-        sortConfig: {
-          trigger: 'cell',
-          defaultSort: {
-            field: 'name',
-            order: 'desc'
-          }
-        },
         filterConfig: {
           remote: true
         },
         pagerConfig: {
           autoHidden: false,
-          pageSize: 10,
+          pageSize: 20,
           pageSizes: [10, 20, 50, 80, 100],
           layouts: [
             'Total',
@@ -265,12 +177,6 @@ export default {
             'NextJump',
             'FullJump'
           ]
-        },
-        toolbar: {
-          refresh: true,
-          print: true,
-          zoom: true,
-          custom: true
         },
         radioConfig: {
           range: true,
@@ -332,43 +238,29 @@ export default {
           }
         },
         columns: [
-          { type: 'checkbox', width: 40, align: 'center' },
           {
-            field: 'userId',
-            title: '用户编号',
-            width: 140,
-            align: 'center',
-            headerAlign: 'center',
-            visible: false
-          }, {
             field: 'userName',
             title: '用户',
-            width: 120,
+            width: 160,
             align: 'center',
             headerAlign: 'center'
           }, {
             field: 'status',
             title: '登录状态',
-            width: 80,
+            minWidth: 80,
             align: 'center',
             headerAlign: 'center',
             slots: { default: 'status_default' }
           }, {
             field: 'ipAddress',
-            title: '登录地址',
-            width: 120,
-            align: 'center',
-            headerAlign: 'center'
-          }, {
-            field: 'loginLocation',
-            title: '登录地点',
-            minWidth: 100,
+            title: '登录IP',
+            minWidth: 160,
             align: 'center',
             headerAlign: 'center'
           }, {
             field: 'browserInfo',
             title: '浏览器',
-            width: 120,
+            minWidth: 120,
             align: 'center',
             headerAlign: 'center'
           }, {
@@ -380,13 +272,13 @@ export default {
           }, {
             field: 'operateMessage',
             title: '登录状态',
-            width: 120,
+            minWidth: 120,
             align: 'center',
             headerAlign: 'center'
           }, {
             field: 'loginTime',
             title: '访问时间',
-            width: 160,
+            minWidth: 160,
             align: 'center',
             headerAlign: 'center'
           }
@@ -428,8 +320,8 @@ export default {
   methods: {
     /* 自适应高度 */
     getHeight() {
-      this.defaultHeight = window.innerHeight - 180 + 'px'
-      this.tableHeight = window.innerHeight - 220 + 'px'
+      this.defaultHeight = window.innerHeight - 100 + 'px'
+      this.tableHeight = window.innerHeight - 140 + 'px'
     },
     checkColumnMethod({ column }) {
       if (['nickname', 'role'].includes(column.property)) {

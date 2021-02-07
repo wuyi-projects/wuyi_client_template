@@ -3,14 +3,14 @@
     <div>
       <el-image :src="require('@/assets/images/home-logo.jpg')" style="width: 280px; height: 280px" />
       <div class="dashboard-text">
-        <span style="font-weight:bold;color:red;">{{ name }}</span><span style="padding-left:10px;">,你好</span>
+        <span style="font-weight:bold;color:red;">{{ name?name:'用户' }}</span><span style="padding-left:10px;">,你好</span>
       </div>
-      <div class="dashboard-text"><span>欢迎使用物一智慧中台</span></div>
+      <div class="dashboard-text"><span>欢迎使用客户信息管理云平台</span></div>
     </div>
   </el-main>
 </template>
 
-<style scoped>
+<style>
 
 .el-main {
   height: calc(100vh - 50px);

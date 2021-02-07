@@ -453,13 +453,6 @@ export default {
             headerAlign: 'center'
           },
           {
-            field: 'operateLocation',
-            title: '操作地点',
-            minWidth: 100,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
             field: 'requestParamter',
             title: '请求参数',
             width: 200,
