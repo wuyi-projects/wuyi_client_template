@@ -2,10 +2,11 @@
   <div class="app-container">
     <el-card class="box-card">
       <el-page-header content="复诊数据" @back="goBack" />
+      <el-divider />
       <!-- <div slot="header" class="clearfix">
         <span>客户体型信息录入</span>
       </div> -->
-      <el-row style="margin-top:20px;">
+      <el-row>
         <el-form
           ref="dataForm"
           :model="formData"

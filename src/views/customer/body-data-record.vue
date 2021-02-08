@@ -135,7 +135,7 @@
       v-if="dialogFormVisible"
       :title="textMap[dialogStatus]"
       :center="true"
-      width="40%"
+      width="60%"
       :visible.sync="dialogFormVisible"
     >
       <el-form
@@ -147,7 +147,7 @@
         style="width: 100%; padding:10px;"
       >
         <el-row>
-          <el-col :span="24">
+          <el-col :span="8">
             <el-form-item label="账户编号" prop="openId">
               <el-input
                 v-model="formData.openId"
@@ -156,9 +156,7 @@
               />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
+          <el-col :span="8">
             <el-form-item label="类型" prop="type">
               <el-input
                 v-model="formData.type"
@@ -167,9 +165,7 @@
               />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
+          <el-col :span="8">
             <el-form-item label="次数" prop="times">
               <el-input
                 v-model="formData.times"
@@ -178,9 +174,7 @@
               />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
+          <el-col :span="8">
             <el-form-item label="体重" prop="weight">
               <el-input
                 v-model="formData.weight"
@@ -189,9 +183,7 @@
               />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
+          <el-col :span="8">
             <el-form-item label="BB" prop="bbValue">
               <el-input
                 v-model="formData.bbValue"
@@ -200,9 +192,7 @@
               />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
+          <el-col :span="8">
             <el-form-item label="BP左" prop="bpLeftValue">
               <el-input
                 v-model="formData.bpLeftValue"
@@ -211,9 +201,7 @@
               />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
+          <el-col :span="8">
             <el-form-item label="BP右" prop="bpRightValue">
               <el-input
                 v-model="formData.bpRightValue"
@@ -222,9 +210,7 @@
               />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
+          <el-col :span="8">
             <el-form-item label="上胸围" prop="upperChestValue">
               <el-input
                 v-model="formData.upperChestValue"
@@ -233,9 +219,7 @@
               />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
+          <el-col :span="8">
             <el-form-item label="下胸围" prop="underChestValue">
               <el-input
                 v-model="formData.underChestValue"
@@ -244,9 +228,7 @@
               />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
+          <el-col :span="8">
             <el-form-item label="胃围" prop="gastricValue">
               <el-input
                 v-model="formData.gastricValue"
@@ -255,9 +237,7 @@
               />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
+          <el-col :span="8">
             <el-form-item label="腰围" prop="waistlineValue">
               <el-input
                 v-model="formData.waistlineValue"
@@ -266,9 +246,7 @@
               />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
+          <el-col :span="8">
             <el-form-item label="腹围" prop="abdominalValue">
               <el-input
                 v-model="formData.abdominalValue"
@@ -277,9 +255,7 @@
               />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
+          <el-col :span="8">
             <el-form-item label="臂围" prop="hiplineValue">
               <el-input
                 v-model="formData.hiplineValue"
@@ -288,9 +264,7 @@
               />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
+          <el-col :span="8">
             <el-form-item label="臂高" prop="armHigh">
               <el-input
                 v-model="formData.armHigh"
@@ -299,9 +273,7 @@
               />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
+          <el-col :span="8">
             <el-form-item label="左大腿" prop="leftThighValue">
               <el-input
                 v-model="formData.leftThighValue"
@@ -310,9 +282,7 @@
               />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
+          <el-col :span="8">
             <el-form-item label="右大腿" prop="rightThighValue">
               <el-input
                 v-model="formData.rightThighValue"
@@ -321,9 +291,7 @@
               />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
+          <el-col :span="8">
             <el-form-item label="记录日期" prop="recordTime">
               <el-input
                 v-model="formData.recordTime"
@@ -332,9 +300,7 @@
               />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
+          <el-col :span="8">
             <el-form-item label="状态" prop="status">
               <el-input
                 v-model="formData.status"
@@ -343,9 +309,7 @@
               />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
+          <el-col :span="8">
             <el-form-item label="确认时间" prop="confirmTime">
               <el-input
                 v-model="formData.confirmTime"
@@ -640,14 +604,16 @@ export default {
             title: '类型',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            formatter: this.typeFormatter
           },
           {
             field: 'times',
             title: '次数',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            formatter: this.timesFormatter
           },
           {
             field: 'weight',
@@ -752,7 +718,8 @@ export default {
             title: '状态',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            formatter: this.statusFormatter
           },
           {
             field: 'confirmTime',
@@ -1011,6 +978,35 @@ export default {
           break
         default:
       }
+    },
+    typeFormatter({ cellValue, row, column }) {
+      let result
+      if (!(cellValue === null || cellValue === '')) {
+        if (cellValue === 0) {
+          result = '目标数据'
+        } else if (cellValue === 1) {
+          result = '复诊数据'
+        }
+      } else {
+        result = '未知'
+      }
+      return result
+    },
+    statusFormatter({ cellValue, row, column }) {
+      let result
+      if (!(cellValue === null || cellValue === '')) {
+        if (cellValue === 0) {
+          result = '待确认'
+        } else {
+          result = '已确认'
+        }
+      } else {
+        result = '未知'
+      }
+      return result
+    },
+    timesFormatter({ cellValue, row, column }) {
+      return '第' + cellValue + '次'
     }
   }
 }

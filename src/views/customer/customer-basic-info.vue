@@ -108,6 +108,7 @@
 
         <!--数据行操作-->
         <template v-slot:operate="{ row }">
+          <el-button type="text" style="color:red;" @click="viewCustomerDetailInfo(row)">查看客户数据</el-button>
           <el-button type="text" @click="handleInputBodyData(row)">录入复诊数据</el-button>
           <el-button type="text" @click="handleUpdate(row)">修改</el-button>
           <el-divider direction="vertical" />
@@ -121,12 +122,12 @@
               >
                 删除
               </el-dropdown-item>
-              <el-dropdown-item
+              <!-- <el-dropdown-item
                 :command="beforeHandleCommand('viewRow', row)"
                 divided
               >
                 详情
-              </el-dropdown-item>
+              </el-dropdown-item> -->
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -745,7 +746,7 @@ export default {
           {
             field: 'solutionVersion',
             title: '方案版本',
-            minWidth: 120,
+            minWidth: 100,
             align: 'center',
             headerAlign: 'center',
             slots: { default: 'solutionVersion_default' }
@@ -762,7 +763,8 @@ export default {
             title: '备用号码',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            visible: false
           },
           {
             field: 'height',
@@ -907,7 +909,7 @@ export default {
           },
           {
             title: '操作',
-            width: 240,
+            width: 320,
             align: 'center',
             headerAlign: 'center',
             fixed: 'right',
@@ -1168,6 +1170,14 @@ export default {
         name: 'body-data-edit',
         query: {
           customerId: row.id
+        }
+      })
+    },
+    viewCustomerDetailInfo(row) {
+      this.$router.push({
+        name: 'customer-detail',
+        query: {
+          id: row.id
         }
       })
     }

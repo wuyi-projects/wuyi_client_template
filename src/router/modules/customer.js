@@ -47,11 +47,12 @@ const customerRouter = {
       meta: { title: '服务评价', roles: ['PermissionConfigAdministrator'] }
     },
     {
-      path: 'customer',
+      path: 'customer-detail',
       component: () =>
-        import ('@/views/customer-info/customer'),
-      name: 'customer',
-      meta: { title: '客户信息', roles: ['PermissionConfigAdministrator'] }
+        import ('@/views/customer/customer-detail'),
+      name: 'customer-detail',
+      meta: { title: '客户信息', roles: ['PermissionConfigAdministrator'] },
+      hidden: true
     }
   ]
 }

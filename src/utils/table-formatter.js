@@ -13,6 +13,10 @@ export function formatSelect({ cellValue }, list) {
 export function formatDate({ cellValue }, format) {
   return XEUtils.toDateString(cellValue, format || 'yyyy-MM-dd HH:mm:ss')
 }
+// 格式化日期，默认 yyyy-MM-dd
+export function formatShortDate({ cellValue }, format) {
+  return XEUtils.toDateString(cellValue, format || 'yyyy-MM-dd')
+}
 // 四舍五入金额，每隔3位逗号分隔，默认2位数
 export function formatAmount({ cellValue }, digits = 2) {
   return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: digits })
