@@ -617,6 +617,7 @@ export default {
             { field: 'address' },
             { field: 'detailedAddress' },
             { field: 'regionalId' },
+            { field: 'regionalName' },
             { field: 'solutionVersion' },
             { field: 'bodyType' },
             { field: 'breastShape' },
@@ -826,7 +827,7 @@ export default {
             visible: false
           },
           {
-            field: 'regionalId',
+            field: 'regionalName',
             title: '所属区域',
             minWidth: 120,
             align: 'center',

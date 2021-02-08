@@ -132,11 +132,18 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="所属区域" prop="regionalId">
-              <el-input
+              <el-select
                 v-model="formData.regionalId"
-                placeholder="请输入所属区域"
-                clearable
-              />
+                placeholder="选择方案版本"
+                style="width: 100%"
+              >
+                <el-option
+                  v-for="item in regionalOptions"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -307,6 +314,7 @@ import {
   updateCustomerBasicInfo
 } from '@/api/customer-basic-info'
 
+import { listAllRegional } from '@/api/regional'
 export default {
   data() {
     return {
@@ -375,6 +383,7 @@ export default {
         operateTime: null,
         version: 0
       },
+      regionalOptions: null,
       bodyOption: [
         {
           name: 'I',
@@ -522,6 +531,7 @@ export default {
     } else {
       that.formData.designDate = this.$moment(new Date()).format('YYYY-MM-DD')
     }
+    that.listAllRegional()
   },
   methods: {
     getCustomerBasicInfo() {
@@ -697,6 +707,20 @@ export default {
     },
     handleAddressChange(value) {
       this.formData.address = CodeToText[value[0]] + ' ' + CodeToText[value[1]] + ' ' + CodeToText[value[2]]
+    },
+    listAllRegional() {
+      const that = this
+      listAllRegional({})
+        .then((response) => {
+          const data = response.data
+          if (!data) {
+            return
+          }
+          that.regionalOptions = data
+        })
+        .catch((e) => {
+
+        })
     }
   }
 }

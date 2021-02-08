@@ -826,7 +826,7 @@ export default {
             visible: false
           },
           {
-            field: 'regionalId',
+            field: 'regionalName',
             title: '所属区域',
             minWidth: 120,
             align: 'center',

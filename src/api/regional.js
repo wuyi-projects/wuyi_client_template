@@ -53,3 +53,12 @@ export function listRegional(data) {
     data
   })
 }
+
+/** 获取全部区域信息 */
+export function listAllRegional(data) {
+  return request({
+    url: '/wuyi_oa/v1/regional/listAll.json',
+    method: 'post',
+    data
+  })
+}
