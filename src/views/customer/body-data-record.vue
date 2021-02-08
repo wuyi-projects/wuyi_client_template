@@ -146,10 +146,136 @@
         label-width="80px"
         style="width: 100%; padding:10px;"
       >
+      	        <el-row>
+          <el-col :span="24">
+            <el-form-item label="账户编号" prop="openId">
+              <el-input v-model="formData.openId" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="权限名称" prop="permission">
-              <el-input v-model="formData.permission" clearable />
+            <el-form-item label="类型" prop="type">
+              <el-input v-model="formData.type" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="次数" prop="times">
+              <el-input v-model="formData.times" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="体重" prop="weight">
+              <el-input v-model="formData.weight" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="BB" prop="bbValue">
+              <el-input v-model="formData.bbValue" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="BP左" prop="bpLeftValue">
+              <el-input v-model="formData.bpLeftValue" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="BP右" prop="bpRightValue">
+              <el-input v-model="formData.bpRightValue" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="上胸围" prop="upperChestValue">
+              <el-input v-model="formData.upperChestValue" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="下胸围" prop="underChestValue">
+              <el-input v-model="formData.underChestValue" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="胃围" prop="gastricValue">
+              <el-input v-model="formData.gastricValue" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="腰围" prop="waistlineValue">
+              <el-input v-model="formData.waistlineValue" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="腹围" prop="abdominalValue">
+              <el-input v-model="formData.abdominalValue" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="臂围" prop="hiplineValue">
+              <el-input v-model="formData.hiplineValue" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="臂高" prop="armHigh">
+              <el-input v-model="formData.armHigh" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="左大腿" prop="leftThighValue">
+              <el-input v-model="formData.leftThighValue" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="右大腿" prop="rightThighValue">
+              <el-input v-model="formData.rightThighValue" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="记录日期" prop="recordTime">
+              <el-input v-model="formData.recordTime" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="状态" prop="status">
+              <el-input v-model="formData.status" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="确认时间" prop="confirmTime">
+              <el-input v-model="formData.confirmTime" clearable />
             </el-form-item>
           </el-col>
         </el-row>
@@ -190,7 +316,7 @@
 <script>
 import formatTableSize from '@/utils/size'
 
-import { listPermission, savePermission, deletePermission, batchDeletePermission, updatePermission } from '@/api/permission'
+import { listBodyDataRecord, saveBodyDataRecord, deleteBodyDataRecord, batchDeleteBodyDataRecord, updateBodyDataRecord } from '@/api/body-data-record'
 
 export default {
   data() {
@@ -202,7 +328,6 @@ export default {
       dialogFormVisible: false,
       loadingSubmitButton: false,
       submitButtonText: '提交',
-      allPermissionGroup: [],
       textMap: {
         update: '编辑',
         create: '创建',
@@ -221,18 +346,48 @@ export default {
       },
       formData: {
         id: null,
-        permission: '',
-        description: '',
-        permissionGroupInfoId: null,
-        available: 1,
+        openId: null,
+        type: null,
+        times: null,
+        weight: null,
+        bbValue: null,
+        bpLeftValue: null,
+        bpRightValue: null,
+        upperChestValue: null,
+        underChestValue: null,
+        gastricValue: null,
+        waistlineValue: null,
+        abdominalValue: null,
+        hiplineValue: null,
+        armHigh: null,
+        leftThighValue: null,
+        rightThighValue: null,
+        recordTime: null,
+        status: null,
+        confirmTime: null,
         version: 0
       },
       initCreateData: {
         id: null,
-        permission: '',
-        description: '',
-        permissionGroupInfoId: null,
-        available: 1,
+        openId: null,
+        type: null,
+        times: null,
+        weight: null,
+        bbValue: null,
+        bpLeftValue: null,
+        bpRightValue: null,
+        upperChestValue: null,
+        underChestValue: null,
+        gastricValue: null,
+        waistlineValue: null,
+        abdominalValue: null,
+        hiplineValue: null,
+        armHigh: null,
+        leftThighValue: null,
+        rightThighValue: null,
+        recordTime: null,
+        status: null,
+        confirmTime: null,
         version: 0
       },
       pickerOptions: {
@@ -278,9 +433,25 @@ export default {
         printConfig: {
           columns: [
             { field: 'id' },
-            { field: 'permission' },
-            { field: 'description' },
-            { field: 'available' }
+            { field: 'openId' },
+            { field: 'type' },
+            { field: 'times' },
+            { field: 'weight' },
+            { field: 'bbValue' },
+            { field: 'bpLeftValue' },
+            { field: 'bpRightValue' },
+            { field: 'upperChestValue' },
+            { field: 'underChestValue' },
+            { field: 'gastricValue' },
+            { field: 'waistlineValue' },
+            { field: 'abdominalValue' },
+            { field: 'hiplineValue' },
+            { field: 'armHigh' },
+            { field: 'leftThighValue' },
+            { field: 'rightThighValue' },
+            { field: 'recordTime' },
+            { field: 'status' },
+            { field: 'confirmTime' },
           ]
         },
         sortConfig: {
@@ -364,7 +535,7 @@ export default {
                 limit: page.pageSize
               })
               const result = Object.assign(pageData, searchData, sortParams)
-              return listPermission(result)
+              return listBodyDataRecord(result)
             }
           }
         },
@@ -382,23 +553,135 @@ export default {
             visible: false
           },
           {
-            field: 'permission',
-            title: '权限名称',
-            width: 200,
+            field: 'openId',
+            title: '账户编号',
+            minWidth: 120,
             align: 'center',
             headerAlign: 'center'
           },
           {
-            field: 'description',
-            title: '权限描述',
-            align: 'left',
-            headerAlign: 'center',
-            minWidth: 200
+            field: 'type',
+            title: '类型',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
           },
           {
-            field: 'groupName',
-            title: '权限分组名称',
-            minWidth: 200,
+            field: 'times',
+            title: '次数',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'weight',
+            title: '体重',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'bbValue',
+            title: 'BB',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'bpLeftValue',
+            title: 'BP左',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'bpRightValue',
+            title: 'BP右',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'upperChestValue',
+            title: '上胸围',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'underChestValue',
+            title: '下胸围',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'gastricValue',
+            title: '胃围',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'waistlineValue',
+            title: '腰围',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'abdominalValue',
+            title: '腹围',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'hiplineValue',
+            title: '臂围',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'armHigh',
+            title: '臂高',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'leftThighValue',
+            title: '左大腿',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'rightThighValue',
+            title: '右大腿',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'recordTime',
+            title: '记录日期',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'status',
+            title: '状态',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'confirmTime',
+            title: '确认时间',
+            minWidth: 120,
             align: 'center',
             headerAlign: 'center'
           },
@@ -494,7 +777,7 @@ export default {
             }
             batchDeleteData.push(temp)
           }
-          batchDeletePermission(batchDeleteData)
+          batchDeleteBodyDataRecord(batchDeleteData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -541,7 +824,7 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.formData)
-          savePermission(tempData)
+          saveBodyDataRecord(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -570,7 +853,7 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.formData)
-          updatePermission(tempData)
+          updateBodyDataRecord(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -605,7 +888,7 @@ export default {
           id: id,
           version: version
         })
-        deletePermission(tempData)
+        deleteBodyDataRecord(tempData)
           .then(response => {
             const result = response.data
             if (result) {

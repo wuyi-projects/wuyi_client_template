@@ -146,10 +146,164 @@
         label-width="80px"
         style="width: 100%; padding:10px;"
       >
+      	        <el-row>
+          <el-col :span="24">
+            <el-form-item label="账户编号" prop="openId">
+              <el-input v-model="formData.openId" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="权限名称" prop="permission">
-              <el-input v-model="formData.permission" clearable />
+            <el-form-item label="姓名" prop="name">
+              <el-input v-model="formData.name" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="微信绑定手机号码" prop="phone">
+              <el-input v-model="formData.phone" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="备用号码" prop="phone2">
+              <el-input v-model="formData.phone2" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="身高" prop="height">
+              <el-input v-model="formData.height" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="出生日期" prop="birthday">
+              <el-input v-model="formData.birthday" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="职业" prop="profession">
+              <el-input v-model="formData.profession" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="体重" prop="weight">
+              <el-input v-model="formData.weight" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="婚姻状况" prop="maritalStatus">
+              <el-input v-model="formData.maritalStatus" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="地址" prop="address">
+              <el-input v-model="formData.address" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="详细地址" prop="detailedAddress">
+              <el-input v-model="formData.detailedAddress" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="所属区域" prop="regionalId">
+              <el-input v-model="formData.regionalId" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="方案版本" prop="solutionVersion">
+              <el-input v-model="formData.solutionVersion" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="体型" prop="bodyType">
+              <el-input v-model="formData.bodyType" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="胸型" prop="breastShape">
+              <el-input v-model="formData.breastShape" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="备用字段1" prop="field1">
+              <el-input v-model="formData.field1" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="备用字段2" prop="field2">
+              <el-input v-model="formData.field2" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="备用字段3" prop="field3">
+              <el-input v-model="formData.field3" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="备用字段4" prop="field4">
+              <el-input v-model="formData.field4" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="备用字段5" prop="field5">
+              <el-input v-model="formData.field5" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="操作人编号" prop="operatorId">
+              <el-input v-model="formData.operatorId" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="操作人名称" prop="operatorName">
+              <el-input v-model="formData.operatorName" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="操作时间" prop="operateTime">
+              <el-input v-model="formData.operateTime" clearable />
             </el-form-item>
           </el-col>
         </el-row>
@@ -190,7 +344,7 @@
 <script>
 import formatTableSize from '@/utils/size'
 
-import { listPermission, savePermission, deletePermission, batchDeletePermission, updatePermission } from '@/api/permission'
+import { listCustomerBasicInfo, saveCustomerBasicInfo, deleteCustomerBasicInfo, batchDeleteCustomerBasicInfo, updateCustomerBasicInfo } from '@/api/customer-basic-info'
 
 export default {
   data() {
@@ -202,7 +356,6 @@ export default {
       dialogFormVisible: false,
       loadingSubmitButton: false,
       submitButtonText: '提交',
-      allPermissionGroup: [],
       textMap: {
         update: '编辑',
         create: '创建',
@@ -221,18 +374,56 @@ export default {
       },
       formData: {
         id: null,
-        permission: '',
-        description: '',
-        permissionGroupInfoId: null,
-        available: 1,
+        openId: null,
+        name: null,
+        phone: null,
+        phone2: null,
+        height: null,
+        birthday: null,
+        profession: null,
+        weight: null,
+        maritalStatus: null,
+        address: null,
+        detailedAddress: null,
+        regionalId: null,
+        solutionVersion: null,
+        bodyType: null,
+        breastShape: null,
+        field1: null,
+        field2: null,
+        field3: null,
+        field4: null,
+        field5: null,
+        operatorId: null,
+        operatorName: null,
+        operateTime: null,
         version: 0
       },
       initCreateData: {
         id: null,
-        permission: '',
-        description: '',
-        permissionGroupInfoId: null,
-        available: 1,
+        openId: null,
+        name: null,
+        phone: null,
+        phone2: null,
+        height: null,
+        birthday: null,
+        profession: null,
+        weight: null,
+        maritalStatus: null,
+        address: null,
+        detailedAddress: null,
+        regionalId: null,
+        solutionVersion: null,
+        bodyType: null,
+        breastShape: null,
+        field1: null,
+        field2: null,
+        field3: null,
+        field4: null,
+        field5: null,
+        operatorId: null,
+        operatorName: null,
+        operateTime: null,
         version: 0
       },
       pickerOptions: {
@@ -278,9 +469,29 @@ export default {
         printConfig: {
           columns: [
             { field: 'id' },
-            { field: 'permission' },
-            { field: 'description' },
-            { field: 'available' }
+            { field: 'openId' },
+            { field: 'name' },
+            { field: 'phone' },
+            { field: 'phone2' },
+            { field: 'height' },
+            { field: 'birthday' },
+            { field: 'profession' },
+            { field: 'weight' },
+            { field: 'maritalStatus' },
+            { field: 'address' },
+            { field: 'detailedAddress' },
+            { field: 'regionalId' },
+            { field: 'solutionVersion' },
+            { field: 'bodyType' },
+            { field: 'breastShape' },
+            { field: 'field1' },
+            { field: 'field2' },
+            { field: 'field3' },
+            { field: 'field4' },
+            { field: 'field5' },
+            { field: 'operatorId' },
+            { field: 'operatorName' },
+            { field: 'operateTime' },
           ]
         },
         sortConfig: {
@@ -364,7 +575,7 @@ export default {
                 limit: page.pageSize
               })
               const result = Object.assign(pageData, searchData, sortParams)
-              return listPermission(result)
+              return listCustomerBasicInfo(result)
             }
           }
         },
@@ -382,23 +593,163 @@ export default {
             visible: false
           },
           {
-            field: 'permission',
-            title: '权限名称',
-            width: 200,
+            field: 'openId',
+            title: '账户编号',
+            minWidth: 120,
             align: 'center',
             headerAlign: 'center'
           },
           {
-            field: 'description',
-            title: '权限描述',
-            align: 'left',
-            headerAlign: 'center',
-            minWidth: 200
+            field: 'name',
+            title: '姓名',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
           },
           {
-            field: 'groupName',
-            title: '权限分组名称',
-            minWidth: 200,
+            field: 'phone',
+            title: '微信绑定手机号码',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'phone2',
+            title: '备用号码',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'height',
+            title: '身高',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'birthday',
+            title: '出生日期',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'profession',
+            title: '职业',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'weight',
+            title: '体重',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'maritalStatus',
+            title: '婚姻状况',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'address',
+            title: '地址',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'detailedAddress',
+            title: '详细地址',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'regionalId',
+            title: '所属区域',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'solutionVersion',
+            title: '方案版本',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'bodyType',
+            title: '体型',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'breastShape',
+            title: '胸型',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'field1',
+            title: '备用字段1',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'field2',
+            title: '备用字段2',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'field3',
+            title: '备用字段3',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'field4',
+            title: '备用字段4',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'field5',
+            title: '备用字段5',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'operatorId',
+            title: '操作人编号',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'operatorName',
+            title: '操作人名称',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'operateTime',
+            title: '操作时间',
+            minWidth: 120,
             align: 'center',
             headerAlign: 'center'
           },
@@ -494,7 +845,7 @@ export default {
             }
             batchDeleteData.push(temp)
           }
-          batchDeletePermission(batchDeleteData)
+          batchDeleteCustomerBasicInfo(batchDeleteData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -541,7 +892,7 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.formData)
-          savePermission(tempData)
+          saveCustomerBasicInfo(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -570,7 +921,7 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.formData)
-          updatePermission(tempData)
+          updateCustomerBasicInfo(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -605,7 +956,7 @@ export default {
           id: id,
           version: version
         })
-        deletePermission(tempData)
+        deleteCustomerBasicInfo(tempData)
           .then(response => {
             const result = response.data
             if (result) {

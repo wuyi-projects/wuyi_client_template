@@ -146,10 +146,24 @@
         label-width="80px"
         style="width: 100%; padding:10px;"
       >
+      	        <el-row>
+          <el-col :span="24">
+            <el-form-item label="账户编号" prop="openId">
+              <el-input v-model="formData.openId" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="权限名称" prop="permission">
-              <el-input v-model="formData.permission" clearable />
+            <el-form-item label="区域编号" prop="regionalId">
+              <el-input v-model="formData.regionalId" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="数据是否可见" prop="visible">
+              <el-input v-model="formData.visible" clearable />
             </el-form-item>
           </el-col>
         </el-row>
@@ -190,7 +204,7 @@
 <script>
 import formatTableSize from '@/utils/size'
 
-import { listPermission, savePermission, deletePermission, batchDeletePermission, updatePermission } from '@/api/permission'
+import { listRegionalUserLink, saveRegionalUserLink, deleteRegionalUserLink, batchDeleteRegionalUserLink, updateRegionalUserLink } from '@/api/regional-user-link'
 
 export default {
   data() {
@@ -202,7 +216,6 @@ export default {
       dialogFormVisible: false,
       loadingSubmitButton: false,
       submitButtonText: '提交',
-      allPermissionGroup: [],
       textMap: {
         update: '编辑',
         create: '创建',
@@ -221,18 +234,16 @@ export default {
       },
       formData: {
         id: null,
-        permission: '',
-        description: '',
-        permissionGroupInfoId: null,
-        available: 1,
+        openId: null,
+        regionalId: null,
+        visible: null,
         version: 0
       },
       initCreateData: {
         id: null,
-        permission: '',
-        description: '',
-        permissionGroupInfoId: null,
-        available: 1,
+        openId: null,
+        regionalId: null,
+        visible: null,
         version: 0
       },
       pickerOptions: {
@@ -278,9 +289,9 @@ export default {
         printConfig: {
           columns: [
             { field: 'id' },
-            { field: 'permission' },
-            { field: 'description' },
-            { field: 'available' }
+            { field: 'openId' },
+            { field: 'regionalId' },
+            { field: 'visible' },
           ]
         },
         sortConfig: {
@@ -364,7 +375,7 @@ export default {
                 limit: page.pageSize
               })
               const result = Object.assign(pageData, searchData, sortParams)
-              return listPermission(result)
+              return listRegionalUserLink(result)
             }
           }
         },
@@ -382,23 +393,23 @@ export default {
             visible: false
           },
           {
-            field: 'permission',
-            title: '权限名称',
-            width: 200,
+            field: 'openId',
+            title: '账户编号',
+            minWidth: 120,
             align: 'center',
             headerAlign: 'center'
           },
           {
-            field: 'description',
-            title: '权限描述',
-            align: 'left',
-            headerAlign: 'center',
-            minWidth: 200
+            field: 'regionalId',
+            title: '区域编号',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
           },
           {
-            field: 'groupName',
-            title: '权限分组名称',
-            minWidth: 200,
+            field: 'visible',
+            title: '数据是否可见',
+            minWidth: 120,
             align: 'center',
             headerAlign: 'center'
           },
@@ -494,7 +505,7 @@ export default {
             }
             batchDeleteData.push(temp)
           }
-          batchDeletePermission(batchDeleteData)
+          batchDeleteRegionalUserLink(batchDeleteData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -541,7 +552,7 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.formData)
-          savePermission(tempData)
+          saveRegionalUserLink(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -570,7 +581,7 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.formData)
-          updatePermission(tempData)
+          updateRegionalUserLink(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -605,7 +616,7 @@ export default {
           id: id,
           version: version
         })
-        deletePermission(tempData)
+        deleteRegionalUserLink(tempData)
           .then(response => {
             const result = response.data
             if (result) {

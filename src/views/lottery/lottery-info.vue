@@ -146,10 +146,59 @@
         label-width="80px"
         style="width: 100%; padding:10px;"
       >
+      	        <el-row>
+          <el-col :span="24">
+            <el-form-item label="抽奖编号" prop="uniqueNumber">
+              <el-input v-model="formData.uniqueNumber" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="权限名称" prop="permission">
-              <el-input v-model="formData.permission" clearable />
+            <el-form-item label="抽奖类型" prop="type">
+              <el-input v-model="formData.type" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="抽奖名称" prop="title">
+              <el-input v-model="formData.title" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="奖金金额" prop="amount">
+              <el-input v-model="formData.amount" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="是否开启" prop="onOff">
+              <el-input v-model="formData.onOff" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="抽奖日期" prop="lotteryDate">
+              <el-input v-model="formData.lotteryDate" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="抽奖截止时间" prop="deadline">
+              <el-input v-model="formData.deadline" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="奖券过期时间" prop="expirationTime">
+              <el-input v-model="formData.expirationTime" clearable />
             </el-form-item>
           </el-col>
         </el-row>
@@ -190,7 +239,7 @@
 <script>
 import formatTableSize from '@/utils/size'
 
-import { listPermission, savePermission, deletePermission, batchDeletePermission, updatePermission } from '@/api/permission'
+import { listLotteryInfo, saveLotteryInfo, deleteLotteryInfo, batchDeleteLotteryInfo, updateLotteryInfo } from '@/api/lottery-info'
 
 export default {
   data() {
@@ -202,7 +251,6 @@ export default {
       dialogFormVisible: false,
       loadingSubmitButton: false,
       submitButtonText: '提交',
-      allPermissionGroup: [],
       textMap: {
         update: '编辑',
         create: '创建',
@@ -221,18 +269,26 @@ export default {
       },
       formData: {
         id: null,
-        permission: '',
-        description: '',
-        permissionGroupInfoId: null,
-        available: 1,
+        uniqueNumber: null,
+        type: null,
+        title: null,
+        amount: null,
+        onOff: null,
+        lotteryDate: null,
+        deadline: null,
+        expirationTime: null,
         version: 0
       },
       initCreateData: {
         id: null,
-        permission: '',
-        description: '',
-        permissionGroupInfoId: null,
-        available: 1,
+        uniqueNumber: null,
+        type: null,
+        title: null,
+        amount: null,
+        onOff: null,
+        lotteryDate: null,
+        deadline: null,
+        expirationTime: null,
         version: 0
       },
       pickerOptions: {
@@ -278,9 +334,14 @@ export default {
         printConfig: {
           columns: [
             { field: 'id' },
-            { field: 'permission' },
-            { field: 'description' },
-            { field: 'available' }
+            { field: 'uniqueNumber' },
+            { field: 'type' },
+            { field: 'title' },
+            { field: 'amount' },
+            { field: 'onOff' },
+            { field: 'lotteryDate' },
+            { field: 'deadline' },
+            { field: 'expirationTime' },
           ]
         },
         sortConfig: {
@@ -364,7 +425,7 @@ export default {
                 limit: page.pageSize
               })
               const result = Object.assign(pageData, searchData, sortParams)
-              return listPermission(result)
+              return listLotteryInfo(result)
             }
           }
         },
@@ -382,23 +443,58 @@ export default {
             visible: false
           },
           {
-            field: 'permission',
-            title: '权限名称',
-            width: 200,
+            field: 'uniqueNumber',
+            title: '抽奖编号',
+            minWidth: 120,
             align: 'center',
             headerAlign: 'center'
           },
           {
-            field: 'description',
-            title: '权限描述',
-            align: 'left',
-            headerAlign: 'center',
-            minWidth: 200
+            field: 'type',
+            title: '抽奖类型',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
           },
           {
-            field: 'groupName',
-            title: '权限分组名称',
-            minWidth: 200,
+            field: 'title',
+            title: '抽奖名称',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'amount',
+            title: '奖金金额',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'onOff',
+            title: '是否开启',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'lotteryDate',
+            title: '抽奖日期',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'deadline',
+            title: '抽奖截止时间',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'expirationTime',
+            title: '奖券过期时间',
+            minWidth: 120,
             align: 'center',
             headerAlign: 'center'
           },
@@ -494,7 +590,7 @@ export default {
             }
             batchDeleteData.push(temp)
           }
-          batchDeletePermission(batchDeleteData)
+          batchDeleteLotteryInfo(batchDeleteData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -541,7 +637,7 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.formData)
-          savePermission(tempData)
+          saveLotteryInfo(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -570,7 +666,7 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.formData)
-          updatePermission(tempData)
+          updateLotteryInfo(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -605,7 +701,7 @@ export default {
           id: id,
           version: version
         })
-        deletePermission(tempData)
+        deleteLotteryInfo(tempData)
           .then(response => {
             const result = response.data
             if (result) {

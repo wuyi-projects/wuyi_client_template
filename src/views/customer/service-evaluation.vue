@@ -146,10 +146,73 @@
         label-width="80px"
         style="width: 100%; padding:10px;"
       >
+      	        <el-row>
+          <el-col :span="24">
+            <el-form-item label="账户编号" prop="openId">
+              <el-input v-model="formData.openId" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="权限名称" prop="permission">
-              <el-input v-model="formData.permission" clearable />
+            <el-form-item label="设计方案" prop="solutionVersion">
+              <el-input v-model="formData.solutionVersion" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="使用阶段" prop="stage">
+              <el-input v-model="formData.stage" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="操作人编号" prop="operatorId">
+              <el-input v-model="formData.operatorId" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="操作人名称" prop="operatorName">
+              <el-input v-model="formData.operatorName" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="操作时间" prop="operateTime">
+              <el-input v-model="formData.operateTime" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="客户反馈" prop="feedbackStatus">
+              <el-input v-model="formData.feedbackStatus" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="反馈时间" prop="feedbackTime">
+              <el-input v-model="formData.feedbackTime" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="反馈意见" prop="feedbackContent">
+              <el-input v-model="formData.feedbackContent" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="备注" prop="note">
+              <el-input v-model="formData.note" clearable />
             </el-form-item>
           </el-col>
         </el-row>
@@ -190,7 +253,7 @@
 <script>
 import formatTableSize from '@/utils/size'
 
-import { listPermission, savePermission, deletePermission, batchDeletePermission, updatePermission } from '@/api/permission'
+import { listServiceEvaluation, saveServiceEvaluation, deleteServiceEvaluation, batchDeleteServiceEvaluation, updateServiceEvaluation } from '@/api/service-evaluation'
 
 export default {
   data() {
@@ -202,7 +265,6 @@ export default {
       dialogFormVisible: false,
       loadingSubmitButton: false,
       submitButtonText: '提交',
-      allPermissionGroup: [],
       textMap: {
         update: '编辑',
         create: '创建',
@@ -221,18 +283,30 @@ export default {
       },
       formData: {
         id: null,
-        permission: '',
-        description: '',
-        permissionGroupInfoId: null,
-        available: 1,
+        openId: null,
+        solutionVersion: null,
+        stage: null,
+        operatorId: null,
+        operatorName: null,
+        operateTime: null,
+        feedbackStatus: null,
+        feedbackTime: null,
+        feedbackContent: null,
+        note: null,
         version: 0
       },
       initCreateData: {
         id: null,
-        permission: '',
-        description: '',
-        permissionGroupInfoId: null,
-        available: 1,
+        openId: null,
+        solutionVersion: null,
+        stage: null,
+        operatorId: null,
+        operatorName: null,
+        operateTime: null,
+        feedbackStatus: null,
+        feedbackTime: null,
+        feedbackContent: null,
+        note: null,
         version: 0
       },
       pickerOptions: {
@@ -278,9 +352,16 @@ export default {
         printConfig: {
           columns: [
             { field: 'id' },
-            { field: 'permission' },
-            { field: 'description' },
-            { field: 'available' }
+            { field: 'openId' },
+            { field: 'solutionVersion' },
+            { field: 'stage' },
+            { field: 'operatorId' },
+            { field: 'operatorName' },
+            { field: 'operateTime' },
+            { field: 'feedbackStatus' },
+            { field: 'feedbackTime' },
+            { field: 'feedbackContent' },
+            { field: 'note' },
           ]
         },
         sortConfig: {
@@ -364,7 +445,7 @@ export default {
                 limit: page.pageSize
               })
               const result = Object.assign(pageData, searchData, sortParams)
-              return listPermission(result)
+              return listServiceEvaluation(result)
             }
           }
         },
@@ -382,23 +463,72 @@ export default {
             visible: false
           },
           {
-            field: 'permission',
-            title: '权限名称',
-            width: 200,
+            field: 'openId',
+            title: '账户编号',
+            minWidth: 120,
             align: 'center',
             headerAlign: 'center'
           },
           {
-            field: 'description',
-            title: '权限描述',
-            align: 'left',
-            headerAlign: 'center',
-            minWidth: 200
+            field: 'solutionVersion',
+            title: '设计方案',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
           },
           {
-            field: 'groupName',
-            title: '权限分组名称',
-            minWidth: 200,
+            field: 'stage',
+            title: '使用阶段',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'operatorId',
+            title: '操作人编号',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'operatorName',
+            title: '操作人名称',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'operateTime',
+            title: '操作时间',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'feedbackStatus',
+            title: '客户反馈',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'feedbackTime',
+            title: '反馈时间',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'feedbackContent',
+            title: '反馈意见',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'note',
+            title: '备注',
+            minWidth: 120,
             align: 'center',
             headerAlign: 'center'
           },
@@ -494,7 +624,7 @@ export default {
             }
             batchDeleteData.push(temp)
           }
-          batchDeletePermission(batchDeleteData)
+          batchDeleteServiceEvaluation(batchDeleteData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -541,7 +671,7 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.formData)
-          savePermission(tempData)
+          saveServiceEvaluation(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -570,7 +700,7 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.formData)
-          updatePermission(tempData)
+          updateServiceEvaluation(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -605,7 +735,7 @@ export default {
           id: id,
           version: version
         })
-        deletePermission(tempData)
+        deleteServiceEvaluation(tempData)
           .then(response => {
             const result = response.data
             if (result) {

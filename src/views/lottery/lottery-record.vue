@@ -146,10 +146,94 @@
         label-width="80px"
         style="width: 100%; padding:10px;"
       >
+      	        <el-row>
+          <el-col :span="24">
+            <el-form-item label="抽奖信息编号" prop="lotteryInfoId">
+              <el-input v-model="formData.lotteryInfoId" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="权限名称" prop="permission">
-              <el-input v-model="formData.permission" clearable />
+            <el-form-item label="账户编号" prop="openId">
+              <el-input v-model="formData.openId" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="手机号码" prop="phone">
+              <el-input v-model="formData.phone" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="备用号码" prop="phone2">
+              <el-input v-model="formData.phone2" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="姓名" prop="name">
+              <el-input v-model="formData.name" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="头像" prop="photoUrl">
+              <el-input v-model="formData.photoUrl" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="奖金金额" prop="amount">
+              <el-input v-model="formData.amount" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="状态" prop="status">
+              <el-input v-model="formData.status" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="过期时间" prop="expirationTime">
+              <el-input v-model="formData.expirationTime" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="使用状态" prop="usageStatus">
+              <el-input v-model="formData.usageStatus" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="申请时间" prop="applicationTime">
+              <el-input v-model="formData.applicationTime" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="核销时间" prop="verificationTime">
+              <el-input v-model="formData.verificationTime" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="核销人" prop="verificationUserId">
+              <el-input v-model="formData.verificationUserId" clearable />
             </el-form-item>
           </el-col>
         </el-row>
@@ -190,7 +274,7 @@
 <script>
 import formatTableSize from '@/utils/size'
 
-import { listPermission, savePermission, deletePermission, batchDeletePermission, updatePermission } from '@/api/permission'
+import { listLotteryRecord, saveLotteryRecord, deleteLotteryRecord, batchDeleteLotteryRecord, updateLotteryRecord } from '@/api/lottery-record'
 
 export default {
   data() {
@@ -202,7 +286,6 @@ export default {
       dialogFormVisible: false,
       loadingSubmitButton: false,
       submitButtonText: '提交',
-      allPermissionGroup: [],
       textMap: {
         update: '编辑',
         create: '创建',
@@ -221,18 +304,36 @@ export default {
       },
       formData: {
         id: null,
-        permission: '',
-        description: '',
-        permissionGroupInfoId: null,
-        available: 1,
+        lotteryInfoId: null,
+        openId: null,
+        phone: null,
+        phone2: null,
+        name: null,
+        photoUrl: null,
+        amount: null,
+        status: null,
+        expirationTime: null,
+        usageStatus: null,
+        applicationTime: null,
+        verificationTime: null,
+        verificationUserId: null,
         version: 0
       },
       initCreateData: {
         id: null,
-        permission: '',
-        description: '',
-        permissionGroupInfoId: null,
-        available: 1,
+        lotteryInfoId: null,
+        openId: null,
+        phone: null,
+        phone2: null,
+        name: null,
+        photoUrl: null,
+        amount: null,
+        status: null,
+        expirationTime: null,
+        usageStatus: null,
+        applicationTime: null,
+        verificationTime: null,
+        verificationUserId: null,
         version: 0
       },
       pickerOptions: {
@@ -278,9 +379,19 @@ export default {
         printConfig: {
           columns: [
             { field: 'id' },
-            { field: 'permission' },
-            { field: 'description' },
-            { field: 'available' }
+            { field: 'lotteryInfoId' },
+            { field: 'openId' },
+            { field: 'phone' },
+            { field: 'phone2' },
+            { field: 'name' },
+            { field: 'photoUrl' },
+            { field: 'amount' },
+            { field: 'status' },
+            { field: 'expirationTime' },
+            { field: 'usageStatus' },
+            { field: 'applicationTime' },
+            { field: 'verificationTime' },
+            { field: 'verificationUserId' },
           ]
         },
         sortConfig: {
@@ -364,7 +475,7 @@ export default {
                 limit: page.pageSize
               })
               const result = Object.assign(pageData, searchData, sortParams)
-              return listPermission(result)
+              return listLotteryRecord(result)
             }
           }
         },
@@ -382,23 +493,93 @@ export default {
             visible: false
           },
           {
-            field: 'permission',
-            title: '权限名称',
-            width: 200,
+            field: 'lotteryInfoId',
+            title: '抽奖信息编号',
+            minWidth: 120,
             align: 'center',
             headerAlign: 'center'
           },
           {
-            field: 'description',
-            title: '权限描述',
-            align: 'left',
-            headerAlign: 'center',
-            minWidth: 200
+            field: 'openId',
+            title: '账户编号',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
           },
           {
-            field: 'groupName',
-            title: '权限分组名称',
-            minWidth: 200,
+            field: 'phone',
+            title: '手机号码',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'phone2',
+            title: '备用号码',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'name',
+            title: '姓名',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'photoUrl',
+            title: '头像',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'amount',
+            title: '奖金金额',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'status',
+            title: '状态',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'expirationTime',
+            title: '过期时间',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'usageStatus',
+            title: '使用状态',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'applicationTime',
+            title: '申请时间',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'verificationTime',
+            title: '核销时间',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'verificationUserId',
+            title: '核销人',
+            minWidth: 120,
             align: 'center',
             headerAlign: 'center'
           },
@@ -494,7 +675,7 @@ export default {
             }
             batchDeleteData.push(temp)
           }
-          batchDeletePermission(batchDeleteData)
+          batchDeleteLotteryRecord(batchDeleteData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -541,7 +722,7 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.formData)
-          savePermission(tempData)
+          saveLotteryRecord(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -570,7 +751,7 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.formData)
-          updatePermission(tempData)
+          updateLotteryRecord(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -605,7 +786,7 @@ export default {
           id: id,
           version: version
         })
-        deletePermission(tempData)
+        deleteLotteryRecord(tempData)
           .then(response => {
             const result = response.data
             if (result) {

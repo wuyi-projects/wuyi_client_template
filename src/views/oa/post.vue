@@ -10,8 +10,8 @@
         size="small"
       >
         <el-col :span="8">
-          <el-form-item label="数据编号" prop="id">
-            <el-input v-model="searchFormData.id" clearable />
+          <el-form-item label="岗位名称" prop="name">
+            <el-input v-model="searchFormData.name" clearable />
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -28,7 +28,7 @@
                 />
               </el-form-item>
             </el-col>
-            <el-col style="text-align: center;" :span="2">-</el-col>
+            <el-col class="line" :span="2">-</el-col>
             <el-col :span="11">
               <el-form-item prop="end">
                 <el-date-picker
@@ -70,12 +70,11 @@
     </el-card>
 
     <!--数据展示-->
-    <el-card class="box-card" shadow="never" :style="{height:defaultHeight}">
+    <el-card class="box-card" shadow="never">
       <vxe-grid
         ref="dataGrid"
         class="custom-table-scrollbar"
         v-bind="gridOptions"
-        :height="tableHeight"
       >
         <!--工具栏按钮-->
         <template v-slot:buttons>
@@ -88,38 +87,21 @@
           </el-button-group>
         </template>
 
-        <!--插槽使用示例:是否可用展示-->
-        <!-- <template v-slot:available_default="{ row }">
+        <!--是否可用展示-->
+        <template v-slot:available_default="{ row }">
           <template v-if="row.available === 1">
             <el-badge is-dot class="item" type="primary" />启用
           </template>
           <template v-else>
             <el-badge is-dot class="item" type="info" />停用
           </template>
-        </template> -->
+        </template>
 
         <!--数据行操作-->
         <template v-slot:operate="{ row }">
           <el-button type="text" @click="handleUpdate(row)">修改</el-button>
           <el-divider direction="vertical" />
-          <el-dropdown @command="handleCommand">
-            <span class="el-dropdown-link">
-              更多<i class="el-icon-arrow-down" />
-            </span>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item
-                :command="beforeHandleCommand('handleDelete', row)"
-              >
-                删除
-              </el-dropdown-item>
-              <el-dropdown-item
-                :command="beforeHandleCommand('viewRow', row)"
-                divided
-              >
-                详情
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
+          <el-button type="text" @click="handleDelete(row)">删除</el-button>
         </template>
         <!--自定义空数据模板-->
         <template v-slot:empty>
@@ -141,15 +123,15 @@
       <el-form
         ref="dataForm"
         :rules="rules"
-        :model="formData"
+        :model="temp"
         label-position="right"
         label-width="80px"
         style="width: 100%; padding:10px;"
       >
         <el-row>
           <el-col :span="24">
-            <el-form-item label="权限名称" prop="permission">
-              <el-input v-model="formData.permission" clearable />
+            <el-form-item label="岗位名称" prop="postName">
+              <el-input v-model="temp.postName" clearable />
             </el-form-item>
           </el-col>
         </el-row>
@@ -190,19 +172,17 @@
 <script>
 import formatTableSize from '@/utils/size'
 
-import { listPermission, savePermission, deletePermission, batchDeletePermission, updatePermission } from '@/api/permission'
+import { listPost, savePost, deletePost, batchDeletePost, updatePost } from '@/api/post'
 
 export default {
   data() {
     return {
-      defaultHeight: '500px',
-      tableHeight: '460px',
-      permissionGroupInfoOptions: [],
+      optionsData: [],
       folding: false,
       dialogFormVisible: false,
       loadingSubmitButton: false,
       submitButtonText: '提交',
-      allPermissionGroup: [],
+      allPostGroup: [],
       textMap: {
         update: '编辑',
         create: '创建',
@@ -210,29 +190,28 @@ export default {
       },
       searchFormData: {
         id: '',
+        name: '',
+        groupName: '',
         start: '',
-        end: ''
+        end: '',
+        type: [],
+        resource: '',
+        desc: ''
       },
       rules: {
-        permission: [
-          { required: true, message: '请输入权限名称', trigger: 'blur' },
-          { min: 5, message: '长度大于 5 个字符', trigger: 'blur' }
+        postName: [
+          { required: true, message: '请输入岗位名称', trigger: 'blur' },
+          { min: 2, message: '长度大于 1 个字符', trigger: 'blur' }
         ]
       },
-      formData: {
+      temp: {
         id: null,
-        permission: '',
-        description: '',
-        permissionGroupInfoId: null,
-        available: 1,
+        postName: '',
         version: 0
       },
       initCreateData: {
         id: null,
-        permission: '',
-        description: '',
-        permissionGroupInfoId: null,
-        available: 1,
+        postName: '',
         version: 0
       },
       pickerOptions: {
@@ -271,7 +250,7 @@ export default {
         highlightHoverColumn: true,
         highlightCurrentColumn: true,
         keepSource: true,
-        id: 'data_table',
+        id: 'full_edit_1',
         rowId: 'id',
         headerAlign: 'center',
         scrollY: { gt: -1 },
@@ -364,15 +343,14 @@ export default {
                 limit: page.pageSize
               })
               const result = Object.assign(pageData, searchData, sortParams)
-              return listPermission(result)
+              return listPost(result)
             }
           }
         },
         columns: [
           { type: 'checkbox',
             width: 40,
-            align: 'center'
-          },
+            align: 'center' },
           {
             field: 'id',
             title: '编号',
@@ -382,23 +360,9 @@ export default {
             visible: false
           },
           {
-            field: 'permission',
-            title: '权限名称',
-            width: 200,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'description',
-            title: '权限描述',
-            align: 'left',
-            headerAlign: 'center',
-            minWidth: 200
-          },
-          {
-            field: 'groupName',
-            title: '权限分组名称',
-            minWidth: 200,
+            field: 'postName',
+            title: '岗位名称',
+            minwidth: 200,
             align: 'center',
             headerAlign: 'center'
           },
@@ -429,6 +393,19 @@ export default {
           reserve: true,
           highlight: true,
           range: true
+        },
+        editRules: {
+          name: [
+            { required: true, message: 'app.body.valid.rName' },
+            { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
+          ],
+          email: [{ required: true, message: '邮件必须填写' }],
+          role: [{ required: true, message: '角色必须填写' }]
+        },
+        editConfig: {
+          trigger: 'click',
+          mode: 'row',
+          showStatus: true
         }
       }
     }
@@ -436,14 +413,14 @@ export default {
   computed: {
   },
   created() {
-    window.addEventListener('resize', this.getHeight)
-    this.getHeight()
   },
+
   methods: {
-    /* 自适应高度 */
-    getHeight() {
-      this.defaultHeight = window.innerHeight - 180 + 'px'
-      this.tableHeight = window.innerHeight - 220 + 'px'
+    checkColumnMethod({ column }) {
+      if (['nickname', 'role'].includes(column.property)) {
+        return false
+      }
+      return true
     },
     importMethod({ file }) {
       return false
@@ -468,7 +445,7 @@ export default {
       this.$refs[formName].resetFields()
     },
     handleCreate() {
-      this.formData = Object.assign({}, this.initCreateData)
+      this.temp = Object.assign({}, this.initCreateData)
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -494,7 +471,7 @@ export default {
             }
             batchDeleteData.push(temp)
           }
-          batchDeletePermission(batchDeleteData)
+          batchDeletePost(batchDeleteData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -519,12 +496,12 @@ export default {
       } else {
         this.$message({
           showClose: true,
-          message: '请选择需要删除的记录'
+          message: '请先选择需要删除的记录'
         })
       }
     },
     handleUpdate(row) {
-      this.formData = Object.assign({}, row)
+      this.temp = Object.assign({}, row)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -540,8 +517,8 @@ export default {
         if (valid) {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
-          const tempData = Object.assign({}, this.formData)
-          savePermission(tempData)
+          const tempData = Object.assign({}, this.temp)
+          savePost(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -569,8 +546,8 @@ export default {
         if (valid) {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
-          const tempData = Object.assign({}, this.formData)
-          updatePermission(tempData)
+          const tempData = Object.assign({}, this.temp)
+          updatePost(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -605,7 +582,7 @@ export default {
           id: id,
           version: version
         })
-        deletePermission(tempData)
+        deletePost(tempData)
           .then(response => {
             const result = response.data
             if (result) {
@@ -629,7 +606,7 @@ export default {
       })
     },
     viewRow(row) {
-      this.formData = Object.assign({}, row)
+      this.temp = Object.assign({}, row)
       this.dialogStatus = 'detail'
       this.dialogFormVisible = true
       this.$nextTick(() => {

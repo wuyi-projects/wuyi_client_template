@@ -146,10 +146,52 @@
         label-width="80px"
         style="width: 100%; padding:10px;"
       >
+      	        <el-row>
+          <el-col :span="24">
+            <el-form-item label="签到信息编号" prop="signUpInfoId">
+              <el-input v-model="formData.signUpInfoId" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="权限名称" prop="permission">
-              <el-input v-model="formData.permission" clearable />
+            <el-form-item label="账户编号" prop="openId">
+              <el-input v-model="formData.openId" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="微信绑定手机号码" prop="phone">
+              <el-input v-model="formData.phone" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="备用号码" prop="phone2">
+              <el-input v-model="formData.phone2" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="姓名" prop="name">
+              <el-input v-model="formData.name" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="头像" prop="photoUrl">
+              <el-input v-model="formData.photoUrl" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="签到时间" prop="signTime">
+              <el-input v-model="formData.signTime" clearable />
             </el-form-item>
           </el-col>
         </el-row>
@@ -190,7 +232,7 @@
 <script>
 import formatTableSize from '@/utils/size'
 
-import { listPermission, savePermission, deletePermission, batchDeletePermission, updatePermission } from '@/api/permission'
+import { listSignUpRecord, saveSignUpRecord, deleteSignUpRecord, batchDeleteSignUpRecord, updateSignUpRecord } from '@/api/sign-up-record'
 
 export default {
   data() {
@@ -202,7 +244,6 @@ export default {
       dialogFormVisible: false,
       loadingSubmitButton: false,
       submitButtonText: '提交',
-      allPermissionGroup: [],
       textMap: {
         update: '编辑',
         create: '创建',
@@ -221,18 +262,24 @@ export default {
       },
       formData: {
         id: null,
-        permission: '',
-        description: '',
-        permissionGroupInfoId: null,
-        available: 1,
+        signUpInfoId: null,
+        openId: null,
+        phone: null,
+        phone2: null,
+        name: null,
+        photoUrl: null,
+        signTime: null,
         version: 0
       },
       initCreateData: {
         id: null,
-        permission: '',
-        description: '',
-        permissionGroupInfoId: null,
-        available: 1,
+        signUpInfoId: null,
+        openId: null,
+        phone: null,
+        phone2: null,
+        name: null,
+        photoUrl: null,
+        signTime: null,
         version: 0
       },
       pickerOptions: {
@@ -278,9 +325,13 @@ export default {
         printConfig: {
           columns: [
             { field: 'id' },
-            { field: 'permission' },
-            { field: 'description' },
-            { field: 'available' }
+            { field: 'signUpInfoId' },
+            { field: 'openId' },
+            { field: 'phone' },
+            { field: 'phone2' },
+            { field: 'name' },
+            { field: 'photoUrl' },
+            { field: 'signTime' },
           ]
         },
         sortConfig: {
@@ -364,7 +415,7 @@ export default {
                 limit: page.pageSize
               })
               const result = Object.assign(pageData, searchData, sortParams)
-              return listPermission(result)
+              return listSignUpRecord(result)
             }
           }
         },
@@ -382,23 +433,51 @@ export default {
             visible: false
           },
           {
-            field: 'permission',
-            title: '权限名称',
-            width: 200,
+            field: 'signUpInfoId',
+            title: '签到信息编号',
+            minWidth: 120,
             align: 'center',
             headerAlign: 'center'
           },
           {
-            field: 'description',
-            title: '权限描述',
-            align: 'left',
-            headerAlign: 'center',
-            minWidth: 200
+            field: 'openId',
+            title: '账户编号',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
           },
           {
-            field: 'groupName',
-            title: '权限分组名称',
-            minWidth: 200,
+            field: 'phone',
+            title: '微信绑定手机号码',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'phone2',
+            title: '备用号码',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'name',
+            title: '姓名',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'photoUrl',
+            title: '头像',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'signTime',
+            title: '签到时间',
+            minWidth: 120,
             align: 'center',
             headerAlign: 'center'
           },
@@ -494,7 +573,7 @@ export default {
             }
             batchDeleteData.push(temp)
           }
-          batchDeletePermission(batchDeleteData)
+          batchDeleteSignUpRecord(batchDeleteData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -541,7 +620,7 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.formData)
-          savePermission(tempData)
+          saveSignUpRecord(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -570,7 +649,7 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.formData)
-          updatePermission(tempData)
+          updateSignUpRecord(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -605,7 +684,7 @@ export default {
           id: id,
           version: version
         })
-        deletePermission(tempData)
+        deleteSignUpRecord(tempData)
           .then(response => {
             const result = response.data
             if (result) {
