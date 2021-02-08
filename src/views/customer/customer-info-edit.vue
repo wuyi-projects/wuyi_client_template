@@ -101,11 +101,23 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="地址" prop="address">
-              <el-input
+            <el-form-item label="地址" prop="selectAddress">
+              <!-- <el-input
                 v-model="formData.address"
                 placeholder="请输入地址"
                 clearable
+              /> -->
+              <!--省市三级联动-->
+              <el-cascader
+                v-model="formData.selectAddress"
+                size="large"
+                :options="addressOptions"
+                expand-trigger="hover"
+                filterable
+                style="width:100%;"
+                :clearable="true"
+                :separator="' '"
+                @change="handleAddressChange"
               />
             </el-form-item>
           </el-col>
@@ -135,7 +147,7 @@
                 <el-col v-for="body in bodyOption" :key="body.value" :span="2">
                   <el-card
                     v-model="formData.bodyType"
-                    style="text-align:center"
+                    style="text-align: center"
                     shadow="hover"
                     :body-style="{ padding: '0px' }"
                     :class="body.value == formData.bodyType ? 'custom' : 'over'"
@@ -151,13 +163,21 @@
           <el-col :span="24">
             <el-form-item label="胸型:" prop="breastShape">
               <el-row :gutter="10">
-                <el-col v-for="breastShapeInfo in breastShapeOption" :key="breastShapeInfo.value" :span="2">
+                <el-col
+                  v-for="breastShapeInfo in breastShapeOption"
+                  :key="breastShapeInfo.value"
+                  :span="2"
+                >
                   <el-card
                     v-model="formData.breastShape"
-                    style="text-align:center"
+                    style="text-align: center"
                     shadow="hover"
                     :body-style="{ padding: '0px' }"
-                    :class="breastShapeInfo.value == formData.breastShape ? 'custom' : 'over'"
+                    :class="
+                      breastShapeInfo.value == formData.breastShape
+                        ? 'custom'
+                        : 'over'
+                    "
                     @click.native="breastShapeCheck(breastShapeInfo.value)"
                   >
                     <el-image :src="breastShapeInfo.src" fit="contain" />
@@ -174,7 +194,7 @@
               <el-select
                 v-model="formData.solutionVersion"
                 placeholder="选择方案版本"
-                style="width:100%"
+                style="width: 100%"
               >
                 <el-option
                   v-for="item in solutionVersionOptions"
@@ -280,8 +300,12 @@
 </style>
 
 <script>
-import moment from 'moment'
-import { getCustomerBasicInfo, saveCustomerBasicInfo, updateCustomerBasicInfo } from '@/api/customer-basic-info'
+import { regionData, CodeToText, TextToCode } from 'element-china-area-data'
+import {
+  getCustomerBasicInfo,
+  saveCustomerBasicInfo,
+  updateCustomerBasicInfo
+} from '@/api/customer-basic-info'
 
 export default {
   data() {
@@ -292,6 +316,8 @@ export default {
       bodyTypeChecks: false,
       bodyId: null,
       chestId: null,
+      addressOptions: regionData,
+      selectAddress: [],
       formData: {
         id: null,
         openId: null,
@@ -303,6 +329,7 @@ export default {
         profession: null,
         weight: null,
         maritalStatus: null,
+        selectAddress: null,
         address: null,
         detailedAddress: null,
         regionalId: null,
@@ -331,6 +358,7 @@ export default {
         profession: null,
         weight: null,
         maritalStatus: null,
+        selectAddress: null,
         address: null,
         detailedAddress: null,
         regionalId: null,
@@ -419,9 +447,7 @@ export default {
         }
       ],
       solutionVersionOptions: [
-        { name: '显效版',
-          value: 1
-        },
+        { name: '显效版', value: 1 },
         {
           name: '有效版',
           value: 2
@@ -446,9 +472,14 @@ export default {
       rules: {
         name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
         phone: [{ required: true, message: '请输入电话号码', trigger: 'blur' }],
-        maritalStatus: [{ required: true, message: '请选择婚姻状况', trigger: 'blur' }],
+        maritalStatus: [
+          { required: true, message: '请选择婚姻状况', trigger: 'blur' }
+        ],
         height: [{ required: true, message: '请输入身高', trigger: 'blur' }],
-        solutionVersion: [{ required: true, message: '请选择方案版本', trigger: 'blur' }]
+        solutionVersion: [
+          { required: true, message: '请选择方案版本', trigger: 'blur' }
+        ],
+        selectAddress: [{ type: 'array', required: true, message: '请选择地址', trigger: 'change' }]
       },
       pickerOptions: {
         /* disabledDate(time) {
@@ -490,7 +521,7 @@ export default {
       that.pageStatus = 'update'
       that.getCustomerBasicInfo()
     } else {
-      that.formData.designDate = moment(new Date()).format('YYYY-MM-DD')
+      that.formData.designDate = this.$moment(new Date()).format('YYYY-MM-DD')
     }
   },
   methods: {
@@ -501,7 +532,7 @@ export default {
         getCustomerBasicInfo({
           id: id
         })
-          .then(response => {
+          .then((response) => {
             const data = response.data
             if (!data) {
               return
@@ -509,8 +540,18 @@ export default {
             that.formData = data
             that.formData.bodyType = data.bodyType
             that.formData.breastShape = data.breastShape
+            const address = data.address
+            if (address) {
+              const addressArray = address.split(' ')
+              const selectAddress = []
+              selectAddress.push(TextToCode[addressArray[0]].code)
+              selectAddress.push(TextToCode[addressArray[0]][addressArray[1]].code)
+              selectAddress.push(TextToCode[addressArray[0]][addressArray[1]][addressArray[2]].code)
+              console.log(JSON.stringify(selectAddress))
+              that.formData.selectAddress = selectAddress
+            }
           })
-          .catch(e => {
+          .catch((e) => {
             that.loading = false
           })
       }
@@ -543,7 +584,7 @@ export default {
     },
     createData() {
       const that = this
-      that.$refs['formData'].validate(valid => {
+      that.$refs['formData'].validate((valid) => {
         if (valid) {
           const bodyType = that.formData.bodyType
           if (bodyType == null) {
@@ -566,7 +607,7 @@ export default {
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.formData)
           saveCustomerBasicInfo(tempData)
-            .then(response => {
+            .then((response) => {
               const result = response.data
               if (result) {
                 this.$message({
@@ -581,7 +622,7 @@ export default {
                 this.initFormSafeSubmitConfig()
               }
             })
-            .catch(e => {
+            .catch((e) => {
               this.loading = false
               this.initFormSafeSubmitConfig()
             })
@@ -594,7 +635,7 @@ export default {
     },
     updateData() {
       const that = this
-      that.$refs['formData'].validate(valid => {
+      that.$refs['formData'].validate((valid) => {
         if (valid) {
           const bodyType = that.formData.bodyType
           if (bodyType == null) {
@@ -617,7 +658,7 @@ export default {
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.formData)
           updateCustomerBasicInfo(tempData)
-            .then(response => {
+            .then((response) => {
               const result = response.data
               if (result) {
                 this.$message({
@@ -632,7 +673,7 @@ export default {
               }
               this.$router.push('/customer/customer-basic-info')
             })
-            .catch(e => {
+            .catch((e) => {
               this.loading = false
               this.initFormSafeSubmitConfig()
             })
@@ -654,6 +695,9 @@ export default {
     initFormSafeSubmitConfig() {
       this.loadingSubmitButton = false
       this.submitButtonText = '提交'
+    },
+    handleAddressChange(value) {
+      this.formData.address = CodeToText[value[0]] + ' ' + CodeToText[value[1]] + ' ' + CodeToText[value[2]]
     }
   }
 }
