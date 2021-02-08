@@ -25,6 +25,8 @@ import 'font-awesome/css/font-awesome.css'
 import lodash from 'lodash'
 import formCreate from '@form-create/element-ui' // form generator
 
+import moment from 'moment'
+
 Vue.prototype.lodash = lodash
 /**
  * If you don't want to use mock-server
@@ -48,6 +50,9 @@ Vue.use(ElementUI)
 Vue.use(formCreate)
 
 Vue.config.productionTip = false
+
+moment.locale('zh-cn') // 设置语言 或 moment.lang('zh-cn');
+Vue.prototype.$moment = moment// 赋值使用
 
 new Vue({
   el: '#app',

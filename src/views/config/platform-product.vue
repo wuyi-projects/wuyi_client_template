@@ -624,6 +624,10 @@ export default {
             query: ({ page, sort, filters }) => {
               // 查询条件
               const searchData = {}
+              const end = this.searchFormData.end
+              if (end) {
+                this.searchFormData.end = this.$moment(end).add(1, 'days')
+              }
               const searchFormData = this.searchAccountTypeFormData
               for (var key in searchFormData) {
                 const value = searchFormData[key]
@@ -801,6 +805,10 @@ export default {
             query: ({ page, sort, filters }) => {
               // 查询条件
               const searchData = {}
+              const end = this.searchFormData.end
+              if (end) {
+                this.searchFormData.end = this.$moment(end).add(1, 'days')
+              }
               const searchFormData = this.searchAccountTypeFormData
               for (var key in searchFormData) {
                 const value = searchFormData[key]
@@ -998,6 +1006,10 @@ export default {
             query: ({ page, sort, filters }) => {
               // 查询条件
               const searchData = {}
+              const end = this.searchFormData.end
+              if (end) {
+                this.searchFormData.end = this.$moment(end).add(1, 'days')
+              }
               const searchFormData = this.searchFormData
               for (var key in searchFormData) {
                 const value = searchFormData[key]
