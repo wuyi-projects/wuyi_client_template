@@ -149,21 +149,24 @@
       	        <el-row>
           <el-col :span="24">
             <el-form-item label="账户编号" prop="openId">
-              <el-input v-model="formData.openId" clearable />
+              <el-input v-model="formData.openId"
+                placeholder="请输入账户编号" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="区域编号" prop="regionalId">
-              <el-input v-model="formData.regionalId" clearable />
+              <el-input v-model="formData.regionalId"
+                placeholder="请输入区域编号" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="数据是否可见" prop="visible">
-              <el-input v-model="formData.visible" clearable />
+              <el-input v-model="formData.visible"
+                placeholder="请输入数据是否可见" clearable />
             </el-form-item>
           </el-col>
         </el-row>

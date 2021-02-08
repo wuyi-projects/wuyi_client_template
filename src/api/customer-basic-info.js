@@ -36,6 +36,15 @@ export function updateCustomerBasicInfo(data) {
   })
 }
 
+/** 查询客户基本信息详情 */
+export function getCustomerBasicInfo(data) {
+  return request({
+    url: '/wuyi_oa/v1/customerBasicInfo/get.json',
+    method: 'post',
+    data
+  })
+}
+
 /** 查询客户基本信息列表 */
 export function listCustomerBasicInfo(data) {
   return request({

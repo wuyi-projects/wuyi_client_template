@@ -149,21 +149,24 @@
       	        <el-row>
           <el-col :span="24">
             <el-form-item label="签到编号" prop="uniqueNumber">
-              <el-input v-model="formData.uniqueNumber" clearable />
+              <el-input v-model="formData.uniqueNumber"
+                placeholder="请输入签到编号" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="签到名称" prop="title">
-              <el-input v-model="formData.title" clearable />
+              <el-input v-model="formData.title"
+                placeholder="请输入签到名称" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="是否开启" prop="onOff">
-              <el-input v-model="formData.onOff" clearable />
+              <el-input v-model="formData.onOff"
+                placeholder="请输入是否开启" clearable />
             </el-form-item>
           </el-col>
         </el-row>

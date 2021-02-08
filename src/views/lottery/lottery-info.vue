@@ -149,56 +149,64 @@
       	        <el-row>
           <el-col :span="24">
             <el-form-item label="抽奖编号" prop="uniqueNumber">
-              <el-input v-model="formData.uniqueNumber" clearable />
+              <el-input v-model="formData.uniqueNumber"
+                placeholder="请输入抽奖编号" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="抽奖类型" prop="type">
-              <el-input v-model="formData.type" clearable />
+              <el-input v-model="formData.type"
+                placeholder="请输入抽奖类型" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="抽奖名称" prop="title">
-              <el-input v-model="formData.title" clearable />
+              <el-input v-model="formData.title"
+                placeholder="请输入抽奖名称" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="奖金金额" prop="amount">
-              <el-input v-model="formData.amount" clearable />
+              <el-input v-model="formData.amount"
+                placeholder="请输入奖金金额" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="是否开启" prop="onOff">
-              <el-input v-model="formData.onOff" clearable />
+              <el-input v-model="formData.onOff"
+                placeholder="请输入是否开启" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="抽奖日期" prop="lotteryDate">
-              <el-input v-model="formData.lotteryDate" clearable />
+              <el-input v-model="formData.lotteryDate"
+                placeholder="请输入抽奖日期" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="抽奖截止时间" prop="deadline">
-              <el-input v-model="formData.deadline" clearable />
+              <el-input v-model="formData.deadline"
+                placeholder="请输入抽奖截止时间" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="奖券过期时间" prop="expirationTime">
-              <el-input v-model="formData.expirationTime" clearable />
+              <el-input v-model="formData.expirationTime"
+                placeholder="请输入奖券过期时间" clearable />
             </el-form-item>
           </el-col>
         </el-row>

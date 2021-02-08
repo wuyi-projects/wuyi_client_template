@@ -149,49 +149,56 @@
       	        <el-row>
           <el-col :span="24">
             <el-form-item label="签到信息编号" prop="signUpInfoId">
-              <el-input v-model="formData.signUpInfoId" clearable />
+              <el-input v-model="formData.signUpInfoId"
+                placeholder="请输入签到信息编号" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="账户编号" prop="openId">
-              <el-input v-model="formData.openId" clearable />
+              <el-input v-model="formData.openId"
+                placeholder="请输入账户编号" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="微信绑定手机号码" prop="phone">
-              <el-input v-model="formData.phone" clearable />
+              <el-input v-model="formData.phone"
+                placeholder="请输入微信绑定手机号码" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="备用号码" prop="phone2">
-              <el-input v-model="formData.phone2" clearable />
+              <el-input v-model="formData.phone2"
+                placeholder="请输入备用号码" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="姓名" prop="name">
-              <el-input v-model="formData.name" clearable />
+              <el-input v-model="formData.name"
+                placeholder="请输入姓名" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="头像" prop="photoUrl">
-              <el-input v-model="formData.photoUrl" clearable />
+              <el-input v-model="formData.photoUrl"
+                placeholder="请输入头像" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="签到时间" prop="signTime">
-              <el-input v-model="formData.signTime" clearable />
+              <el-input v-model="formData.signTime"
+                placeholder="请输入签到时间" clearable />
             </el-form-item>
           </el-col>
         </el-row>

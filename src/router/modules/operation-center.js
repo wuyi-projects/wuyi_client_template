@@ -10,10 +10,10 @@ const operationCenterRouter = {
   },
   children: [
     {
-      path: 'login-log',
+      path: 'system-login-log',
       component: () =>
         import ('@/views/operation-center/login-log'),
-      name: 'login-log',
+      name: 'system-login-log',
       meta: { title: '系统登录日志', roles: ['PermissionConfigAdministrator'] }
     },
     {

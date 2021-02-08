@@ -89,14 +89,22 @@
         </template>
 
         <!--插槽使用示例:是否可用展示-->
-        <!-- <template v-slot:available_default="{ row }">
-          <template v-if="row.available === 1">
-            <el-badge is-dot class="item" type="primary" />启用
+        <template v-slot:solutionVersion_default="{ row }">
+          <template v-for="item in solutionVersionOptions">
+            <!-- <el-tag
+              v-if="row.solutionVersion == item.value"
+              :key="item.value"
+              type="warning"
+              effect="plain"
+            >
+              {{ item.name }}
+            </el-tag> -->
+            <span
+              v-if="row.solutionVersion == item.value"
+              :key="item.value"
+            >{{ item.name }}</span>
           </template>
-          <template v-else>
-            <el-badge is-dot class="item" type="info" />停用
-          </template>
-        </template> -->
+        </template>
 
         <!--数据行操作-->
         <template v-slot:operate="{ row }">
@@ -149,154 +157,253 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="账户编号" prop="openId">
-              <el-input v-model="formData.openId" clearable />
+              <el-input
+                v-model="formData.openId"
+                placeholder="请输入账户编号"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="姓名" prop="name">
-              <el-input v-model="formData.name" clearable />
+              <el-input
+                v-model="formData.name"
+                placeholder="请输入姓名"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="微信绑定手机号码" prop="phone">
-              <el-input v-model="formData.phone" clearable />
+              <el-input
+                v-model="formData.phone"
+                placeholder="请输入微信绑定手机号码"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="备用号码" prop="phone2">
-              <el-input v-model="formData.phone2" clearable />
+              <el-input
+                v-model="formData.phone2"
+                placeholder="请输入备用号码"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="身高" prop="height">
-              <el-input v-model="formData.height" clearable />
+              <el-input
+                v-model="formData.height"
+                placeholder="请输入身高"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="出生日期" prop="birthday">
-              <el-input v-model="formData.birthday" clearable />
+              <el-input
+                v-model="formData.birthday"
+                placeholder="请输入出生日期"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="职业" prop="profession">
-              <el-input v-model="formData.profession" clearable />
+              <el-input
+                v-model="formData.profession"
+                placeholder="请输入职业"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="体重" prop="weight">
-              <el-input v-model="formData.weight" clearable />
+              <el-input
+                v-model="formData.weight"
+                placeholder="请输入体重"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="婚姻状况" prop="maritalStatus">
-              <el-input v-model="formData.maritalStatus" clearable />
+              <el-input
+                v-model="formData.maritalStatus"
+                placeholder="请输入婚姻状况"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="地址" prop="address">
-              <el-input v-model="formData.address" clearable />
+              <el-input
+                v-model="formData.address"
+                placeholder="请输入地址"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="详细地址" prop="detailedAddress">
-              <el-input v-model="formData.detailedAddress" clearable />
+              <el-input
+                v-model="formData.detailedAddress"
+                placeholder="请输入详细地址"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="所属区域" prop="regionalId">
-              <el-input v-model="formData.regionalId" clearable />
+              <el-input
+                v-model="formData.regionalId"
+                placeholder="请输入所属区域"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="方案版本" prop="solutionVersion">
-              <el-input v-model="formData.solutionVersion" clearable />
+              <el-input
+                v-model="formData.solutionVersion"
+                placeholder="请输入方案版本"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="设计日期" prop="designDate">
+              <el-input
+                v-model="formData.designDate"
+                placeholder="请输入设计日期"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="体型" prop="bodyType">
-              <el-input v-model="formData.bodyType" clearable />
+              <el-input
+                v-model="formData.bodyType"
+                placeholder="请输入体型"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="胸型" prop="breastShape">
-              <el-input v-model="formData.breastShape" clearable />
+              <el-input
+                v-model="formData.breastShape"
+                placeholder="请输入胸型"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="备用字段1" prop="field1">
-              <el-input v-model="formData.field1" clearable />
+              <el-input
+                v-model="formData.field1"
+                placeholder="请输入备用字段1"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="备用字段2" prop="field2">
-              <el-input v-model="formData.field2" clearable />
+              <el-input
+                v-model="formData.field2"
+                placeholder="请输入备用字段2"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="备用字段3" prop="field3">
-              <el-input v-model="formData.field3" clearable />
+              <el-input
+                v-model="formData.field3"
+                placeholder="请输入备用字段3"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="备用字段4" prop="field4">
-              <el-input v-model="formData.field4" clearable />
+              <el-input
+                v-model="formData.field4"
+                placeholder="请输入备用字段4"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="备用字段5" prop="field5">
-              <el-input v-model="formData.field5" clearable />
+              <el-input
+                v-model="formData.field5"
+                placeholder="请输入备用字段5"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="操作人编号" prop="operatorId">
-              <el-input v-model="formData.operatorId" clearable />
+              <el-input
+                v-model="formData.operatorId"
+                placeholder="请输入操作人编号"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="操作人名称" prop="operatorName">
-              <el-input v-model="formData.operatorName" clearable />
+              <el-input
+                v-model="formData.operatorName"
+                placeholder="请输入操作人名称"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -387,6 +494,7 @@ export default {
         detailedAddress: null,
         regionalId: null,
         solutionVersion: null,
+        designDate: null,
         bodyType: null,
         breastShape: null,
         field1: null,
@@ -414,6 +522,7 @@ export default {
         detailedAddress: null,
         regionalId: null,
         solutionVersion: null,
+        designDate: null,
         bodyType: null,
         breastShape: null,
         field1: null,
@@ -451,6 +560,31 @@ export default {
           }
         }]
       },
+      solutionVersionOptions: [
+        { name: '显效版',
+          value: 1
+        },
+        {
+          name: '有效版',
+          value: 2
+        },
+        {
+          name: '健康版',
+          value: 3
+        },
+        {
+          name: '标准版',
+          value: 4
+        },
+        {
+          name: '完美版',
+          value: 5
+        },
+        {
+          name: '精致版',
+          value: 6
+        }
+      ],
       gridOptions: {
         border: 'default',
         size: formatTableSize(),
@@ -612,7 +746,8 @@ export default {
             title: '方案版本',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            slots: { default: 'solutionVersion_default' }
           },
           {
             field: 'phone',
@@ -835,12 +970,13 @@ export default {
       this.$refs[formName].resetFields()
     },
     handleCreate() {
-      this.formData = Object.assign({}, this.initCreateData)
-      this.dialogStatus = 'create'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
+      this.$router.push('/customer/customer-info-edit')
+      // this.formData = Object.assign({}, this.initCreateData)
+      // this.dialogStatus = 'create'
+      // this.dialogFormVisible = true
+      // this.$nextTick(() => {
+      //   this.$refs['dataForm'].clearValidate()
+      // })
     },
     handleBatchDelete() {
       const selectRecords = this.$refs.dataGrid.getCheckboxRecords()
@@ -891,12 +1027,18 @@ export default {
       }
     },
     handleUpdate(row) {
-      this.formData = Object.assign({}, row)
-      this.dialogStatus = 'update'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
+      this.$router.push({
+        name: 'customer-info-edit',
+        query: {
+          id: row.id
+        }
       })
+      // this.formData = Object.assign({}, row)
+      // this.dialogStatus = 'update'
+      // this.dialogFormVisible = true
+      // this.$nextTick(() => {
+      //   this.$refs['dataForm'].clearValidate()
+      // })
     },
     initFormSafeSubmitConfig() {
       this.loadingSubmitButton = false

@@ -149,133 +149,152 @@
       	        <el-row>
           <el-col :span="24">
             <el-form-item label="账户编号" prop="openId">
-              <el-input v-model="formData.openId" clearable />
+              <el-input v-model="formData.openId"
+                placeholder="请输入账户编号" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="类型" prop="type">
-              <el-input v-model="formData.type" clearable />
+              <el-input v-model="formData.type"
+                placeholder="请输入类型" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="次数" prop="times">
-              <el-input v-model="formData.times" clearable />
+              <el-input v-model="formData.times"
+                placeholder="请输入次数" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="体重" prop="weight">
-              <el-input v-model="formData.weight" clearable />
+              <el-input v-model="formData.weight"
+                placeholder="请输入体重" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="BB" prop="bbValue">
-              <el-input v-model="formData.bbValue" clearable />
+              <el-input v-model="formData.bbValue"
+                placeholder="请输入BB" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="BP左" prop="bpLeftValue">
-              <el-input v-model="formData.bpLeftValue" clearable />
+              <el-input v-model="formData.bpLeftValue"
+                placeholder="请输入BP左" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="BP右" prop="bpRightValue">
-              <el-input v-model="formData.bpRightValue" clearable />
+              <el-input v-model="formData.bpRightValue"
+                placeholder="请输入BP右" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="上胸围" prop="upperChestValue">
-              <el-input v-model="formData.upperChestValue" clearable />
+              <el-input v-model="formData.upperChestValue"
+                placeholder="请输入上胸围" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="下胸围" prop="underChestValue">
-              <el-input v-model="formData.underChestValue" clearable />
+              <el-input v-model="formData.underChestValue"
+                placeholder="请输入下胸围" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="胃围" prop="gastricValue">
-              <el-input v-model="formData.gastricValue" clearable />
+              <el-input v-model="formData.gastricValue"
+                placeholder="请输入胃围" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="腰围" prop="waistlineValue">
-              <el-input v-model="formData.waistlineValue" clearable />
+              <el-input v-model="formData.waistlineValue"
+                placeholder="请输入腰围" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="腹围" prop="abdominalValue">
-              <el-input v-model="formData.abdominalValue" clearable />
+              <el-input v-model="formData.abdominalValue"
+                placeholder="请输入腹围" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="臂围" prop="hiplineValue">
-              <el-input v-model="formData.hiplineValue" clearable />
+              <el-input v-model="formData.hiplineValue"
+                placeholder="请输入臂围" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="臂高" prop="armHigh">
-              <el-input v-model="formData.armHigh" clearable />
+              <el-input v-model="formData.armHigh"
+                placeholder="请输入臂高" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="左大腿" prop="leftThighValue">
-              <el-input v-model="formData.leftThighValue" clearable />
+              <el-input v-model="formData.leftThighValue"
+                placeholder="请输入左大腿" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="右大腿" prop="rightThighValue">
-              <el-input v-model="formData.rightThighValue" clearable />
+              <el-input v-model="formData.rightThighValue"
+                placeholder="请输入右大腿" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="记录日期" prop="recordTime">
-              <el-input v-model="formData.recordTime" clearable />
+              <el-input v-model="formData.recordTime"
+                placeholder="请输入记录日期" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="状态" prop="status">
-              <el-input v-model="formData.status" clearable />
+              <el-input v-model="formData.status"
+                placeholder="请输入状态" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="确认时间" prop="confirmTime">
-              <el-input v-model="formData.confirmTime" clearable />
+              <el-input v-model="formData.confirmTime"
+                placeholder="请输入确认时间" clearable />
             </el-form-item>
           </el-col>
         </el-row>

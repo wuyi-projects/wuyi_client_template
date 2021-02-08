@@ -149,21 +149,24 @@
       	        <el-row>
           <el-col :span="24">
             <el-form-item label="名称" prop="name">
-              <el-input v-model="formData.name" clearable />
+              <el-input v-model="formData.name"
+                placeholder="请输入名称" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="权重" prop="weight">
-              <el-input v-model="formData.weight" clearable />
+              <el-input v-model="formData.weight"
+                placeholder="请输入权重" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="上级编号" prop="parentId">
-              <el-input v-model="formData.parentId" clearable />
+              <el-input v-model="formData.parentId"
+                placeholder="请输入上级编号" clearable />
             </el-form-item>
           </el-col>
         </el-row>

@@ -149,91 +149,104 @@
       	        <el-row>
           <el-col :span="24">
             <el-form-item label="抽奖信息编号" prop="lotteryInfoId">
-              <el-input v-model="formData.lotteryInfoId" clearable />
+              <el-input v-model="formData.lotteryInfoId"
+                placeholder="请输入抽奖信息编号" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="账户编号" prop="openId">
-              <el-input v-model="formData.openId" clearable />
+              <el-input v-model="formData.openId"
+                placeholder="请输入账户编号" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="手机号码" prop="phone">
-              <el-input v-model="formData.phone" clearable />
+              <el-input v-model="formData.phone"
+                placeholder="请输入手机号码" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="备用号码" prop="phone2">
-              <el-input v-model="formData.phone2" clearable />
+              <el-input v-model="formData.phone2"
+                placeholder="请输入备用号码" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="姓名" prop="name">
-              <el-input v-model="formData.name" clearable />
+              <el-input v-model="formData.name"
+                placeholder="请输入姓名" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="头像" prop="photoUrl">
-              <el-input v-model="formData.photoUrl" clearable />
+              <el-input v-model="formData.photoUrl"
+                placeholder="请输入头像" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="奖金金额" prop="amount">
-              <el-input v-model="formData.amount" clearable />
+              <el-input v-model="formData.amount"
+                placeholder="请输入奖金金额" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="状态" prop="status">
-              <el-input v-model="formData.status" clearable />
+              <el-input v-model="formData.status"
+                placeholder="请输入状态" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="过期时间" prop="expirationTime">
-              <el-input v-model="formData.expirationTime" clearable />
+              <el-input v-model="formData.expirationTime"
+                placeholder="请输入过期时间" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="使用状态" prop="usageStatus">
-              <el-input v-model="formData.usageStatus" clearable />
+              <el-input v-model="formData.usageStatus"
+                placeholder="请输入使用状态" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="申请时间" prop="applicationTime">
-              <el-input v-model="formData.applicationTime" clearable />
+              <el-input v-model="formData.applicationTime"
+                placeholder="请输入申请时间" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="核销时间" prop="verificationTime">
-              <el-input v-model="formData.verificationTime" clearable />
+              <el-input v-model="formData.verificationTime"
+                placeholder="请输入核销时间" clearable />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="核销人" prop="verificationUserId">
-              <el-input v-model="formData.verificationUserId" clearable />
+              <el-input v-model="formData.verificationUserId"
+                placeholder="请输入核销人" clearable />
             </el-form-item>
           </el-col>
         </el-row>

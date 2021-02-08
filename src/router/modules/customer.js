@@ -17,6 +17,14 @@ const customerRouter = {
       meta: { title: '客户信息管理', roles: ['PermissionConfigAdministrator'] }
     },
     {
+      path: 'customer-info-edit',
+      component: () =>
+        import ('@/views/customer/customer-info-edit'),
+      name: 'customer-info-edit',
+      meta: { title: '客户信息录入', roles: ['PermissionConfigAdministrator'] },
+      hidden: true
+    },
+    {
       path: 'body-data-record',
       component: () =>
         import ('@/views/customer/body-data-record'),
@@ -29,13 +37,6 @@ const customerRouter = {
         import ('@/views/customer/service-evaluation'),
       name: 'service-evaluation',
       meta: { title: '服务评价', roles: ['PermissionConfigAdministrator'] }
-    },
-    {
-      path: 'customer-info',
-      component: () =>
-        import ('@/views/customer-info/customer-info'),
-      name: 'customer-info',
-      meta: { title: '客户信息录入', roles: ['PermissionConfigAdministrator'] }
     },
     {
       path: 'bodytype',
