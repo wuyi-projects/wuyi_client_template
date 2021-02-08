@@ -89,7 +89,12 @@
               <template v-if="departmentFormVisible">
                 <el-row type="flex" class="row-bg" justify="center">
                   <el-col :span="18">
-                    <el-form ref="dataForm" :model="temp" label-width="80px">
+                    <el-form
+                      ref="dataForm"
+                      :rules="rules"
+                      :model="temp"
+                      label-width="80px"
+                    >
                       <el-row>
                         <el-col :span="12">
                           <el-form-item label="部门名称" prop="departmentName">
@@ -298,6 +303,13 @@ export default {
         departmentDescription: '',
         parent: '',
         version: 0
+      },
+      rules: {
+        departmentName: [
+          { required: true, message: '请输入部门名称', trigger: 'blur' },
+          { min: 2, message: '长度大于等于 2 个字符', trigger: 'blur' }
+        ],
+        parent: [{ required: true, message: '请选择上级部门', trigger: 'blur' }]
       }
     }
   },

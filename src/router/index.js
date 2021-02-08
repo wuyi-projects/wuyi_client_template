@@ -7,6 +7,7 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 /* Router Modules */
+import userRouter from './modules/user'
 import oaRouter from './modules/oa'
 import settingRouter from './modules/permission'
 // import companyRouter from './modules/company'
@@ -62,6 +63,7 @@ export const asyncRoutes = [
   customerRouter,
   lotteryRouter,
   oaRouter,
+  userRouter,
   operationCenterRouter,
   profileRouter,
   // tableRouter,
