@@ -492,6 +492,7 @@ export default {
         profession: null,
         weight: null,
         maritalStatus: null,
+        selectAddress: null,
         address: null,
         detailedAddress: null,
         regionalId: null,

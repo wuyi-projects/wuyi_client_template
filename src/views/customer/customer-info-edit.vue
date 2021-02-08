@@ -317,7 +317,6 @@ export default {
       bodyId: null,
       chestId: null,
       addressOptions: regionData,
-      selectAddress: [],
       formData: {
         id: null,
         openId: null,
