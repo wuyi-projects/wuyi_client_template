@@ -36,6 +36,15 @@ export function updateLotteryRoster(data) {
   })
 }
 
+/** 查询抽奖人员详情 */
+export function getLotteryRoster(data) {
+  return request({
+    url: '/wuyi_lottery/v1/lotteryRoster/get.json',
+    method: 'post',
+    data
+  })
+}
+
 /** 查询抽奖人员列表 */
 export function listLotteryRoster(data) {
   return request({

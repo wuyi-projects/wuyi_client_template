@@ -36,6 +36,15 @@ export function updateSignUpRecord(data) {
   })
 }
 
+/** 查询签到记录详情 */
+export function getSignUpRecord(data) {
+  return request({
+    url: '/wuyi_lottery/v1/signUpRecord/get.json',
+    method: 'post',
+    data
+  })
+}
+
 /** 查询签到记录列表 */
 export function listSignUpRecord(data) {
   return request({

@@ -36,6 +36,15 @@ export function updateServiceEvaluation(data) {
   })
 }
 
+/** 查询服务评价详情 */
+export function getServiceEvaluation(data) {
+  return request({
+    url: '/wuyi_oa/v1/serviceEvaluation/get.json',
+    method: 'post',
+    data
+  })
+}
+
 /** 查询服务评价列表 */
 export function listServiceEvaluation(data) {
   return request({

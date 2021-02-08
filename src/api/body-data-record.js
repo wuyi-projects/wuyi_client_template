@@ -36,6 +36,15 @@ export function updateBodyDataRecord(data) {
   })
 }
 
+/** 查询体型信息记录详情 */
+export function getBodyDataRecord(data) {
+  return request({
+    url: '/wuyi_oa/v1/bodyDataRecord/get.json',
+    method: 'post',
+    data
+  })
+}
+
 /** 查询体型信息记录列表 */
 export function listBodyDataRecord(data) {
   return request({

@@ -108,6 +108,7 @@
 
         <!--数据行操作-->
         <template v-slot:operate="{ row }">
+          <el-button type="text" @click="handleInputBodyData(row)">录入复诊数据</el-button>
           <el-button type="text" @click="handleUpdate(row)">修改</el-button>
           <el-divider direction="vertical" />
           <el-dropdown @command="handleCommand">
@@ -906,7 +907,7 @@ export default {
           },
           {
             title: '操作',
-            width: 140,
+            width: 240,
             align: 'center',
             headerAlign: 'center',
             fixed: 'right',
@@ -989,8 +990,8 @@ export default {
           type: 'warning'
         }).then(() => {
           for (let index = 0, len = selectRecords.length; index < len; index++) {
-            const id = selectRecords[index].['id']
-            const version = selectRecords[index].['version']
+            const id = selectRecords[index].id
+            const version = selectRecords[index].version
             const temp = {
               id: id,
               version: version
@@ -1161,6 +1162,14 @@ export default {
           break
         default:
       }
+    },
+    handleInputBodyData(row) {
+      this.$router.push({
+        name: 'body-data-edit',
+        query: {
+          customerId: row.id
+        }
+      })
     }
   }
 }

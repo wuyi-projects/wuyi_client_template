@@ -36,6 +36,15 @@ export function updateRegionalUserLink(data) {
   })
 }
 
+/** 查询区域人员关联详情 */
+export function getRegionalUserLink(data) {
+  return request({
+    url: '/wuyi_oa/v1/regionalUserLink/get.json',
+    method: 'post',
+    data
+  })
+}
+
 /** 查询区域人员关联列表 */
 export function listRegionalUserLink(data) {
   return request({

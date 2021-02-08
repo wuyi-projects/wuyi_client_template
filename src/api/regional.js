@@ -36,6 +36,15 @@ export function updateRegional(data) {
   })
 }
 
+/** 查询区域信息详情 */
+export function getRegional(data) {
+  return request({
+    url: '/wuyi_oa/v1/regional/get.json',
+    method: 'post',
+    data
+  })
+}
+
 /** 查询区域信息列表 */
 export function listRegional(data) {
   return request({

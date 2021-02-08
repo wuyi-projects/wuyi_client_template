@@ -25,6 +25,14 @@ const customerRouter = {
       hidden: true
     },
     {
+      path: 'body-data-edit',
+      component: () =>
+        import ('@/views/customer/body-data-edit'),
+      name: 'body-data-edit',
+      meta: { title: '体型信息录入', roles: ['PermissionConfigAdministrator'] },
+      hidden: true
+    },
+    {
       path: 'body-data-record',
       component: () =>
         import ('@/views/customer/body-data-record'),
@@ -37,13 +45,6 @@ const customerRouter = {
         import ('@/views/customer/service-evaluation'),
       name: 'service-evaluation',
       meta: { title: '服务评价', roles: ['PermissionConfigAdministrator'] }
-    },
-    {
-      path: 'bodytype',
-      component: () =>
-        import ('@/views/customer-info/bodytype'),
-      name: 'bodytype',
-      meta: { title: '体型信息录入', roles: ['PermissionConfigAdministrator'] }
     },
     {
       path: 'customer',

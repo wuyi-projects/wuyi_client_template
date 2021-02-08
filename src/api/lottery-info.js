@@ -36,6 +36,15 @@ export function updateLotteryInfo(data) {
   })
 }
 
+/** 查询抽奖信息详情 */
+export function getLotteryInfo(data) {
+  return request({
+    url: '/wuyi_lottery/v1/lotteryInfo/get.json',
+    method: 'post',
+    data
+  })
+}
+
 /** 查询抽奖信息列表 */
 export function listLotteryInfo(data) {
   return request({
