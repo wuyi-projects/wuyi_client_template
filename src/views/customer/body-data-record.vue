@@ -256,19 +256,19 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="臂围" prop="hiplineValue">
+            <el-form-item label="臀围" prop="hiplineValue">
               <el-input
                 v-model="formData.hiplineValue"
-                placeholder="请输入臂围"
+                placeholder="请输入臀围"
                 clearable
               />
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="臂高" prop="armHigh">
+            <el-form-item label="臀高" prop="armHigh">
               <el-input
                 v-model="formData.armHigh"
-                placeholder="请输入臂高"
+                placeholder="请输入臀高"
                 clearable
               />
             </el-form-item>
@@ -684,14 +684,14 @@ export default {
           },
           {
             field: 'hiplineValue',
-            title: '臂围',
+            title: '臀围',
             minWidth: 120,
             align: 'center',
             headerAlign: 'center'
           },
           {
             field: 'armHigh',
-            title: '臂高',
+            title: '臀高',
             minWidth: 120,
             align: 'center',
             headerAlign: 'center'

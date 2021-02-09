@@ -1,9 +1,11 @@
 <template>
   <div class="app-container">
     <el-card class="box-card">
-      <div slot="header" class="clearfix">
+      <!-- <div slot="header" class="clearfix">
         <span>基本信息</span>
-      </div>
+      </div> -->
+      <el-page-header content="基本信息" @back="goBack" />
+      <el-divider />
       <el-form
         ref="formData"
         :model="formData"
@@ -721,6 +723,9 @@ export default {
         .catch((e) => {
 
         })
+    },
+    goBack() {
+      this.$router.go(-1)
     }
   }
 }

@@ -8,44 +8,44 @@
           <span class="title">设计日期:</span>
         </el-col>
         <el-col :span="5">
-          <span class="content">{{ customerInfo.designDate }}</span>
+          <span class="content">{{ customerInfo.designDate?customerInfo.designDate:'-' }}</span>
         </el-col>
         <el-col :span="3">
           <span class="title">姓名：</span>
         </el-col>
         <el-col :span="5">
-          <span class="content">{{ customerInfo.name }}</span>
+          <span class="content">{{ customerInfo.name?customerInfo.name:'-' }}</span>
         </el-col>
         <el-col :span="3">
           <span class="title">电话：</span>
         </el-col>
         <el-col :span="5">
-          <span class="content">{{ customerInfo.phone }}</span>
+          <span class="content">{{ customerInfo.phone?customerInfo.phone:'-' }}</span>
         </el-col>
         <el-col :span="3">
           <span class="title">身高：</span>
         </el-col>
         <el-col :span="5">
-          <span class="content">{{ customerInfo.height }}</span>
+          <span class="content">{{ customerInfo.height?customerInfo.height:'-' }}</span>
           <span style="margin-left: 10px">厘米</span>
         </el-col>
         <el-col :span="3">
           <span class="title">出生日期：</span>
         </el-col>
         <el-col :span="5">
-          <span class="content">{{ customerInfo.birthday }}</span>
+          <span class="content">{{ customerInfo.birthday?customerInfo.birthday:'-' }}</span>
         </el-col>
         <el-col :span="3">
           <span class="title">职业：</span>
         </el-col>
         <el-col :span="5">
-          <span class="content">{{ customerInfo.profession }}</span>
+          <span class="content">{{ customerInfo.profession?customerInfo.profession:'-' }}</span>
         </el-col>
         <el-col :span="3">
           <span class="title">体重：</span>
         </el-col>
         <el-col :span="5">
-          <span class="content">{{ customerInfo.weight }}</span><span style="margin-left: 10px">Kg</span>
+          <span class="content">{{ customerInfo.weight?customerInfo.weight:'-' }}</span><span style="margin-left: 10px">Kg</span>
         </el-col>
         <el-col :span="3">
           <span class="title">婚姻状况：</span>
@@ -69,7 +69,7 @@
           <span class="title">地址：</span>
         </el-col>
         <el-col :span="21">
-          <span class="content">{{ customerInfo.address }}{{ customerInfo.detailedAddress }}</span>
+          <span class="content">{{ customerInfo.address?customerInfo.address:'-' }}{{ customerInfo.detailedAddress }}</span>
         </el-col>
       </el-row>
       <!-- 表格 -->
@@ -350,14 +350,14 @@ export default {
           },
           {
             field: 'hiplineValue',
-            title: '臂围',
+            title: '臀围',
             minWidth: 50,
             align: 'center',
             headerAlign: 'center'
           },
           {
             field: 'armHigh',
-            title: '臂高',
+            title: '臀高',
             minWidth: 50,
             align: 'center',
             headerAlign: 'center'

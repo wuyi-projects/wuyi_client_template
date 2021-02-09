@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-card class="box-card">
-      <el-page-header content="复诊数据" @back="goBack" />
+      <el-page-header content="录入体型数据" @back="goBack" />
       <el-divider />
       <!-- <div slot="header" class="clearfix">
         <span>客户体型信息录入</span>
@@ -136,10 +136,10 @@
                 </el-form-item>
               </el-col>
               <el-col :span="24">
-                <el-form-item label="臂围" prop="hiplineValue">
+                <el-form-item label="臀围" prop="hiplineValue">
                   <el-input
                     v-model="formData.hiplineValue"
-                    placeholder="输入臂围"
+                    placeholder="输入臀围"
                     oninput="value=value.replace(/[^\d.]/g,'')"
                     clearable
                   >
@@ -148,10 +148,10 @@
                 </el-form-item>
               </el-col>
               <el-col :span="24">
-                <el-form-item label="臂高" prop="armHigh">
+                <el-form-item label="臀高" prop="armHigh">
                   <el-input
                     v-model="formData.armHigh"
-                    placeholder="输入臂高"
+                    placeholder="输入臀高"
                     oninput="value=value.replace(/[^\d.]/g,'')"
                     clearable
                   >
@@ -320,8 +320,8 @@ export default {
         gastricValue: [{ required: true, message: '胃围值必填', trigger: 'blur' }],
         waistlineValue: [{ required: true, message: '腰围值必填', trigger: 'blur' }],
         abdominalValue: [{ required: true, message: '腹围值必填', trigger: 'blur' }],
-        hiplineValue: [{ required: true, message: '臂围值必填', trigger: 'blur' }],
-        armHigh: [{ required: true, message: '臂高值必填', trigger: 'blur' }],
+        hiplineValue: [{ required: true, message: '臀围值必填', trigger: 'blur' }],
+        armHigh: [{ required: true, message: '臀高值必填', trigger: 'blur' }],
         leftThighValue: [{ required: true, message: '左大腿值必填', trigger: 'blur' }],
         rightThighValue: [{ required: true, message: '右大腿值必填', trigger: 'blur' }]
       },
