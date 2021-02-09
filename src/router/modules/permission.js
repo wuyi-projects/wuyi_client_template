@@ -6,7 +6,7 @@ const settingRouter = {
   meta: {
     title: '基础设置',
     icon: 'setting2',
-    roles: ['PermissionConfigAdministrator']
+    roles: ['PermissionConfigAdministrator', 'RegionalManager', 'BusinessAdmistrator']
   },
   children: [
     {
@@ -43,7 +43,7 @@ const settingRouter = {
       path: 'login-log',
       component: () => import('@/views/setting/login-log'),
       name: 'login-log',
-      meta: { title: '系统登录日志', roles: ['PermissionConfigAdministrator'] }
+      meta: { title: '系统登录日志', roles: ['PermissionConfigAdministrator', 'RegionalManager', 'BusinessAdmistrator'] }
     },
     {
       path: 'operate-log',

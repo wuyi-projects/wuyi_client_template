@@ -6,7 +6,7 @@ const customerRouter = {
   meta: {
     title: '客户信息',
     icon: 'tree',
-    roles: ['PermissionConfigAdministrator']
+    roles: ['PermissionConfigAdministrator', 'RegionalManager', 'BusinessAdmistrator']
   },
   children: [
     {
@@ -25,26 +25,26 @@ const customerRouter = {
       path: 'my-customer-info',
       component: () => import('@/views/customer/my-customer-info'),
       name: 'my-customer-info',
-      meta: { title: '我的客户', roles: ['PermissionConfigAdministrator'] }
+      meta: { title: '我的客户', roles: ['PermissionConfigAdministrator', 'BusinessAdmistrator'] }
     },
     {
       path: 'owner-customer-info',
       component: () => import('@/views/customer/owner-customer-info'),
       name: 'owner-customer-info',
-      meta: { title: '我的专属客户', roles: ['PermissionConfigAdministrator'] }
+      meta: { title: '我的专属客户', roles: ['PermissionConfigAdministrator', 'RegionalManager'] }
     },
     {
       path: 'customer-info-edit',
       component: () => import('@/views/customer/customer-info-edit'),
       name: 'customer-info-edit',
-      meta: { title: '客户信息录入', roles: ['PermissionConfigAdministrator'] },
+      meta: { title: '客户信息录入', roles: ['PermissionConfigAdministrator', 'RegionalManager', 'BusinessAdmistrator'] },
       hidden: true
     },
     {
       path: 'body-data-edit',
       component: () => import('@/views/customer/body-data-edit'),
       name: 'body-data-edit',
-      meta: { title: '体型信息录入', roles: ['PermissionConfigAdministrator'] },
+      meta: { title: '体型信息录入', roles: ['PermissionConfigAdministrator', 'RegionalManager', 'BusinessAdmistrator'] },
       hidden: true
     },
     {
@@ -63,7 +63,7 @@ const customerRouter = {
       path: 'customer-detail',
       component: () => import('@/views/customer/customer-detail'),
       name: 'customer-detail',
-      meta: { title: '客户信息', roles: ['PermissionConfigAdministrator'] },
+      meta: { title: '客户信息', roles: ['PermissionConfigAdministrator', 'RegionalManager', 'BusinessAdmistrator'] },
       hidden: true
     }
   ]
