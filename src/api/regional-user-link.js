@@ -53,3 +53,12 @@ export function listRegionalUserLink(data) {
     data
   })
 }
+
+/** 查询区域人员关联列表 */
+export function listRegionalUserLinkForPerson(data) {
+  return request({
+    url: '/wuyi_oa/v1/regionalUserLink/listForPerson.json',
+    method: 'post',
+    data
+  })
+}

@@ -77,7 +77,8 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-
+        </el-row>
+        <el-row>
           <el-col :span="8">
             <el-form-item label="身高" prop="height">
               <el-input
@@ -489,7 +490,8 @@ export default {
         solutionVersion: [
           { required: true, message: '请选择方案版本', trigger: 'blur' }
         ],
-        selectAddress: [{ type: 'array', required: true, message: '请选择地址', trigger: 'change' }]
+        selectAddress: [{ type: 'array', required: true, message: '请选择地址', trigger: 'change' }],
+        regionalId: [{ required: true, message: '请选择区域', trigger: 'blur' }]
       },
       pickerOptions: {
         /* disabledDate(time) {
@@ -637,7 +639,7 @@ export default {
               this.loading = false
               this.initFormSafeSubmitConfig()
             })
-          this.$router.push('/customer/customer-basic-info')
+          this.$router.go(-1)
         } else {
           console.log('error submit!!')
           return false
@@ -682,7 +684,7 @@ export default {
                 this.$message.error('修改失败')
                 this.initFormSafeSubmitConfig()
               }
-              this.$router.push('/customer/customer-basic-info')
+              this.$router.go(-1)
             })
             .catch((e) => {
               this.loading = false

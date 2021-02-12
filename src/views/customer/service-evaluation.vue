@@ -98,6 +98,24 @@
           </template>
         </template> -->
 
+        <!--插槽使用示例:是否可用展示-->
+        <template v-slot:solutionVersion_default="{ row }">
+          <template v-for="item in solutionVersionOptions">
+            <!-- <el-tag
+              v-if="row.solutionVersion == item.value"
+              :key="item.value"
+              type="warning"
+              effect="plain"
+            >
+              {{ item.name }}
+            </el-tag> -->
+            <span
+              v-if="row.solutionVersion == item.value"
+              :key="item.value"
+            >{{ item.name }}</span>
+          </template>
+        </template>
+
         <!--数据行操作-->
         <template v-slot:operate="{ row }">
           <el-button type="text" @click="handleUpdate(row)">修改</el-button>
@@ -374,6 +392,56 @@ export default {
           }
         }]
       },
+      solutionVersionOptions: [
+        { name: '显效版',
+          value: 1
+        },
+        {
+          name: '有效版',
+          value: 2
+        },
+        {
+          name: '健康版',
+          value: 3
+        },
+        {
+          name: '标准版',
+          value: 4
+        },
+        {
+          name: '完美版',
+          value: 5
+        },
+        {
+          name: '精致版',
+          value: 6
+        }
+      ],
+      stageOptions: [
+        { name: '第1阶段',
+          value: 1
+        },
+        {
+          name: '第2阶段',
+          value: 2
+        },
+        {
+          name: '第3阶段',
+          value: 3
+        },
+        {
+          name: '第4阶段',
+          value: 4
+        },
+        {
+          name: '第5阶段',
+          value: 5
+        },
+        {
+          name: '第6阶段',
+          value: 6
+        }
+      ],
       gridOptions: {
         border: 'default',
         size: formatTableSize(),
@@ -512,35 +580,62 @@ export default {
             title: '账户编号',
             minWidth: 120,
             align: 'center',
+            headerAlign: 'center',
+            visible: false
+          },
+          {
+            field: 'name',
+            title: '客户姓名',
+            minWidth: 120,
+            align: 'center',
             headerAlign: 'center'
+          },
+          {
+            field: 'phone',
+            title: '手机号码',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'phone2',
+            title: '备用号码',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center',
+            visible: false
           },
           {
             field: 'solutionVersion',
             title: '设计方案',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            slots: { default: 'solutionVersion_default' }
           },
           {
             field: 'stage',
             title: '使用阶段',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            formatter: this.stageFormatter
           },
           {
             field: 'operatorId',
             title: '操作人编号',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            visible: false
           },
           {
             field: 'operatorName',
             title: '操作人名称',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            visible: false
           },
           {
             field: 'operateTime',
@@ -554,14 +649,16 @@ export default {
             title: '客户反馈',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            formatter: this.feedbackStatusFormatter
           },
           {
             field: 'feedbackTime',
             title: '反馈时间',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            visible: false
           },
           {
             field: 'feedbackContent',
@@ -576,15 +673,15 @@ export default {
             minWidth: 120,
             align: 'center',
             headerAlign: 'center'
-          },
-          {
-            title: '操作',
-            width: 140,
-            align: 'center',
-            headerAlign: 'center',
-            fixed: 'right',
-            slots: { default: 'operate' }
           }
+          // {
+          //   title: '操作',
+          //   width: 140,
+          //   align: 'center',
+          //   headerAlign: 'center',
+          //   fixed: 'right',
+          //   slots: { default: 'operate' }
+          // }
         ],
         importConfig: {
           remote: true,
@@ -827,6 +924,44 @@ export default {
           break
         default:
       }
+    },
+    stageFormatter({ cellValue, row, column }) {
+      let result
+      if (!(cellValue === null || cellValue === '')) {
+        const stageOptions = this.stageOptions
+        for (let index = 0, len = stageOptions.length; index < len; index++) {
+          if (cellValue === stageOptions[index].value) {
+            result = stageOptions[index].name
+          }
+        }
+      } else {
+        result = '未知'
+      }
+      return result
+    },
+    feedbackStatusFormatter({ cellValue, row, column }) {
+      let result
+      if (!(cellValue === null || cellValue === '')) {
+        switch (cellValue) {
+          case 0:
+            result = '未反馈'
+            break
+          case 1:
+            result = '一般'
+            break
+          case 2:
+            result = '满意'
+            break
+          case 3:
+            result = '很满意'
+            break
+          default:
+            result = '未知'
+        }
+      } else {
+        result = '未知'
+      }
+      return result
     }
   }
 }

@@ -111,11 +111,12 @@ import moment from 'moment'
 import formatTableSize from '@/utils/size'
 
 import { getCustomerBasicInfo } from '@/api/customer-basic-info'
-import { listBodyDataRecord } from '@/api/body-data-record'
+import { listBodyDataRecordForCustomer } from '@/api/body-data-record'
 
 export default {
   data() {
     return {
+      openId: null,
       customerInfo: {},
       defaultHeight: '500px',
       tableHeight: '460px',
@@ -222,6 +223,7 @@ export default {
                   searchData[key] = value
                 }
               }
+              searchData.openId = this.openId
 
               // 处理排序条件
               const sortParams = Object.assign({
@@ -246,7 +248,7 @@ export default {
                 limit: page.pageSize
               })
               const result = Object.assign(pageData, searchData, sortParams)
-              return listBodyDataRecord(result)
+              return listBodyDataRecordForCustomer(result)
             }
           }
         },
@@ -439,6 +441,7 @@ export default {
     this.getHeight()
     const that = this
     const id = that.$route.query.id
+    this.openId = id
     if (id) {
       that.customerInfo.id = id
       that.pageStatus = 'update'

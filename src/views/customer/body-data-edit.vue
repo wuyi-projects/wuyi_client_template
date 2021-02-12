@@ -400,7 +400,7 @@ export default {
               this.loading = false
               this.initFormSafeSubmitConfig()
             })
-          this.$router.push('/customer/customer-basic-info')
+          this.$router.go(-1)
         } else {
           console.log('error submit!!')
           return false
@@ -434,7 +434,7 @@ export default {
               this.loading = false
               this.initFormSafeSubmitConfig()
             })
-          this.$router.push('/customer/customer-basic-info')
+          this.$router.go(-1)
         } else {
           console.log('error submit!!')
           return false

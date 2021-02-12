@@ -53,3 +53,12 @@ export function listServiceEvaluation(data) {
     data
   })
 }
+
+/** 查询服务评价列表(服务门店) */
+export function listServiceEvaluationForService(data) {
+  return request({
+    url: '/wuyi_oa/v1/serviceEvaluation/listForMe.json',
+    method: 'post',
+    data
+  })
+}

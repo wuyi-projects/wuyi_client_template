@@ -1,18 +1,81 @@
 <template>
   <div class="app-container">
+    <!--查询条件-->
+    <el-card class="box-card" shadow="never" style="margin-bottom:16px;">
+      <el-form
+        ref="searchForm"
+        :model="searchFormData"
+        :rules="rules"
+        label-width="120px"
+        size="small"
+      >
+        <!-- <el-col :span="8">
+          <el-form-item label="数据编号" prop="id">
+            <el-input v-model="searchFormData.id" clearable />
+          </el-form-item>
+        </el-col> -->
+        <el-col :span="8">
+          <el-form-item label="手机号码" prop="phone">
+            <el-input v-model="searchFormData.phone" clearable />
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="起止时间">
+            <el-col :span="11">
+              <el-form-item prop="start">
+                <el-date-picker
+                  v-model="searchFormData.start"
+                  type="date"
+                  placeholder="起始日期"
+                  style="width: 100%;"
+                  :picker-options="pickerOptions"
+                  value-format="yyyy-MM-dd"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col style="text-align: center;" :span="2">-</el-col>
+            <el-col :span="11">
+              <el-form-item prop="end">
+                <el-date-picker
+                  v-model="searchFormData.end"
+                  type="date"
+                  placeholder="结束时间"
+                  style="width: 100%;"
+                  :picker-options="pickerOptions"
+                  value-format="yyyy-MM-dd"
+                />
+              </el-form-item>
+            </el-col>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item style="float: right;" label-width="0">
+            <el-button @click="resetForm('searchForm')">重 置</el-button>
+            <el-button
+              type="primary"
+              @click="submitForm('searchForm')"
+            >查 询</el-button>
+            <!--<el-button
+              v-if="folding"
+              type="text"
+              @click="toggleFolding()"
+            >收起<i
+              class="el-icon-arrow-up el-icon--right"
+            /></el-button>
+            <el-button
+              v-else
+              type="text"
+              @click="toggleFolding()"
+            >展开<i
+              class="el-icon-arrow-down el-icon--right"
+            /></el-button>-->
+          </el-form-item>
+        </el-col>
+      </el-form>
+    </el-card>
 
     <!--数据展示-->
     <el-card class="box-card" shadow="never" :style="{height:defaultHeight}">
-      <el-page-header content="人员区域管理" @back="goBack" />
-      <el-divider />
-      <el-row :gutter="20" style="margin:0 0 20px 40px;">
-        <el-col :span="3">
-          <span class="title">姓名：</span>
-        </el-col>
-        <el-col :span="5">
-          <span class="content">{{ personInfo.name?personInfo.name:'-' }}</span>
-        </el-col>
-      </el-row>
       <vxe-grid
         ref="dataGrid"
         class="custom-table-scrollbar"
@@ -20,7 +83,7 @@
         :height="tableHeight"
       >
         <!--工具栏按钮-->
-        <template v-slot:buttons>
+        <!-- <template v-slot:buttons>
           <el-button-group>
             <el-button @click.native.prevent="handleCreate()">新增</el-button>
             <el-button
@@ -28,6 +91,24 @@
               @click.native.prevent="handleBatchDelete()"
             >批量删除</el-button>
           </el-button-group>
+        </template> -->
+
+        <!--插槽使用示例:是否可用展示-->
+        <template v-slot:solutionVersion_default="{ row }">
+          <template v-for="item in solutionVersionOptions">
+            <!-- <el-tag
+              v-if="row.solutionVersion == item.value"
+              :key="item.value"
+              type="warning"
+              effect="plain"
+            >
+              {{ item.name }}
+            </el-tag> -->
+            <span
+              v-if="row.solutionVersion == item.value"
+              :key="item.value"
+            >{{ item.name }}</span>
+          </template>
         </template>
 
         <!--插槽使用示例:是否可用展示-->
@@ -41,7 +122,7 @@
         </template> -->
 
         <!--数据行操作-->
-        <template v-slot:operate="{ row }">
+        <!-- <template v-slot:operate="{ row }">
           <el-button type="text" @click="handleUpdate(row)">修改</el-button>
           <el-divider direction="vertical" />
           <el-dropdown @command="handleCommand">
@@ -62,7 +143,7 @@
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-        </template>
+        </template> -->
         <!--自定义空数据模板-->
         <template v-slot:empty>
           <span>
@@ -88,52 +169,113 @@
         label-width="80px"
         style="width: 100%; padding:10px;"
       >
-        <!-- <el-row>
+        <el-row>
           <el-col :span="24">
             <el-form-item label="账户编号" prop="openId">
               <el-input
                 v-model="formData.openId"
                 placeholder="请输入账户编号"
-                disabled
                 clearable
               />
-            </el-form-item>
-          </el-col>
-        </el-row> -->
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="区域编号" prop="regionalId">
-              <el-select
-                v-model="formData.regionalId"
-                placeholder="选择区域"
-                style="width: 100%"
-              >
-                <el-option
-                  v-for="item in allRegionalOptions"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id"
-                />
-              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <!-- <el-col :span="24">
-            <el-form-item label="数据是否可见" prop="visible">
+          <el-col :span="24">
+            <el-form-item label="设计方案" prop="solutionVersion">
               <el-input
-                v-model="formData.visible"
-                placeholder="请输入数据是否可见"
+                v-model="formData.solutionVersion"
+                placeholder="请输入设计方案"
                 clearable
               />
             </el-form-item>
-          </el-col> -->
+          </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="24">
-            <el-form-item label="数据可见" prop="visible">
-              <el-radio-group v-model="formData.visible">
-                <el-radio :label="1">可见</el-radio>
-                <el-radio :label="0">不可见</el-radio>
-              </el-radio-group>
+            <el-form-item label="使用阶段" prop="stage">
+              <el-input
+                v-model="formData.stage"
+                placeholder="请输入使用阶段"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="操作人编号" prop="operatorId">
+              <el-input
+                v-model="formData.operatorId"
+                placeholder="请输入操作人编号"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="操作人名称" prop="operatorName">
+              <el-input
+                v-model="formData.operatorName"
+                placeholder="请输入操作人名称"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="操作时间" prop="operateTime">
+              <el-input
+                v-model="formData.operateTime"
+                placeholder="请输入操作时间"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="客户反馈" prop="feedbackStatus">
+              <el-input
+                v-model="formData.feedbackStatus"
+                placeholder="请输入客户反馈"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="反馈时间" prop="feedbackTime">
+              <el-input
+                v-model="formData.feedbackTime"
+                placeholder="请输入反馈时间"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="反馈意见" prop="feedbackContent">
+              <el-input
+                v-model="formData.feedbackContent"
+                placeholder="请输入反馈意见"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="备注" prop="note">
+              <el-input
+                v-model="formData.note"
+                placeholder="请输入备注"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -174,16 +316,11 @@
 <script>
 import formatTableSize from '@/utils/size'
 
-import { getPerson } from '@/api/person'
-import { listAllRegional } from '@/api/regional'
-import { listRegionalUserLinkForPerson, saveRegionalUserLink, deleteRegionalUserLink, batchDeleteRegionalUserLink, updateRegionalUserLink } from '@/api/regional-user-link'
+import { listServiceEvaluationForService, saveServiceEvaluation, deleteServiceEvaluation, batchDeleteServiceEvaluation, updateServiceEvaluation } from '@/api/service-evaluation'
 
 export default {
   data() {
     return {
-      openId: null,
-      personInfo: {},
-      allRegionalOptions: [],
       defaultHeight: '500px',
       tableHeight: '460px',
       permissionGroupInfoOptions: [],
@@ -202,21 +339,37 @@ export default {
         end: ''
       },
       rules: {
-        regionalId: [{ required: true, message: '请选择区域', trigger: 'blur' }],
-        visible: [{ required: true, message: '请选择数据是否可见', trigger: 'blur' }]
+        permission: [
+          { required: true, message: '请输入权限名称', trigger: 'blur' },
+          { min: 5, message: '长度大于 5 个字符', trigger: 'blur' }
+        ]
       },
       formData: {
         id: null,
         openId: null,
-        regionalId: null,
-        visible: null,
+        solutionVersion: null,
+        stage: null,
+        operatorId: null,
+        operatorName: null,
+        operateTime: null,
+        feedbackStatus: null,
+        feedbackTime: null,
+        feedbackContent: null,
+        note: null,
         version: 0
       },
       initCreateData: {
         id: null,
         openId: null,
-        regionalId: null,
-        visible: null,
+        solutionVersion: null,
+        stage: null,
+        operatorId: null,
+        operatorName: null,
+        operateTime: null,
+        feedbackStatus: null,
+        feedbackTime: null,
+        feedbackContent: null,
+        note: null,
         version: 0
       },
       pickerOptions: {
@@ -244,6 +397,56 @@ export default {
           }
         }]
       },
+      solutionVersionOptions: [
+        { name: '显效版',
+          value: 1
+        },
+        {
+          name: '有效版',
+          value: 2
+        },
+        {
+          name: '健康版',
+          value: 3
+        },
+        {
+          name: '标准版',
+          value: 4
+        },
+        {
+          name: '完美版',
+          value: 5
+        },
+        {
+          name: '精致版',
+          value: 6
+        }
+      ],
+      stageOptions: [
+        { name: '第1阶段',
+          value: 1
+        },
+        {
+          name: '第2阶段',
+          value: 2
+        },
+        {
+          name: '第3阶段',
+          value: 3
+        },
+        {
+          name: '第4阶段',
+          value: 4
+        },
+        {
+          name: '第5阶段',
+          value: 5
+        },
+        {
+          name: '第6阶段',
+          value: 6
+        }
+      ],
       gridOptions: {
         border: 'default',
         size: formatTableSize(),
@@ -263,8 +466,15 @@ export default {
           columns: [
             { field: 'id' },
             { field: 'openId' },
-            { field: 'regionalId' },
-            { field: 'visible' }
+            { field: 'solutionVersion' },
+            { field: 'stage' },
+            { field: 'operatorId' },
+            { field: 'operatorName' },
+            { field: 'operateTime' },
+            { field: 'feedbackStatus' },
+            { field: 'feedbackTime' },
+            { field: 'feedbackContent' },
+            { field: 'note' }
           ]
         },
         sortConfig: {
@@ -325,10 +535,10 @@ export default {
                 }
               }
               const end = this.searchFormData.end
+              console.log(JSON.stringify(end))
               if (end) {
                 searchData.end = this.$moment(end).add(1, 'days').format('YYYY-MM-DD')
               }
-              searchData.openId = this.openId
 
               // 处理排序条件
               const sortParams = Object.assign({
@@ -353,7 +563,7 @@ export default {
                 limit: page.pageSize
               })
               const result = Object.assign(pageData, searchData, sortParams)
-              return listRegionalUserLinkForPerson(result)
+              return listServiceEvaluationForService(result)
             }
           }
         },
@@ -379,36 +589,104 @@ export default {
             visible: false
           },
           {
-            field: 'regionalId',
-            title: '区域编号',
+            field: 'name',
+            title: '客户姓名',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'phone',
+            title: '手机号码',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'phone2',
+            title: '备用号码',
             minWidth: 120,
             align: 'center',
             headerAlign: 'center',
             visible: false
           },
           {
-            field: 'name',
-            title: '区域名称',
+            field: 'solutionVersion',
+            title: '设计方案',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center',
+            slots: { default: 'solutionVersion_default' }
+          },
+          {
+            field: 'stage',
+            title: '使用阶段',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center',
+            formatter: this.stageFormatter
+          },
+          {
+            field: 'operatorId',
+            title: '操作人编号',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center',
+            visible: false
+          },
+          {
+            field: 'operatorName',
+            title: '操作人名称',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center',
+            visible: false
+          },
+          {
+            field: 'operateTime',
+            title: '操作时间',
             minWidth: 120,
             align: 'center',
             headerAlign: 'center'
           },
           {
-            field: 'visible',
-            title: '数据是否可见',
+            field: 'feedbackStatus',
+            title: '客户反馈',
             minWidth: 120,
             align: 'center',
             headerAlign: 'center',
-            formatter: this.visibleFormatter
+            formatter: this.feedbackStatusFormatter
           },
           {
-            title: '操作',
-            width: 140,
+            field: 'feedbackTime',
+            title: '反馈时间',
+            minWidth: 120,
             align: 'center',
             headerAlign: 'center',
-            fixed: 'right',
-            slots: { default: 'operate' }
+            visible: false
+          },
+          {
+            field: 'feedbackContent',
+            title: '反馈意见',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'note',
+            title: '备注',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
           }
+          // {
+          //   title: '操作',
+          //   width: 140,
+          //   align: 'center',
+          //   headerAlign: 'center',
+          //   fixed: 'right',
+          //   slots: { default: 'operate' }
+          // }
         ],
         importConfig: {
           remote: true,
@@ -435,55 +713,14 @@ export default {
   computed: {
   },
   created() {
-    addEventListener('resize', this.getHeight)
+    window.addEventListener('resize', this.getHeight)
     this.getHeight()
-    const that = this
-    const id = that.$route.query.id
-    if (id) {
-      that.openId = id
-      that.pageStatus = 'update'
-      that.getPerson()
-      // that.listAllRegional()
-    }
   },
   methods: {
     /* 自适应高度 */
     getHeight() {
-      this.defaultHeight = window.innerHeight - 120 + 'px'
-      this.tableHeight = window.innerHeight - 160 + 'px'
-    },
-    getPerson() {
-      const that = this
-      const id = that.id
-      if (id) {
-        getPerson({
-          id: id
-        })
-          .then((response) => {
-            const data = response.data
-            if (!data) {
-              return
-            }
-            that.personInfo = data
-          })
-          .catch((e) => {
-            that.loading = false
-          })
-      }
-    },
-    listAllRegional() {
-      const that = this
-      listAllRegional({})
-        .then((response) => {
-          const data = response.data
-          if (!data) {
-            return
-          }
-          that.allRegionalOptions = data
-        })
-        .catch((e) => {
-          that.loading = false
-        })
+      this.defaultHeight = window.innerHeight - 180 + 'px'
+      this.tableHeight = window.innerHeight - 220 + 'px'
     },
     importMethod({ file }) {
       return false
@@ -509,7 +746,6 @@ export default {
     },
     handleCreate() {
       this.formData = Object.assign({}, this.initCreateData)
-      this.$set(this.formData, 'openId', this.personInfo.openId)
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -535,7 +771,7 @@ export default {
             }
             batchDeleteData.push(temp)
           }
-          batchDeleteRegionalUserLink(batchDeleteData)
+          batchDeleteServiceEvaluation(batchDeleteData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -582,7 +818,7 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.formData)
-          saveRegionalUserLink(tempData)
+          saveServiceEvaluation(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -611,7 +847,7 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.formData)
-          updateRegionalUserLink(tempData)
+          updateServiceEvaluation(tempData)
             .then(response => {
               const result = response.data
               if (result) {
@@ -646,7 +882,7 @@ export default {
           id: id,
           version: version
         })
-        deleteRegionalUserLink(tempData)
+        deleteServiceEvaluation(tempData)
           .then(response => {
             const result = response.data
             if (result) {
@@ -694,20 +930,41 @@ export default {
         default:
       }
     },
-    goBack() {
-      this.$router.go(-1)
-    },
-    visibleFormatter({ cellValue, row, column }) {
+    stageFormatter({ cellValue, row, column }) {
       let result
-      switch (cellValue) {
-        case 0:
-          result = '不可见'
-          break
-        case 1:
-          result = '可见'
-          break
-        default:
-          result = '未知'
+      if (!(cellValue === null || cellValue === '')) {
+        const stageOptions = this.stageOptions
+        for (let index = 0, len = stageOptions.length; index < len; index++) {
+          if (cellValue === stageOptions[index].value) {
+            result = stageOptions[index].name
+          }
+        }
+      } else {
+        result = '未知'
+      }
+      return result
+    },
+    feedbackStatusFormatter({ cellValue, row, column }) {
+      let result
+      if (!(cellValue === null || cellValue === '')) {
+        switch (cellValue) {
+          case 0:
+            result = '未反馈'
+            break
+          case 1:
+            result = '一般'
+            break
+          case 2:
+            result = '满意'
+            break
+          case 3:
+            result = '很满意'
+            break
+          default:
+            result = '未知'
+        }
+      } else {
+        result = '未知'
       }
       return result
     }

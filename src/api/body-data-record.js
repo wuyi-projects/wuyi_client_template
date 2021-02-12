@@ -53,3 +53,12 @@ export function listBodyDataRecord(data) {
     data
   })
 }
+
+/** 查询体型信息记录列表（客户） */
+export function listBodyDataRecordForCustomer(data) {
+  return request({
+    url: '/wuyi_oa/v1/bodyDataRecord/listForCustomer.json',
+    method: 'post',
+    data
+  })
+}

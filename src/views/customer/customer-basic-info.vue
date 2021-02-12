@@ -9,11 +9,11 @@
         label-width="120px"
         size="small"
       >
-        <el-col :span="8">
+        <!-- <el-col :span="8">
           <el-form-item label="数据编号" prop="id">
             <el-input v-model="searchFormData.id" clearable />
           </el-form-item>
-        </el-col>
+        </el-col> -->
         <el-col :span="8">
           <el-form-item label="手机号码" prop="phone">
             <el-input v-model="searchFormData.phone" clearable />

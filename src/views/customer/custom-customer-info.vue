@@ -10,7 +10,7 @@
         size="small"
       >
         <el-col :span="8">
-          <el-form-item label="电话号码" prop="phone">
+          <el-form-item label="手机号码" prop="phone">
             <el-input v-model="searchFormData.phone" clearable />
           </el-form-item>
         </el-col>
@@ -108,7 +108,8 @@
 
         <!--数据行操作-->
         <template v-slot:operate="{ row }">
-          <el-button type="text" style="color:red;" @click="viewCustomerDetailInfo(row)">查看客户数据</el-button>
+          <el-button type="text" @click="handleServiceEvaluationCreate(row)">添加服务记录</el-button>
+          <!-- <el-button type="text" style="color:red;" @click="viewCustomerDetailInfo(row)">查看客户数据</el-button>
           <el-divider direction="vertical" />
           <el-button type="text" @click="handleInputBodyData(row)">录入复诊数据</el-button>
           <el-divider direction="vertical" />
@@ -124,14 +125,8 @@
               >
                 删除
               </el-dropdown-item>
-              <!-- <el-dropdown-item
-                :command="beforeHandleCommand('viewRow', row)"
-                divided
-              >
-                详情
-              </el-dropdown-item> -->
             </el-dropdown-menu>
-          </el-dropdown>
+          </el-dropdown> -->
         </template>
         <!--自定义空数据模板-->
         <template v-slot:empty>
@@ -435,6 +430,112 @@
         </template>
       </div>
     </el-dialog>
+
+    <!-- 创建/修改表单 -->
+    <el-dialog
+      v-if="dialogServiceEvaluationFormVisible"
+      :title="textMap[dialogServiceEvaluationStatus]"
+      :center="true"
+      width="40%"
+      :visible.sync="dialogServiceEvaluationFormVisible"
+    >
+      <el-form
+        ref="dataServiceEvaluationForm"
+        :rules="rules"
+        :model="serviceEvaluationFormData"
+        label-position="right"
+        label-width="80px"
+        style="width: 100%; padding:10px;"
+      >
+        <!-- <el-row>
+          <el-col :span="24">
+            <el-form-item label="账户编号" prop="openId">
+              <el-input
+                v-model="serviceEvaluationFormData.openId"
+                placeholder="请输入账户编号"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row> -->
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="姓名" prop="name">
+              <el-input
+                v-model="serviceEvaluationFormData.name"
+                placeholder="请输入账户编号"
+                disabled
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="方案版本" prop="solutionVersion">
+              <el-select
+                v-model="serviceEvaluationFormData.solutionVersion"
+                placeholder="选择方案版本"
+                style="width: 100%"
+              >
+                <el-option
+                  v-for="item in solutionVersionOptions"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="使用阶段" prop="stage">
+              <el-select
+                v-model="serviceEvaluationFormData.stage"
+                placeholder="选择使用阶段"
+                style="width: 100%"
+              >
+                <el-option
+                  v-for="item in stageOptions"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="备注" prop="note">
+              <el-input
+                v-model="serviceEvaluationFormData.note"
+                type="textarea"
+                placeholder="请输入备注"
+                maxlength="100"
+                rows="3"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <template v-if="dialogServiceEvaluationStatus !== 'detail'">
+          <el-button @click="resetForm('dataForm')">
+            重置
+          </el-button>
+          <el-button
+            type="primary"
+            :loading="loadingSubmitButton"
+            :disabled="loadingSubmitButton"
+            @click="dialogServiceEvaluationStatus === 'create' ? createServiceEvaluationData() : updateServiceEvaluationData()"
+          >
+            {{ submitButtonText }}
+          </el-button>
+        </template>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -456,6 +557,7 @@
 import formatTableSize from '@/utils/size'
 
 import { listCustomerBasicInfoForService, saveCustomerBasicInfo, deleteCustomerBasicInfo, batchDeleteCustomerBasicInfo, updateCustomerBasicInfo } from '@/api/customer-basic-info'
+import { saveServiceEvaluation, updateServiceEvaluation } from '@/api/service-evaluation'
 
 export default {
   data() {
@@ -465,6 +567,7 @@ export default {
       permissionGroupInfoOptions: [],
       folding: false,
       dialogFormVisible: false,
+      dialogServiceEvaluationFormVisible: false,
       loadingSubmitButton: false,
       submitButtonText: '提交',
       textMap: {
@@ -540,6 +643,24 @@ export default {
         operateTime: null,
         version: 0
       },
+      serviceEvaluationFormData: {
+        id: null,
+        openId: null,
+        name: null,
+        solutionVersion: null,
+        stage: null,
+        note: null,
+        version: 0
+      },
+      initEvaluationCreateData: {
+        id: null,
+        openId: null,
+        name: null,
+        solutionVersion: null,
+        stage: null,
+        note: null,
+        version: 0
+      },
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() > Date.now()
@@ -587,6 +708,31 @@ export default {
         },
         {
           name: '精致版',
+          value: 6
+        }
+      ],
+      stageOptions: [
+        { name: '第1阶段',
+          value: 1
+        },
+        {
+          name: '第2阶段',
+          value: 2
+        },
+        {
+          name: '第3阶段',
+          value: 3
+        },
+        {
+          name: '第4阶段',
+          value: 4
+        },
+        {
+          name: '第5阶段',
+          value: 5
+        },
+        {
+          name: '第6阶段',
           value: 6
         }
       ],
@@ -1187,6 +1333,75 @@ export default {
         query: {
           id: row.id
         }
+      })
+    },
+    createServiceEvaluationData() {
+      this.$refs['dataServiceEvaluationForm'].validate((valid) => {
+        if (valid) {
+          this.loadingSubmitButton = true
+          this.submitButtonText = '执行中...'
+          const tempData = Object.assign({}, this.serviceEvaluationFormData)
+          saveServiceEvaluation(tempData)
+            .then(response => {
+              const result = response.data
+              if (result) {
+                this.$message({
+                  message: '新增成功',
+                  type: 'success'
+                })
+                this.initFormSafeSubmitConfig()
+                this.dialogServiceEvaluationFormVisible = false
+              } else {
+                this.$message.error('新增失败')
+                this.initFormSafeSubmitConfig()
+              }
+            })
+            .catch(e => {
+              this.loading = false
+              this.initFormSafeSubmitConfig()
+            })
+        }
+      })
+    },
+    updateServiceEvaluationData() {
+      this.$refs['dataServiceEvaluationForm'].validate((valid) => {
+        if (valid) {
+          this.loadingSubmitButton = true
+          this.submitButtonText = '执行中...'
+          const tempData = Object.assign({}, this.serviceEvaluationFormData)
+          updateServiceEvaluation(tempData)
+            .then(response => {
+              const result = response.data
+              if (result) {
+                this.$message({
+                  message: '修改操作成功',
+                  type: 'success'
+                })
+                this.initFormSafeSubmitConfig()
+                this.dialogServiceEvaluationFormVisible = false
+              } else {
+                this.$message.error('修改操作失败')
+                this.initFormSafeSubmitConfig()
+              }
+            })
+            .catch(e => {
+              this.loading = false
+              this.initFormSafeSubmitConfig()
+            })
+        }
+      })
+    },
+    handleServiceEvaluationCreate(row) {
+      console.log(JSON.stringify(row))
+      this.serviceEvaluationFormData = Object.assign({}, this.initEvaluationCreateData)
+      // this.$set(this.serviceEvaluationFormData, 'openId', row.openId)
+      // this.$set(this.serviceEvaluationFormData, 'name', row.name)
+      this.serviceEvaluationFormData.openId = row.openId
+      this.serviceEvaluationFormData.name = row.name
+      this.dialogServiceEvaluationStatus = 'create'
+      this.dialogServiceEvaluationFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataServiceEvaluationForm'].clearValidate()
       })
     }
   }
