@@ -19,7 +19,7 @@ const customerRouter = {
       path: 'custom-customer-info',
       component: () => import('@/views/customer/custom-customer-info'),
       name: 'custom-customer-info',
-      meta: { title: '我的服务客户', roles: ['PermissionConfigAdministrator', 'ServiceSupplier'] }
+      meta: { title: '我的服务客户', roles: ['ServiceSupplier'] }
     },
     {
       path: 'service-evaluation',
@@ -37,13 +37,13 @@ const customerRouter = {
       path: 'my-customer-info',
       component: () => import('@/views/customer/my-customer-info'),
       name: 'my-customer-info',
-      meta: { title: '我的关联客户', roles: ['PermissionConfigAdministrator', 'BusinessAdmistrator'] }
+      meta: { title: '我的关联客户', roles: ['BusinessAdmistrator'] }
     },
     {
       path: 'owner-customer-info',
       component: () => import('@/views/customer/owner-customer-info'),
       name: 'owner-customer-info',
-      meta: { title: '我的区域客户', roles: ['PermissionConfigAdministrator', 'RegionalManager'] }
+      meta: { title: '我的区域客户', roles: ['RegionalManager'] }
     },
     {
       path: 'customer-info-edit',
