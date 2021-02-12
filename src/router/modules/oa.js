@@ -32,7 +32,15 @@ const oaRouter = {
       component: () => import('@/views/oa/person'),
       name: 'person',
       meta: { title: '人员管理', roles: ['PermissionConfigAdministrator', 'HumanAdministrator'] }
+    },
+    {
+      path: 'user-regional-manage',
+      component: () => import('@/views/regional/user-regional-manage'),
+      name: 'user-regional-manage',
+      meta: { title: '人员区域管理', roles: ['PermissionConfigAdministrator', 'HumanAdministrator'] },
+      hidden: true
     }
+
   ]
 }
 export default oaRouter

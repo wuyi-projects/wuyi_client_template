@@ -15,6 +15,14 @@ export function listAllSuperior4Person(data) {
   })
 }
 
+export function getPerson(data) {
+  return request({
+    url: '/wuyi_oa/v1/person/get.json',
+    method: 'post',
+    data
+  })
+}
+
 export function listPerson(data) {
   return request({
     url: '/wuyi_oa/v1/person/list.json',

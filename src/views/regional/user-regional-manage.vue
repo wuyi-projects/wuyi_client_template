@@ -1,76 +1,18 @@
 <template>
   <div class="app-container">
-    <!--查询条件-->
-    <el-card class="box-card" shadow="never" style="margin-bottom:16px;">
-      <el-form
-        ref="searchForm"
-        :model="searchFormData"
-        :rules="rules"
-        label-width="120px"
-        size="small"
-      >
-        <el-col :span="8">
-          <el-form-item label="数据编号" prop="id">
-            <el-input v-model="searchFormData.id" clearable />
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="起止时间">
-            <el-col :span="11">
-              <el-form-item prop="start">
-                <el-date-picker
-                  v-model="searchFormData.start"
-                  type="date"
-                  placeholder="起始日期"
-                  style="width: 100%;"
-                  :picker-options="pickerOptions"
-                  value-format="yyyy-MM-dd"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col style="text-align: center;" :span="2">-</el-col>
-            <el-col :span="11">
-              <el-form-item prop="end">
-                <el-date-picker
-                  v-model="searchFormData.end"
-                  type="date"
-                  placeholder="结束时间"
-                  style="width: 100%;"
-                  :picker-options="pickerOptions"
-                  value-format="yyyy-MM-dd"
-                />
-              </el-form-item>
-            </el-col>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item style="float: right;" label-width="0">
-            <el-button @click="resetForm('searchForm')">重 置</el-button>
-            <el-button
-              type="primary"
-              @click="submitForm('searchForm')"
-            >查 询</el-button>
-            <!--<el-button
-              v-if="folding"
-              type="text"
-              @click="toggleFolding()"
-            >收起<i
-              class="el-icon-arrow-up el-icon--right"
-            /></el-button>
-            <el-button
-              v-else
-              type="text"
-              @click="toggleFolding()"
-            >展开<i
-              class="el-icon-arrow-down el-icon--right"
-            /></el-button>-->
-          </el-form-item>
-        </el-col>
-      </el-form>
-    </el-card>
 
     <!--数据展示-->
     <el-card class="box-card" shadow="never" :style="{height:defaultHeight}">
+      <el-page-header content="人员区域管理" @back="goBack" />
+      <el-divider />
+      <el-row :gutter="20" style="margin:0 0 20px 40px;">
+        <el-col :span="3">
+          <span class="title">姓名：</span>
+        </el-col>
+        <el-col :span="5">
+          <span class="content">{{ personInfo.name?personInfo.name:'-' }}</span>
+        </el-col>
+      </el-row>
       <vxe-grid
         ref="dataGrid"
         class="custom-table-scrollbar"
@@ -146,27 +88,52 @@
         label-width="80px"
         style="width: 100%; padding:10px;"
       >
-      	        <el-row>
+        <!-- <el-row>
           <el-col :span="24">
             <el-form-item label="账户编号" prop="openId">
-              <el-input v-model="formData.openId"
-                placeholder="请输入账户编号" clearable />
+              <el-input
+                v-model="formData.openId"
+                placeholder="请输入账户编号"
+                disabled
+                clearable
+              />
             </el-form-item>
           </el-col>
-        </el-row>
+        </el-row> -->
         <el-row>
           <el-col :span="24">
             <el-form-item label="区域编号" prop="regionalId">
-              <el-input v-model="formData.regionalId"
-                placeholder="请输入区域编号" clearable />
+              <el-select
+                v-model="formData.regionalId"
+                placeholder="选择区域"
+                style="width: 100%"
+              >
+                <el-option
+                  v-for="item in allRegionalOptions"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="24">
+          <!-- <el-col :span="24">
             <el-form-item label="数据是否可见" prop="visible">
-              <el-input v-model="formData.visible"
-                placeholder="请输入数据是否可见" clearable />
+              <el-input
+                v-model="formData.visible"
+                placeholder="请输入数据是否可见"
+                clearable
+              />
+            </el-form-item>
+          </el-col> -->
+          <el-col :span="24">
+            <el-form-item label="数据可见" prop="visible">
+              <el-radio-group v-model="formData.visible">
+                <el-radio :label="1">可见</el-radio>
+                <el-radio :label="0">不可见</el-radio>
+              </el-radio-group>
             </el-form-item>
           </el-col>
         </el-row>
@@ -207,11 +174,16 @@
 <script>
 import formatTableSize from '@/utils/size'
 
+import { getPerson } from '@/api/person'
+import { listAllRegional } from '@/api/regional'
 import { listRegionalUserLink, saveRegionalUserLink, deleteRegionalUserLink, batchDeleteRegionalUserLink, updateRegionalUserLink } from '@/api/regional-user-link'
 
 export default {
   data() {
     return {
+      openId: null,
+      personInfo: {},
+      allRegionalOptions: [],
       defaultHeight: '500px',
       tableHeight: '460px',
       permissionGroupInfoOptions: [],
@@ -230,10 +202,8 @@ export default {
         end: ''
       },
       rules: {
-        permission: [
-          { required: true, message: '请输入权限名称', trigger: 'blur' },
-          { min: 5, message: '长度大于 5 个字符', trigger: 'blur' }
-        ]
+        regionalId: [{ required: true, message: '请选择区域', trigger: 'blur' }],
+        visible: [{ required: true, message: '请选择数据是否可见', trigger: 'blur' }]
       },
       formData: {
         id: null,
@@ -294,7 +264,7 @@ export default {
             { field: 'id' },
             { field: 'openId' },
             { field: 'regionalId' },
-            { field: 'visible' },
+            { field: 'visible' }
           ]
         },
         sortConfig: {
@@ -347,16 +317,17 @@ export default {
             query: ({ page, sort, filters }) => {
               // 查询条件
               const searchData = {}
-              const end = this.searchFormData.end
-              if (end) {
-                this.searchFormData.end = this.$moment(end).add(1, 'days')
-              }
               const searchFormData = this.searchFormData
               for (var key in searchFormData) {
                 const value = searchFormData[key]
                 if (!(typeof value === 'undefined' || value === null || value === '')) {
                   searchData[key] = value
                 }
+              }
+              const end = this.searchFormData.end
+              console.log(JSON.stringify(end))
+              if (end) {
+                searchData.end = this.$moment(end).add(1, 'days').format('YYYY-MM-DD')
               }
 
               // 处理排序条件
@@ -404,11 +375,20 @@ export default {
             title: '账户编号',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            visible: false
           },
           {
             field: 'regionalId',
             title: '区域编号',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center',
+            visible: false
+          },
+          {
+            field: 'name',
+            title: '区域名称',
             minWidth: 120,
             align: 'center',
             headerAlign: 'center'
@@ -418,7 +398,8 @@ export default {
             title: '数据是否可见',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            formatter: this.visibleFormatter
           },
           {
             title: '操作',
@@ -454,14 +435,55 @@ export default {
   computed: {
   },
   created() {
-    window.addEventListener('resize', this.getHeight)
+    addEventListener('resize', this.getHeight)
     this.getHeight()
+    const that = this
+    const id = that.$route.query.id
+    if (id) {
+      that.id = id
+      that.pageStatus = 'update'
+      that.getPerson()
+      that.listAllRegional()
+    }
   },
   methods: {
     /* 自适应高度 */
     getHeight() {
-      this.defaultHeight = window.innerHeight - 180 + 'px'
-      this.tableHeight = window.innerHeight - 220 + 'px'
+      this.defaultHeight = window.innerHeight - 120 + 'px'
+      this.tableHeight = window.innerHeight - 160 + 'px'
+    },
+    getPerson() {
+      const that = this
+      const id = that.id
+      if (id) {
+        getPerson({
+          id: id
+        })
+          .then((response) => {
+            const data = response.data
+            if (!data) {
+              return
+            }
+            that.personInfo = data
+          })
+          .catch((e) => {
+            that.loading = false
+          })
+      }
+    },
+    listAllRegional() {
+      const that = this
+      listAllRegional({})
+        .then((response) => {
+          const data = response.data
+          if (!data) {
+            return
+          }
+          that.allRegionalOptions = data
+        })
+        .catch((e) => {
+          that.loading = false
+        })
     },
     importMethod({ file }) {
       return false
@@ -487,6 +509,7 @@ export default {
     },
     handleCreate() {
       this.formData = Object.assign({}, this.initCreateData)
+      this.$set(this.formData, 'openId', this.personInfo.openId)
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -670,6 +693,23 @@ export default {
           break
         default:
       }
+    },
+    goBack() {
+      this.$router.go(-1)
+    },
+    visibleFormatter({ cellValue, row, column }) {
+      let result
+      switch (cellValue) {
+        case 0:
+          result = '不可见'
+          break
+        case 1:
+          result = '可见'
+          break
+        default:
+          result = '未知'
+      }
+      return result
     }
   }
 }

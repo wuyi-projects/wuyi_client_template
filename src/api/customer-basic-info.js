@@ -53,3 +53,30 @@ export function listCustomerBasicInfo(data) {
     data
   })
 }
+
+/** 查询客户基本信息列表（业务人员） */
+export function listCustomerBasicInfoForBusiness(data) {
+  return request({
+    url: '/wuyi_oa/v1/customerBasicInfo/listForBusiness.json',
+    method: 'post',
+    data
+  })
+}
+
+/** 查询客户基本信息列表（区域负责人） */
+export function listCustomerBasicInfoForRegionalManage(data) {
+  return request({
+    url: '/wuyi_oa/v1/customerBasicInfo/listForRegionalManage.json',
+    method: 'post',
+    data
+  })
+}
+
+/** 查询客户基本信息列表（服务门店） */
+export function listCustomerBasicInfoForService(data) {
+  return request({
+    url: '/wuyi_oa/v1/customerBasicInfo/listForService.json',
+    method: 'post',
+    data
+  })
+}

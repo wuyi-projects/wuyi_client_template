@@ -6,7 +6,7 @@ const customerRouter = {
   meta: {
     title: '客户信息',
     icon: 'tree',
-    roles: ['PermissionConfigAdministrator', 'RegionalManager', 'BusinessAdmistrator']
+    roles: ['PermissionConfigAdministrator', 'RegionalManager', 'BusinessAdmistrator', 'ServiceSupplier']
   },
   children: [
     {
@@ -19,7 +19,7 @@ const customerRouter = {
       path: 'custom-customer-info',
       component: () => import('@/views/customer/custom-customer-info'),
       name: 'custom-customer-info',
-      meta: { title: '我的服务客户', roles: ['PermissionConfigAdministrator'] }
+      meta: { title: '我的服务客户', roles: ['PermissionConfigAdministrator', 'ServiceSupplier'] }
     },
     {
       path: 'my-customer-info',

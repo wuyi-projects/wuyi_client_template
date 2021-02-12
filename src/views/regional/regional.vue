@@ -146,27 +146,36 @@
         label-width="80px"
         style="width: 100%; padding:10px;"
       >
-      	        <el-row>
+        <el-row>
           <el-col :span="24">
             <el-form-item label="名称" prop="name">
-              <el-input v-model="formData.name"
-                placeholder="请输入名称" clearable />
+              <el-input
+                v-model="formData.name"
+                placeholder="请输入名称"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="权重" prop="weight">
-              <el-input v-model="formData.weight"
-                placeholder="请输入权重" clearable />
+              <el-input
+                v-model="formData.weight"
+                placeholder="请输入权重"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="上级编号" prop="parentId">
-              <el-input v-model="formData.parentId"
-                placeholder="请输入上级编号" clearable />
+              <el-input
+                v-model="formData.parentId"
+                placeholder="请输入上级编号"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -294,7 +303,7 @@ export default {
             { field: 'id' },
             { field: 'name' },
             { field: 'weight' },
-            { field: 'parentId' },
+            { field: 'parentId' }
           ]
         },
         sortConfig: {
@@ -347,16 +356,17 @@ export default {
             query: ({ page, sort, filters }) => {
               // 查询条件
               const searchData = {}
-              const end = this.searchFormData.end
-              if (end) {
-                this.searchFormData.end = this.$moment(end).add(1, 'days')
-              }
               const searchFormData = this.searchFormData
               for (var key in searchFormData) {
                 const value = searchFormData[key]
                 if (!(typeof value === 'undefined' || value === null || value === '')) {
                   searchData[key] = value
                 }
+              }
+              const end = this.searchFormData.end
+              console.log(JSON.stringify(end))
+              if (end) {
+                searchData.end = this.$moment(end).add(1, 'days').format('YYYY-MM-DD')
               }
 
               // 处理排序条件

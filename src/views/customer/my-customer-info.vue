@@ -109,7 +109,9 @@
         <!--数据行操作-->
         <template v-slot:operate="{ row }">
           <el-button type="text" style="color:red;" @click="viewCustomerDetailInfo(row)">查看客户数据</el-button>
+          <el-divider direction="vertical" />
           <el-button type="text" @click="handleInputBodyData(row)">录入复诊数据</el-button>
+          <el-divider direction="vertical" />
           <el-button type="text" @click="handleUpdate(row)">修改</el-button>
           <el-divider direction="vertical" />
           <el-dropdown @command="handleCommand">
@@ -453,7 +455,7 @@
 <script>
 import formatTableSize from '@/utils/size'
 
-import { listCustomerBasicInfo, saveCustomerBasicInfo, deleteCustomerBasicInfo, batchDeleteCustomerBasicInfo, updateCustomerBasicInfo } from '@/api/customer-basic-info'
+import { listCustomerBasicInfoForBusiness, saveCustomerBasicInfo, deleteCustomerBasicInfo, batchDeleteCustomerBasicInfo, updateCustomerBasicInfo } from '@/api/customer-basic-info'
 
 export default {
   data() {
@@ -473,7 +475,8 @@ export default {
       searchFormData: {
         id: '',
         start: '',
-        end: ''
+        end: '',
+        phone: ''
       },
       rules: {
         permission: [
@@ -681,16 +684,17 @@ export default {
             query: ({ page, sort, filters }) => {
               // 查询条件
               const searchData = {}
-              const end = this.searchFormData.end
-              if (end) {
-                this.searchFormData.end = this.$moment(end).add(1, 'days')
-              }
               const searchFormData = this.searchFormData
               for (var key in searchFormData) {
                 const value = searchFormData[key]
                 if (!(typeof value === 'undefined' || value === null || value === '')) {
                   searchData[key] = value
                 }
+              }
+              const end = this.searchFormData.end
+              console.log(JSON.stringify(end))
+              if (end) {
+                searchData.end = this.$moment(end).add(1, 'days').format('YYYY-MM-DD')
               }
 
               // 处理排序条件
@@ -716,7 +720,7 @@ export default {
                 limit: page.pageSize
               })
               const result = Object.assign(pageData, searchData, sortParams)
-              return listCustomerBasicInfo(result)
+              return listCustomerBasicInfoForBusiness(result)
             }
           }
         },

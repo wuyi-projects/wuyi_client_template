@@ -159,6 +159,8 @@
 
         <!--数据行操作-->
         <template v-slot:operate="{ row }">
+          <el-button type="text" @click="handleRegionalManage(row)">所属区域管理</el-button>
+          <el-divider direction="vertical" />
           <el-button type="text" @click="handleUpdate(row)">修改</el-button>
           <el-divider direction="vertical" />
           <el-button type="text" @click="handleView(row)">详情</el-button>
@@ -324,6 +326,7 @@
         </template>
       </div>
     </el-dialog>
+
   </div>
 </template>
 
@@ -517,16 +520,17 @@ export default {
             query: ({ page, sort, filters }) => {
             // 查询条件
               const searchData = {}
-              const end = this.searchFormData.end
-              if (end) {
-                this.searchFormData.end = this.$moment(end).add(1, 'days')
-              }
               const searchFormData = this.searchFormData
               for (var key in searchFormData) {
                 const value = searchFormData[key]
                 if (!(typeof value === 'undefined' || value === null || value === '')) {
                   searchData[key] = value
                 }
+              }
+              const end = this.searchFormData.end
+              console.log(JSON.stringify(end))
+              if (end) {
+                searchData.end = this.$moment(end).add(1, 'days').format('YYYY-MM-DD')
               }
 
               // 处理排序条件
@@ -609,11 +613,12 @@ export default {
             title: '邮箱',
             minWidth: 200,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            visible: false
           },
           {
             title: '操作',
-            width: 140,
+            width: 220,
             align: 'center',
             headerAlign: 'center',
             fixed: 'right',
@@ -757,6 +762,14 @@ export default {
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
+      })
+    },
+    handleRegionalManage(row) {
+      this.$router.push({
+        name: 'user-regional-manage',
+        query: {
+          id: row.id
+        }
       })
     },
     initFormSafeSubmitConfig() {

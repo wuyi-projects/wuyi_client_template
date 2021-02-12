@@ -146,83 +146,113 @@
         label-width="80px"
         style="width: 100%; padding:10px;"
       >
-      	        <el-row>
+        <el-row>
           <el-col :span="24">
             <el-form-item label="账户编号" prop="openId">
-              <el-input v-model="formData.openId"
-                placeholder="请输入账户编号" clearable />
+              <el-input
+                v-model="formData.openId"
+                placeholder="请输入账户编号"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="设计方案" prop="solutionVersion">
-              <el-input v-model="formData.solutionVersion"
-                placeholder="请输入设计方案" clearable />
+              <el-input
+                v-model="formData.solutionVersion"
+                placeholder="请输入设计方案"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="使用阶段" prop="stage">
-              <el-input v-model="formData.stage"
-                placeholder="请输入使用阶段" clearable />
+              <el-input
+                v-model="formData.stage"
+                placeholder="请输入使用阶段"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="操作人编号" prop="operatorId">
-              <el-input v-model="formData.operatorId"
-                placeholder="请输入操作人编号" clearable />
+              <el-input
+                v-model="formData.operatorId"
+                placeholder="请输入操作人编号"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="操作人名称" prop="operatorName">
-              <el-input v-model="formData.operatorName"
-                placeholder="请输入操作人名称" clearable />
+              <el-input
+                v-model="formData.operatorName"
+                placeholder="请输入操作人名称"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="操作时间" prop="operateTime">
-              <el-input v-model="formData.operateTime"
-                placeholder="请输入操作时间" clearable />
+              <el-input
+                v-model="formData.operateTime"
+                placeholder="请输入操作时间"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="客户反馈" prop="feedbackStatus">
-              <el-input v-model="formData.feedbackStatus"
-                placeholder="请输入客户反馈" clearable />
+              <el-input
+                v-model="formData.feedbackStatus"
+                placeholder="请输入客户反馈"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="反馈时间" prop="feedbackTime">
-              <el-input v-model="formData.feedbackTime"
-                placeholder="请输入反馈时间" clearable />
+              <el-input
+                v-model="formData.feedbackTime"
+                placeholder="请输入反馈时间"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="反馈意见" prop="feedbackContent">
-              <el-input v-model="formData.feedbackContent"
-                placeholder="请输入反馈意见" clearable />
+              <el-input
+                v-model="formData.feedbackContent"
+                placeholder="请输入反馈意见"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="备注" prop="note">
-              <el-input v-model="formData.note"
-                placeholder="请输入备注" clearable />
+              <el-input
+                v-model="formData.note"
+                placeholder="请输入备注"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -371,7 +401,7 @@ export default {
             { field: 'feedbackStatus' },
             { field: 'feedbackTime' },
             { field: 'feedbackContent' },
-            { field: 'note' },
+            { field: 'note' }
           ]
         },
         sortConfig: {
@@ -424,16 +454,17 @@ export default {
             query: ({ page, sort, filters }) => {
               // 查询条件
               const searchData = {}
-              const end = this.searchFormData.end
-              if (end) {
-                this.searchFormData.end = this.$moment(end).add(1, 'days')
-              }
               const searchFormData = this.searchFormData
               for (var key in searchFormData) {
                 const value = searchFormData[key]
                 if (!(typeof value === 'undefined' || value === null || value === '')) {
                   searchData[key] = value
                 }
+              }
+              const end = this.searchFormData.end
+              console.log(JSON.stringify(end))
+              if (end) {
+                searchData.end = this.$moment(end).add(1, 'days').format('YYYY-MM-DD')
               }
 
               // 处理排序条件

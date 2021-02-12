@@ -146,67 +146,91 @@
         label-width="80px"
         style="width: 100%; padding:10px;"
       >
-      	        <el-row>
+        <el-row>
           <el-col :span="24">
             <el-form-item label="抽奖编号" prop="uniqueNumber">
-              <el-input v-model="formData.uniqueNumber"
-                placeholder="请输入抽奖编号" clearable />
+              <el-input
+                v-model="formData.uniqueNumber"
+                placeholder="请输入抽奖编号"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="抽奖类型" prop="type">
-              <el-input v-model="formData.type"
-                placeholder="请输入抽奖类型" clearable />
+              <el-input
+                v-model="formData.type"
+                placeholder="请输入抽奖类型"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="抽奖名称" prop="title">
-              <el-input v-model="formData.title"
-                placeholder="请输入抽奖名称" clearable />
+              <el-input
+                v-model="formData.title"
+                placeholder="请输入抽奖名称"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="奖金金额" prop="amount">
-              <el-input v-model="formData.amount"
-                placeholder="请输入奖金金额" clearable />
+              <el-input
+                v-model="formData.amount"
+                placeholder="请输入奖金金额"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="是否开启" prop="onOff">
-              <el-input v-model="formData.onOff"
-                placeholder="请输入是否开启" clearable />
+              <el-input
+                v-model="formData.onOff"
+                placeholder="请输入是否开启"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="抽奖日期" prop="lotteryDate">
-              <el-input v-model="formData.lotteryDate"
-                placeholder="请输入抽奖日期" clearable />
+              <el-input
+                v-model="formData.lotteryDate"
+                placeholder="请输入抽奖日期"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="抽奖截止时间" prop="deadline">
-              <el-input v-model="formData.deadline"
-                placeholder="请输入抽奖截止时间" clearable />
+              <el-input
+                v-model="formData.deadline"
+                placeholder="请输入抽奖截止时间"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="奖券过期时间" prop="expirationTime">
-              <el-input v-model="formData.expirationTime"
-                placeholder="请输入奖券过期时间" clearable />
+              <el-input
+                v-model="formData.expirationTime"
+                placeholder="请输入奖券过期时间"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -349,7 +373,7 @@ export default {
             { field: 'onOff' },
             { field: 'lotteryDate' },
             { field: 'deadline' },
-            { field: 'expirationTime' },
+            { field: 'expirationTime' }
           ]
         },
         sortConfig: {
@@ -402,16 +426,17 @@ export default {
             query: ({ page, sort, filters }) => {
               // 查询条件
               const searchData = {}
-              const end = this.searchFormData.end
-              if (end) {
-                this.searchFormData.end = this.$moment(end).add(1, 'days')
-              }
               const searchFormData = this.searchFormData
               for (var key in searchFormData) {
                 const value = searchFormData[key]
                 if (!(typeof value === 'undefined' || value === null || value === '')) {
                   searchData[key] = value
                 }
+              }
+              const end = this.searchFormData.end
+              console.log(JSON.stringify(end))
+              if (end) {
+                searchData.end = this.$moment(end).add(1, 'days').format('YYYY-MM-DD')
               }
 
               // 处理排序条件
