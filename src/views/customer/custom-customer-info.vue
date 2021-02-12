@@ -837,7 +837,6 @@ export default {
                 }
               }
               const end = this.searchFormData.end
-              console.log(JSON.stringify(end))
               if (end) {
                 searchData.end = this.$moment(end).add(1, 'days').format('YYYY-MM-DD')
               }
@@ -1351,6 +1350,8 @@ export default {
                 })
                 this.initFormSafeSubmitConfig()
                 this.dialogServiceEvaluationFormVisible = false
+                this.searchFormData.phone = null
+                this.$refs.dataGrid.commitProxy('reload')
               } else {
                 this.$message.error('新增失败')
                 this.initFormSafeSubmitConfig()
