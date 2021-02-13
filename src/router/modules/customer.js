@@ -6,14 +6,14 @@ const customerRouter = {
   meta: {
     title: '客户信息',
     icon: 'tree',
-    roles: ['PermissionConfigAdministrator', 'RegionalManager', 'BusinessAdmistrator', 'ServiceSupplier']
+    roles: ['PermissionConfigAdministrator', 'SuperAdministrator', 'RegionalManager', 'BusinessAdmistrator', 'ServiceSupplier']
   },
   children: [
     {
       path: 'customer-basic-info',
       component: () => import('@/views/customer/customer-basic-info'),
       name: 'customer-basic-info',
-      meta: { title: '客户信息管理', roles: ['PermissionConfigAdministrator'] }
+      meta: { title: '客户信息管理', roles: ['PermissionConfigAdministrator', 'SuperAdministrator'] }
     },
     {
       path: 'custom-customer-info',
@@ -25,7 +25,7 @@ const customerRouter = {
       path: 'service-evaluation',
       component: () => import('@/views/customer/service-evaluation'),
       name: 'service-evaluation',
-      meta: { title: '客户服务记录', roles: ['PermissionConfigAdministrator'] }
+      meta: { title: '客户服务记录', roles: ['PermissionConfigAdministrator', 'SuperAdministrator'] }
     },
     {
       path: 'my-service-evaluation',
@@ -49,14 +49,14 @@ const customerRouter = {
       path: 'customer-info-edit',
       component: () => import('@/views/customer/customer-info-edit'),
       name: 'customer-info-edit',
-      meta: { title: '客户信息录入', roles: ['PermissionConfigAdministrator', 'RegionalManager', 'BusinessAdmistrator'] },
+      meta: { title: '客户信息录入', roles: ['PermissionConfigAdministrator', 'SuperAdministrator', 'RegionalManager', 'BusinessAdmistrator'] },
       hidden: true
     },
     {
       path: 'body-data-edit',
       component: () => import('@/views/customer/body-data-edit'),
       name: 'body-data-edit',
-      meta: { title: '体型信息录入', roles: ['PermissionConfigAdministrator', 'RegionalManager', 'BusinessAdmistrator'] },
+      meta: { title: '体型信息录入', roles: ['PermissionConfigAdministrator', 'SuperAdministrator', 'RegionalManager', 'BusinessAdmistrator'] },
       hidden: true
     },
     {
@@ -69,7 +69,7 @@ const customerRouter = {
       path: 'customer-detail',
       component: () => import('@/views/customer/customer-detail'),
       name: 'customer-detail',
-      meta: { title: '客户信息', roles: ['PermissionConfigAdministrator', 'RegionalManager', 'BusinessAdmistrator'] },
+      meta: { title: '客户信息', roles: ['PermissionConfigAdministrator', 'SuperAdministrator', 'RegionalManager', 'BusinessAdmistrator'] },
       hidden: true
     }
   ]

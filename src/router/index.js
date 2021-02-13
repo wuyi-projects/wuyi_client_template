@@ -64,10 +64,10 @@ export const asyncRoutes = [
   lotteryRouter,
   oaRouter,
   userRouter,
-  operationCenterRouter,
   profileRouter,
   // tableRouter,
   settingRouter,
+  operationCenterRouter,
   { path: '*', redirect: '/404', hidden: true }
 ]
 

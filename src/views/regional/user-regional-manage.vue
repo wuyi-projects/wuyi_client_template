@@ -443,7 +443,7 @@ export default {
       that.openId = id
       that.pageStatus = 'update'
       that.getPerson()
-      // that.listAllRegional()
+      that.listAllRegional()
     }
   },
   methods: {
@@ -454,7 +454,7 @@ export default {
     },
     getPerson() {
       const that = this
-      const id = that.id
+      const id = that.openId
       if (id) {
         getPerson({
           id: id
