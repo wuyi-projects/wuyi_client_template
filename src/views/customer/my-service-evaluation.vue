@@ -226,10 +226,10 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="操作时间" prop="operateTime">
+            <el-form-item label="服务时间" prop="operateTime">
               <el-input
                 v-model="formData.operateTime"
-                placeholder="请输入操作时间"
+                placeholder="请输入服务时间"
                 clearable
               />
             </el-form-item>
@@ -335,6 +335,7 @@ export default {
       },
       searchFormData: {
         id: '',
+        phone: '',
         start: '',
         end: ''
       },
@@ -644,7 +645,7 @@ export default {
           },
           {
             field: 'operateTime',
-            title: '操作时间',
+            title: '服务时间',
             minWidth: 120,
             align: 'center',
             headerAlign: 'center'
