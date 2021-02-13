@@ -27,7 +27,7 @@
         trigger="click"
       >
         <div class="avatar-wrapper">
-          <img :src="avatar + '?imageView2/1/w/80/h/80'" class="user-avatar" />
+          <img :src="avatar + '?imageView2/1/w/80/h/80'" class="user-avatar">
           <i class="el-icon-caret-bottom" />
         </div>
         <i class="el-icon-caret-bottom" />
@@ -48,16 +48,16 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import Breadcrumb from "@/components/Breadcrumb";
-import Hamburger from "@/components/Hamburger";
-import ErrorLog from "@/components/ErrorLog";
-import Screenfull from "@/components/Screenfull";
-import SizeSelect from "@/components/SizeSelect";
-import Search from "@/components/HeaderSearch";
+import { mapGetters } from 'vuex'
+import Breadcrumb from '@/components/Breadcrumb'
+import Hamburger from '@/components/Hamburger'
+import ErrorLog from '@/components/ErrorLog'
+import Screenfull from '@/components/Screenfull'
+import SizeSelect from '@/components/SizeSelect'
+import Search from '@/components/HeaderSearch'
 
 import { setTeamNumber } from '@/utils/auth'
-import { listAll4Me } from "@/api/company";
+import { listAll4Me } from '@/api/company'
 
 export default {
   components: {
@@ -66,28 +66,30 @@ export default {
     ErrorLog,
     Screenfull,
     SizeSelect,
-    Search,
+    Search
   },
   data() {
     return {
-    };
+    }
   },
   computed: {
-    ...mapGetters(["sidebar", "avatar", "device"]),
+    ...mapGetters(['sidebar', 'avatar', 'device'])
   },
   created() {
   },
   methods: {
     toggleSideBar() {
-      this.$store.dispatch("app/toggleSideBar");
+      this.$store.dispatch('app/toggleSideBar')
     },
     async logout() {
-      await this.$store.dispatch("user/logout");
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`);
-    },
-    
-  },
-};
+      await this.$store.dispatch('user/logout')
+      // 屏蔽切换账号登录404错误
+      // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      this.$router.push(`/login?redirect=dashboard`)
+    }
+
+  }
+}
 </script>
 
 <style lang="scss" scoped>

@@ -10,13 +10,13 @@
         size="small"
       >
         <el-col :span="8">
-          <el-form-item label="用户名" prop="id">
-            <el-input v-model="searchFormData.id" clearable />
+          <el-form-item label="手机号码" prop="userName">
+            <el-input v-model="searchFormData.userName" clearable />
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="用户IP" prop="userIp">
-            <el-input v-model="searchFormData.userIp" clearable />
+          <el-form-item label="用户IP" prop="operateAddress">
+            <el-input v-model="searchFormData.operateAddress" clearable />
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -228,10 +228,10 @@ export default {
       submitButtonText: '提交',
       allPermissionGroup: [],
       searchFormData: {
-        id: '',
+        userName: '',
+        operateAddress: '',
         startTime: '',
-        endTime: '',
-        loginIp: ''
+        endTime: ''
       },
       rules: {
         permission: [
@@ -355,7 +355,6 @@ export default {
                 }
               }
               const end = this.searchFormData.end
-              console.log(JSON.stringify(end))
               if (end) {
                 searchData.end = this.$moment(end).add(1, 'days').format('YYYY-MM-DD')
               }

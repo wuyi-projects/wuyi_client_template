@@ -10,13 +10,13 @@
         size="small"
       >
         <el-col :span="8">
-          <el-form-item label="用户名" prop="username">
-            <el-input v-model="searchFormData.username" clearable />
+          <el-form-item label="用户名" prop="userName">
+            <el-input v-model="searchFormData.userName" clearable />
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="登录IP" prop="loginIP">
-            <el-input v-model="searchFormData.loginIP" clearable />
+          <el-form-item label="登录IP" prop="ipAddress">
+            <el-input v-model="searchFormData.ipAddress" clearable />
           </el-form-item>
         </el-col>
         <!-- <el-col :span="8">
@@ -192,8 +192,8 @@ export default {
       allPermissionGroup: [],
       defaultTableHeight: 500,
       searchFormData: {
-        username: '',
-        loginIP: ''
+        userName: '',
+        ipAddress: ''
       },
       rules: {
         permission: [
