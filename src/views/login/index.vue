@@ -242,6 +242,7 @@ $light_gray: #454545;
 .login {
   width: 100%;
   height: 100vh;
+  min-width: 1280px;
   vertical-align: middle;
 }
 
