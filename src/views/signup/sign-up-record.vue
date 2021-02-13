@@ -10,11 +10,21 @@
         size="small"
       >
         <el-col :span="8">
-          <el-form-item label="数据编号" prop="id">
-            <el-input v-model="searchFormData.id" clearable />
+          <el-form-item label="签到名称" prop="title">
+            <el-input v-model="searchFormData.title" clearable />
           </el-form-item>
         </el-col>
         <el-col :span="8">
+          <el-form-item label="手机号码" prop="phone">
+            <el-input v-model="searchFormData.phone" clearable />
+          </el-form-item>
+        </el-col>
+        <el-col v-if="folding" :span="8">
+          <el-form-item label="姓名" prop="name">
+            <el-input v-model="searchFormData.name" clearable />
+          </el-form-item>
+        </el-col>
+        <el-col v-if="folding" :span="8">
           <el-form-item label="起止时间">
             <el-col :span="11">
               <el-form-item prop="start">
@@ -43,6 +53,9 @@
             </el-col>
           </el-form-item>
         </el-col>
+        <el-col v-if="folding" :span="8">
+          <el-form-item />
+        </el-col>
         <el-col :span="8">
           <el-form-item style="float: right;" label-width="0">
             <el-button @click="resetForm('searchForm')">重 置</el-button>
@@ -50,7 +63,7 @@
               type="primary"
               @click="submitForm('searchForm')"
             >查 询</el-button>
-            <!--<el-button
+            <el-button
               v-if="folding"
               type="text"
               @click="toggleFolding()"
@@ -63,7 +76,7 @@
               @click="toggleFolding()"
             >展开<i
               class="el-icon-arrow-down el-icon--right"
-            /></el-button>-->
+            /></el-button>
           </el-form-item>
         </el-col>
       </el-form>
@@ -78,7 +91,7 @@
         :height="tableHeight"
       >
         <!--工具栏按钮-->
-        <template v-slot:buttons>
+        <!-- <template v-slot:buttons>
           <el-button-group>
             <el-button @click.native.prevent="handleCreate()">新增</el-button>
             <el-button
@@ -86,7 +99,7 @@
               @click.native.prevent="handleBatchDelete()"
             >批量删除</el-button>
           </el-button-group>
-        </template>
+        </template> -->
 
         <!--插槽使用示例:是否可用展示-->
         <!-- <template v-slot:available_default="{ row }">
@@ -278,7 +291,9 @@ export default {
         detail: '详情'
       },
       searchFormData: {
-        id: '',
+        title: '',
+        phone: '',
+        name: '',
         start: '',
         end: ''
       },

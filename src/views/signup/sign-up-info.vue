@@ -10,8 +10,8 @@
         size="small"
       >
         <el-col :span="8">
-          <el-form-item label="数据编号" prop="id">
-            <el-input v-model="searchFormData.id" clearable />
+          <el-form-item label="签到名称" prop="title">
+            <el-input v-model="searchFormData.title" clearable />
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -81,10 +81,10 @@
         <template v-slot:buttons>
           <el-button-group>
             <el-button @click.native.prevent="handleCreate()">新增</el-button>
-            <el-button
+            <!-- <el-button
               type="primary"
               @click.native.prevent="handleBatchDelete()"
-            >批量删除</el-button>
+            >批量删除</el-button> -->
           </el-button-group>
         </template>
 
@@ -101,7 +101,7 @@
         <!--数据行操作-->
         <template v-slot:operate="{ row }">
           <el-button type="text" @click="handleUpdate(row)">修改</el-button>
-          <el-divider direction="vertical" />
+          <!-- <el-divider direction="vertical" />
           <el-dropdown @command="handleCommand">
             <span class="el-dropdown-link">
               更多<i class="el-icon-arrow-down" />
@@ -119,7 +119,7 @@
                 详情
               </el-dropdown-item>
             </el-dropdown-menu>
-          </el-dropdown>
+          </el-dropdown> -->
         </template>
         <!--自定义空数据模板-->
         <template v-slot:empty>
@@ -146,7 +146,7 @@
         label-width="80px"
         style="width: 100%; padding:10px;"
       >
-        <el-row>
+        <!-- <el-row>
           <el-col :span="24">
             <el-form-item label="签到编号" prop="uniqueNumber">
               <el-input
@@ -156,7 +156,7 @@
               />
             </el-form-item>
           </el-col>
-        </el-row>
+        </el-row> -->
         <el-row>
           <el-col :span="24">
             <el-form-item label="签到名称" prop="title">
@@ -171,11 +171,10 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="是否开启" prop="onOff">
-              <el-input
-                v-model="formData.onOff"
-                placeholder="请输入是否开启"
-                clearable
-              />
+              <el-radio-group v-model="formData.onOff">
+                <el-radio :label="1">开启</el-radio>
+                <el-radio :label="0">关闭</el-radio>
+              </el-radio-group>
             </el-form-item>
           </el-col>
         </el-row>
@@ -234,7 +233,7 @@ export default {
         detail: '详情'
       },
       searchFormData: {
-        id: '',
+        title: '',
         start: '',
         end: ''
       },
@@ -409,13 +408,13 @@ export default {
             headerAlign: 'center',
             visible: false
           },
-          {
-            field: 'uniqueNumber',
-            title: '签到编号',
-            minWidth: 120,
-            align: 'center',
-            headerAlign: 'center'
-          },
+          // {
+          //   field: 'uniqueNumber',
+          //   title: '签到编号',
+          //   minWidth: 120,
+          //   align: 'center',
+          //   headerAlign: 'center'
+          // },
           {
             field: 'title',
             title: '签到名称',
@@ -428,7 +427,8 @@ export default {
             title: '是否开启',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            formatter: this.onOffFormatter
           },
           {
             title: '操作',
@@ -680,6 +680,19 @@ export default {
           break
         default:
       }
+    },
+    onOffFormatter({ cellValue, row, column }) {
+      let result
+      if (!(cellValue === null || cellValue === '')) {
+        if (cellValue === 0) {
+          result = '关闭'
+        } else if (cellValue === 1) {
+          result = '开启'
+        }
+      } else {
+        result = '未知'
+      }
+      return result
     }
   }
 }
