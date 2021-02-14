@@ -148,7 +148,7 @@
       v-if="dialogFormVisible"
       :title="textMap[dialogStatus]"
       :center="true"
-      width="40%"
+      width="60%"
       :visible.sync="dialogFormVisible"
     >
       <el-form
@@ -156,7 +156,7 @@
         :rules="rules"
         :model="formData"
         label-position="right"
-        label-width="80px"
+        label-width="120px"
         style="width: 100%; padding:10px;"
       >
         <el-row>
@@ -183,7 +183,7 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="微信绑定手机号码" prop="phone">
+            <el-form-item label="手机号码" prop="phone">
               <el-input
                 v-model="formData.phone"
                 placeholder="请输入微信绑定手机号码"
@@ -485,6 +485,14 @@ export default {
             title: '签到信息编号',
             minWidth: 120,
             align: 'center',
+            headerAlign: 'center',
+            visible: false
+          },
+          {
+            field: 'title',
+            title: '签到名称',
+            minWidth: 120,
+            align: 'center',
             headerAlign: 'center'
           },
           {
@@ -492,11 +500,12 @@ export default {
             title: '账户编号',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            visible: false
           },
           {
             field: 'phone',
-            title: '微信绑定手机号码',
+            title: '手机号码',
             minWidth: 120,
             align: 'center',
             headerAlign: 'center'
