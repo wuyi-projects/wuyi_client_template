@@ -115,7 +115,7 @@
         <template v-slot:operate="{ row }">
           <el-button type="text" style="color:red;" @click="viewCustomerDetailInfo(row)">查看客户数据</el-button>
           <el-divider direction="vertical" />
-          <el-button type="text" @click="handleInputBodyData(row)">录入复诊数据</el-button>
+          <el-button type="text" @click="handleInputBodyData(row)">录入体型数据</el-button>
           <el-divider direction="vertical" />
           <el-button type="text" @click="handleUpdate(row)">修改</el-button>
           <el-divider direction="vertical" />
