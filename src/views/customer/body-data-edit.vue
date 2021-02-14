@@ -35,7 +35,7 @@
                     oninput="value=value.replace(/[^\d.]/g,'')"
                     clearable
                   >
-                    <template slot="append">厘米</template>
+                    <template slot="append">Kg</template>
                   </el-input>
                 </el-form-item>
               </el-col>
