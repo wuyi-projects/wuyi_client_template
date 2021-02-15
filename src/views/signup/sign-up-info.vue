@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <!--查询条件-->
-    <el-card class="box-card" shadow="never" style="margin-bottom:16px;">
+    <el-card class="box-card" shadow="never" style="margin-bottom: 16px">
       <el-form
         ref="searchForm"
         :model="searchFormData"
@@ -22,20 +22,20 @@
                   v-model="searchFormData.start"
                   type="date"
                   placeholder="起始日期"
-                  style="width: 100%;"
+                  style="width: 100%"
                   :picker-options="pickerOptions"
                   value-format="yyyy-MM-dd"
                 />
               </el-form-item>
             </el-col>
-            <el-col style="text-align: center;" :span="2">-</el-col>
+            <el-col style="text-align: center" :span="2">-</el-col>
             <el-col :span="11">
               <el-form-item prop="end">
                 <el-date-picker
                   v-model="searchFormData.end"
                   type="date"
                   placeholder="结束时间"
-                  style="width: 100%;"
+                  style="width: 100%"
                   :picker-options="pickerOptions"
                   value-format="yyyy-MM-dd"
                 />
@@ -44,7 +44,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item style="float: right;" label-width="0">
+          <el-form-item style="float: right" label-width="0">
             <el-button @click="resetForm('searchForm')">重 置</el-button>
             <el-button
               type="primary"
@@ -70,7 +70,7 @@
     </el-card>
 
     <!--数据展示-->
-    <el-card class="box-card" shadow="never" :style="{height:defaultHeight}">
+    <el-card class="box-card" shadow="never" :style="{ height: defaultHeight }">
       <vxe-grid
         ref="dataGrid"
         class="custom-table-scrollbar"
@@ -100,7 +100,11 @@
 
         <!--数据行操作-->
         <template v-slot:operate="{ row }">
-          <el-button type="text" style="color:red;" @click="handleViewRecord(row)">查看签到记录</el-button>
+          <el-button
+            type="text"
+            style="color: red"
+            @click="handleViewRecord(row)"
+          >查看签到记录</el-button>
           <el-divider direction="vertical" />
           <el-button type="text" @click="handleUpdate(row)">修改</el-button>
           <!-- <el-divider direction="vertical" />
@@ -146,7 +150,7 @@
         :model="formData"
         label-position="right"
         label-width="80px"
-        style="width: 100%; padding:10px;"
+        style="width: 100%; padding: 10px"
       >
         <!-- <el-row>
           <el-col :span="24">
@@ -183,9 +187,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <template v-if="dialogStatus !== 'detail'">
-          <el-button @click="resetForm('dataForm')">
-            重置
-          </el-button>
+          <el-button @click="resetForm('dataForm')"> 重置 </el-button>
           <el-button
             type="primary"
             :loading="loadingSubmitButton"
@@ -217,7 +219,13 @@
 <script>
 import formatTableSize from '@/utils/size'
 
-import { listSignUpInfo, saveSignUpInfo, deleteSignUpInfo, batchDeleteSignUpInfo, updateSignUpInfo } from '@/api/sign-up-info'
+import {
+  listSignUpInfo,
+  saveSignUpInfo,
+  deleteSignUpInfo,
+  batchDeleteSignUpInfo,
+  updateSignUpInfo
+} from '@/api/sign-up-info'
 
 export default {
   data() {
@@ -263,26 +271,30 @@ export default {
         disabledDate(time) {
           return time.getTime() > Date.now()
         },
-        shortcuts: [{
-          text: '今天',
-          onClick(picker) {
-            picker.$emit('pick', new Date())
+        shortcuts: [
+          {
+            text: '今天',
+            onClick(picker) {
+              picker.$emit('pick', new Date())
+            }
+          },
+          {
+            text: '昨天',
+            onClick(picker) {
+              const date = new Date()
+              date.setTime(date.getTime() - 3600 * 1000 * 24)
+              picker.$emit('pick', date)
+            }
+          },
+          {
+            text: '一周前',
+            onClick(picker) {
+              const date = new Date()
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', date)
+            }
           }
-        }, {
-          text: '昨天',
-          onClick(picker) {
-            const date = new Date()
-            date.setTime(date.getTime() - 3600 * 1000 * 24)
-            picker.$emit('pick', date)
-          }
-        }, {
-          text: '一周前',
-          onClick(picker) {
-            const date = new Date()
-            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
-            picker.$emit('pick', date)
-          }
-        }]
+        ]
       },
       gridOptions: {
         border: 'default',
@@ -353,21 +365,28 @@ export default {
             total: 'total'
           },
           ajax: {
-
             query: ({ page, sort, filters }) => {
               // 查询条件
               const searchData = {}
               const searchFormData = this.searchFormData
               for (var key in searchFormData) {
                 const value = searchFormData[key]
-                if (!(typeof value === 'undefined' || value === null || value === '')) {
+                if (
+                  !(
+                    typeof value === 'undefined' ||
+                    value === null ||
+                    value === ''
+                  )
+                ) {
                   searchData[key] = value
                 }
               }
               const end = this.searchFormData.end
               console.log(JSON.stringify(end))
               if (end) {
-                searchData.end = this.$moment(end).add(1, 'days').format('YYYY-MM-DD')
+                searchData.end = this.$moment(end)
+                  .add(1, 'days')
+                  .format('YYYY-MM-DD')
               }
 
               // 处理排序条件
@@ -398,10 +417,7 @@ export default {
           }
         },
         columns: [
-          { type: 'checkbox',
-            width: 40,
-            align: 'center'
-          },
+          { type: 'checkbox', width: 40, align: 'center' },
           {
             field: 'id',
             title: '编号',
@@ -463,8 +479,7 @@ export default {
       }
     }
   },
-  computed: {
-  },
+  computed: {},
   created() {
     window.addEventListener('resize', this.getHeight)
     this.getHeight()
@@ -508,44 +523,57 @@ export default {
     handleBatchDelete() {
       const selectRecords = this.$refs.dataGrid.getCheckboxRecords()
       const batchDeleteData = []
-      if (!(typeof selectRecords === 'undefined' || selectRecords === null || selectRecords === '' || selectRecords.length === 0)) {
+      if (
+        !(
+          typeof selectRecords === 'undefined' ||
+          selectRecords === null ||
+          selectRecords === '' ||
+          selectRecords.length === 0
+        )
+      ) {
         this.$confirm('永久删除记录吗, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           dangerouslyUseHTMLString: true,
           type: 'warning'
-        }).then(() => {
-          for (let index = 0, len = selectRecords.length; index < len; index++) {
-            const id = selectRecords[index].['id']
-            const version = selectRecords[index].['version']
-            const temp = {
-              id: id,
-              version: version
-            }
-            batchDeleteData.push(temp)
-          }
-          batchDeleteSignUpInfo(batchDeleteData)
-            .then(response => {
-              const result = response.data
-              if (result) {
-                this.$message({
-                  type: 'success',
-                  message: '删除成功'
-                })
-              } else {
-                this.$message.error('删除失败')
-              }
-              this.$refs.dataGrid.commitProxy('reload')
-            })
-            .catch(e => {
-              this.loading = false
-            })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
         })
+          .then(() => {
+            for (
+              let index = 0, len = selectRecords.length;
+              index < len;
+              index++
+            ) {
+              const id = selectRecords[index]['id']
+              const version = selectRecords[index]['version']
+              const temp = {
+                id: id,
+                version: version
+              }
+              batchDeleteData.push(temp)
+            }
+            batchDeleteSignUpInfo(batchDeleteData)
+              .then((response) => {
+                const result = response.data
+                if (result) {
+                  this.$message({
+                    type: 'success',
+                    message: '删除成功'
+                  })
+                } else {
+                  this.$message.error('删除失败')
+                }
+                this.$refs.dataGrid.commitProxy('reload')
+              })
+              .catch((e) => {
+                this.loading = false
+              })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            })
+          })
       } else {
         this.$message({
           showClose: true,
@@ -580,7 +608,7 @@ export default {
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.formData)
           saveSignUpInfo(tempData)
-            .then(response => {
+            .then((response) => {
               const result = response.data
               if (result) {
                 this.$message({
@@ -595,7 +623,7 @@ export default {
                 this.initFormSafeSubmitConfig()
               }
             })
-            .catch(e => {
+            .catch((e) => {
               this.loading = false
               this.initFormSafeSubmitConfig()
             })
@@ -609,7 +637,7 @@ export default {
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.formData)
           updateSignUpInfo(tempData)
-            .then(response => {
+            .then((response) => {
               const result = response.data
               if (result) {
                 this.$message({
@@ -624,7 +652,7 @@ export default {
                 this.initFormSafeSubmitConfig()
               }
             })
-            .catch(e => {
+            .catch((e) => {
               this.loading = false
               this.initFormSafeSubmitConfig()
             })
@@ -637,34 +665,36 @@ export default {
         cancelButtonText: '取消',
         dangerouslyUseHTMLString: true,
         type: 'warning'
-      }).then(() => {
-        const { id, version } = row
-        const tempData = Object.assign({
-          id: id,
-          version: version
-        })
-        deleteSignUpInfo(tempData)
-          .then(response => {
-            const result = response.data
-            if (result) {
-              this.$message({
-                type: 'success',
-                message: '删除成功'
-              })
-            } else {
-              this.$message.error('删除失败')
-            }
-            this.$refs.dataGrid.commitProxy('reload')
-          })
-          .catch(e => {
-            this.loading = false
-          })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
       })
+        .then(() => {
+          const { id, version } = row
+          const tempData = Object.assign({
+            id: id,
+            version: version
+          })
+          deleteSignUpInfo(tempData)
+            .then((response) => {
+              const result = response.data
+              if (result) {
+                this.$message({
+                  type: 'success',
+                  message: '删除成功'
+                })
+              } else {
+                this.$message.error('删除失败')
+              }
+              this.$refs.dataGrid.commitProxy('reload')
+            })
+            .catch((e) => {
+              this.loading = false
+            })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
     viewRow(row) {
       this.formData = Object.assign({}, row)
