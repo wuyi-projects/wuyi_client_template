@@ -2,6 +2,8 @@
   <div class="app-container">
     <!--查询条件-->
     <el-card class="box-card" shadow="never" style="margin-bottom:16px;">
+      <el-page-header content="抽奖名单" @back="goBack" />
+      <el-divider />
       <el-form
         ref="searchForm"
         :model="searchFormData"
@@ -743,6 +745,9 @@ export default {
           break
         default:
       }
+    },
+    goBack() {
+      this.$router.go(-1)
     }
   }
 }

@@ -39,11 +39,43 @@ const lotteryRouter = {
       meta: { title: '抽奖记录', roles: ['PermissionConfigAdministrator'] }
     },
     {
+      path: 'user-lottery-record',
+      component: () =>
+        import ('@/views/lottery/user-lottery-record'),
+      name: 'user-lottery-record',
+      meta: { title: '个人奖券配置', roles: ['PermissionConfigAdministrator'] },
+      hidden: true
+    },
+    {
+      path: 'lottery-use',
+      component: () =>
+        import ('@/views/lottery/lottery-use'),
+      name: 'lottery-use',
+      meta: { title: '奖券核销', roles: ['PermissionConfigAdministrator'] }
+    },
+    {
+      path: 'lottery-record-detail',
+      component: () =>
+        import ('@/views/lottery/lottery-record-detail'),
+      name: 'lottery-record-detail',
+      meta: { title: '抽奖记录详情', roles: ['PermissionConfigAdministrator'] },
+      hidden: true
+    },
+    {
       path: 'lottery-roster',
       component: () =>
         import ('@/views/lottery/lottery-roster'),
       name: 'lottery-roster',
-      meta: { title: '抽奖人员名单', roles: ['PermissionConfigAdministrator'] }
+      meta: { title: '抽奖名单', roles: ['PermissionConfigAdministrator'] },
+      hidden: true
+    },
+    {
+      path: 'lottery-roster-manage',
+      component: () =>
+        import ('@/views/lottery/lottery-roster-manage'),
+      name: 'lottery-roster-manage',
+      meta: { title: '抽奖名单管理', roles: ['PermissionConfigAdministrator'] },
+      hidden: true
     }
   ]
 }

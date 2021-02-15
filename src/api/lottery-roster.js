@@ -53,3 +53,21 @@ export function listLotteryRoster(data) {
     data
   })
 }
+
+/** 查询抽奖人员列表 */
+export function listUnlinkedSignUp(data) {
+  return request({
+    url: '/wuyi_lottery/v1/signUpRecord/listUnlinked.json',
+    method: 'post',
+    data
+  })
+}
+
+/** 批量加入抽奖人员名单 */
+export function batchLinkRoster(data) {
+  return request({
+    url: '/wuyi_lottery/v1/lotteryRoster/batchLink.json',
+    method: 'post',
+    data
+  })
+}

@@ -2,94 +2,29 @@
   <div class="app-container">
     <!--查询条件-->
     <el-card class="box-card" shadow="never" style="margin-bottom: 16px">
-      <el-form
-        ref="searchForm"
-        :model="searchFormData"
-        :rules="rules"
-        label-width="120px"
-        size="small"
-      >
-        <el-col :span="8">
-          <el-form-item label="签到名称" prop="title">
-            <el-input v-model="searchFormData.title" clearable />
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="起止时间">
-            <el-col :span="11">
-              <el-form-item prop="start">
-                <el-date-picker
-                  v-model="searchFormData.start"
-                  type="date"
-                  placeholder="起始日期"
-                  style="width: 100%"
-                  :picker-options="pickerOptions"
-                  value-format="yyyy-MM-dd"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col style="text-align: center" :span="2">-</el-col>
-            <el-col :span="11">
-              <el-form-item prop="end">
-                <el-date-picker
-                  v-model="searchFormData.end"
-                  type="date"
-                  placeholder="结束时间"
-                  style="width: 100%"
-                  :picker-options="pickerOptions"
-                  value-format="yyyy-MM-dd"
-                />
-              </el-form-item>
-            </el-col>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item style="float: right" label-width="0">
-            <el-button @click="resetForm('searchForm')">重 置</el-button>
-            <el-button
-              type="primary"
-              @click="submitForm('searchForm')"
-            >查 询</el-button>
-            <!--<el-button
-              v-if="folding"
-              type="text"
-              @click="toggleFolding()"
-            >收起<i
-              class="el-icon-arrow-up el-icon--right"
-            /></el-button>
-            <el-button
-              v-else
-              type="text"
-              @click="toggleFolding()"
-            >展开<i
-              class="el-icon-arrow-down el-icon--right"
-            /></el-button>-->
-          </el-form-item>
-        </el-col>
-      </el-form>
-    </el-card>
+      <el-page-header content="个人奖券配置" @back="goBack" />
+      <el-divider />
+      <el-row :style="{ height: defaultHeight }">
+        <el-col>
+          <vxe-grid
+            ref="dataGrid"
+            class="custom-table-scrollbar"
+            v-bind="gridOptions"
+            :height="tableHeight"
+          >
+            <!--工具栏按钮-->
+            <template v-slot:buttons>
+              <el-button-group>
+                <el-button @click.native.prevent="handleCreate()">新增</el-button>
+                <el-button
+                  type="primary"
+                  @click.native.prevent="handleBatchDelete()"
+                >批量删除</el-button>
+              </el-button-group>
+            </template>
 
-    <!--数据展示-->
-    <el-card class="box-card" shadow="never" :style="{ height: defaultHeight }">
-      <vxe-grid
-        ref="dataGrid"
-        class="custom-table-scrollbar"
-        v-bind="gridOptions"
-        :height="tableHeight"
-      >
-        <!--工具栏按钮-->
-        <template v-slot:buttons>
-          <el-button-group>
-            <el-button @click.native.prevent="handleCreate()">新增</el-button>
-            <!-- <el-button
-              type="primary"
-              @click.native.prevent="handleBatchDelete()"
-            >批量删除</el-button> -->
-          </el-button-group>
-        </template>
-
-        <!--插槽使用示例:是否可用展示-->
-        <!-- <template v-slot:available_default="{ row }">
+            <!--插槽使用示例:是否可用展示-->
+            <!-- <template v-slot:available_default="{ row }">
           <template v-if="row.available === 1">
             <el-badge is-dot class="item" type="primary" />启用
           </template>
@@ -98,43 +33,41 @@
           </template>
         </template> -->
 
-        <!--数据行操作-->
-        <template v-slot:operate="{ row }">
-          <el-button
-            type="text"
-            style="color: red"
-            @click="handleViewRecord(row)"
-          >查看签到记录</el-button>
-          <el-divider direction="vertical" />
-          <el-button type="text" @click="handleUpdate(row)">修改</el-button>
-          <!-- <el-divider direction="vertical" />
-          <el-dropdown @command="handleCommand">
-            <span class="el-dropdown-link">
-              更多<i class="el-icon-arrow-down" />
-            </span>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item
-                :command="beforeHandleCommand('handleDelete', row)"
-              >
-                删除
-              </el-dropdown-item>
-              <el-dropdown-item
-                :command="beforeHandleCommand('viewRow', row)"
-                divided
-              >
-                详情
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown> -->
-        </template>
-        <!--自定义空数据模板-->
-        <template v-slot:empty>
-          <span>
-            <p>没有找到匹配的记录</p>
-          </span>
-        </template>
-      </vxe-grid>
+            <!--数据行操作-->
+            <template v-slot:operate="{ row }">
+              <el-button type="text" @click="handleUpdate(row)">修改</el-button>
+              <el-divider direction="vertical" />
+              <el-dropdown @command="handleCommand">
+                <span class="el-dropdown-link">
+                  更多<i class="el-icon-arrow-down" />
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item
+                    :command="beforeHandleCommand('handleDelete', row)"
+                  >
+                    删除
+                  </el-dropdown-item>
+                  <el-dropdown-item
+                    :command="beforeHandleCommand('viewRow', row)"
+                    divided
+                  >
+                    详情
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </template>
+            <!--自定义空数据模板-->
+            <template v-slot:empty>
+              <span>
+                <p>没有找到匹配的记录</p>
+              </span>
+            </template>
+          </vxe-grid>
+        </el-col>
+      </el-row>
     </el-card>
+
+    <!--数据展示-->
 
     <!-- 创建/修改表单 -->
     <el-dialog
@@ -152,23 +85,26 @@
         label-width="80px"
         style="width: 100%; padding: 10px"
       >
-        <!-- <el-row>
+        <el-row>
           <el-col :span="24">
-            <el-form-item label="签到编号" prop="uniqueNumber">
+            <el-form-item label="抽奖信息编号" prop="lotteryInfoId">
               <el-input
-                v-model="formData.uniqueNumber"
-                placeholder="请输入签到编号"
-                clearable
+                v-model="formData.lotteryInfoId"
+                placeholder="请输入抽奖信息编
+号               "
+                clearab
+                l
+                e
               />
             </el-form-item>
           </el-col>
-        </el-row> -->
+        </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="签到名称" prop="title">
+            <el-form-item label="账户编号" prop="openId">
               <el-input
-                v-model="formData.title"
-                placeholder="请输入签到名称"
+                v-model="formData.openId"
+                placeholder="请输入账户编号"
                 clearable
               />
             </el-form-item>
@@ -176,11 +112,122 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="是否开启" prop="onOff">
-              <el-radio-group v-model="formData.onOff">
-                <el-radio :label="1">开启</el-radio>
-                <el-radio :label="0">关闭</el-radio>
-              </el-radio-group>
+            <el-form-item label="手机号码" prop="phone">
+              <el-input
+                v-model="formData.phone"
+                placeholder="请输入手机号码"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="备用号码" prop="phone2">
+              <el-input
+                v-model="formData.phone2"
+                placeholder="请输入备用号码"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="姓名" prop="name">
+              <el-input
+                v-model="formData.name"
+                placeholder="请输入姓名"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="头像" prop="photoUrl">
+              <el-input
+                v-model="formData.photoUrl"
+                placeholder="请输入头像"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="奖金金额" prop="amount">
+              <el-input
+                v-model="formData.amount"
+                placeholder="请输入奖金金额"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="状态" prop="status">
+              <el-input
+                v-model="formData.status"
+                placeholder="请输入状态"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="过期时间" prop="expirationTime">
+              <el-input
+                v-model="formData.expirationTime"
+                placeholder="请输入过期时间"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="使用状态" prop="usageStatus">
+              <el-input
+                v-model="formData.usageStatus"
+                placeholder="请输入使用状态"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="申请时间" prop="applicationTime">
+              <el-input
+                v-model="formData.applicationTime"
+                placeholder="请输入申请时间"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="核销时间" prop="verificationTime">
+              <el-input
+                v-model="formData.verificationTime"
+                placeholder="请输入核销时间"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="核销人" prop="verificationUserId">
+              <el-input
+                v-model="formData.verificationUserId"
+                placeholder="请输入核销人"
+                clearable
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -219,13 +266,17 @@
 <script>
 import formatTableSize from '@/utils/size'
 
+import { getLotteryInfo } from '@/api/lottery-info'
+
+import { getLotteryRoster } from '@/api/lottery-roster'
+
 import {
-  listSignUpInfo,
-  saveSignUpInfo,
-  deleteSignUpInfo,
-  batchDeleteSignUpInfo,
-  updateSignUpInfo
-} from '@/api/sign-up-info'
+  listLotteryRecord,
+  saveLotteryRecord,
+  deleteLotteryRecord,
+  batchDeleteLotteryRecord,
+  updateLotteryRecord
+} from '@/api/lottery-record'
 
 export default {
   data() {
@@ -243,31 +294,50 @@ export default {
         detail: '详情'
       },
       searchFormData: {
-        title: '',
+        id: '',
+        lotteryRosterId: null,
+        lotteryInfoId: null,
         start: '',
         end: ''
       },
       rules: {
-        title: [
-          { required: true, message: '请输入签到名称', trigger: 'blur' },
-          { min: 5, message: '长度不少于 5 个字符', trigger: 'blur' }
-        ],
-        onOff: [
-          { required: true, message: '请选择签到开关', trigger: 'blur' }
+        permission: [
+          { required: true, message: '请输入权限名称', trigger: 'blur' },
+          { min: 5, message: '长度大于 5 个字符', trigger: 'blur' }
         ]
       },
       formData: {
         id: null,
-        uniqueNumber: null,
-        title: null,
-        onOff: null,
+        lotteryInfoId: null,
+        openId: null,
+        phone: null,
+        phone2: null,
+        name: null,
+        photoUrl: null,
+        amount: null,
+        status: null,
+        expirationTime: null,
+        usageStatus: null,
+        applicationTime: null,
+        verificationTime: null,
+        verificationUserId: null,
         version: 0
       },
       initCreateData: {
         id: null,
-        uniqueNumber: null,
-        title: null,
-        onOff: null,
+        lotteryInfoId: null,
+        openId: null,
+        phone: null,
+        phone2: null,
+        name: null,
+        photoUrl: null,
+        amount: null,
+        status: null,
+        expirationTime: null,
+        usageStatus: null,
+        applicationTime: null,
+        verificationTime: null,
+        verificationUserId: null,
         version: 0
       },
       pickerOptions: {
@@ -317,9 +387,19 @@ export default {
         printConfig: {
           columns: [
             { field: 'id' },
-            { field: 'uniqueNumber' },
-            { field: 'title' },
-            { field: 'onOff' }
+            { field: 'lotteryInfoId' },
+            { field: 'openId' },
+            { field: 'phone' },
+            { field: 'phone2' },
+            { field: 'name' },
+            { field: 'photoUrl' },
+            { field: 'amount' },
+            { field: 'status' },
+            { field: 'expirationTime' },
+            { field: 'usageStatus' },
+            { field: 'applicationTime' },
+            { field: 'verificationTime' },
+            { field: 'verificationUserId' }
           ]
         },
         sortConfig: {
@@ -415,7 +495,7 @@ export default {
                 limit: page.pageSize
               })
               const result = Object.assign(pageData, searchData, sortParams)
-              return listSignUpInfo(result)
+              return listLotteryRecord(result)
             }
           }
         },
@@ -429,31 +509,100 @@ export default {
             headerAlign: 'center',
             visible: false
           },
-          // {
-          //   field: 'uniqueNumber',
-          //   title: '签到编号',
-          //   minWidth: 120,
-          //   align: 'center',
-          //   headerAlign: 'center'
-          // },
           {
-            field: 'title',
-            title: '签到名称',
+            field: 'lotteryInfoId',
+            title: '抽奖信息编号',
             minWidth: 120,
             align: 'center',
             headerAlign: 'center'
           },
           {
-            field: 'onOff',
-            title: '是否开启',
+            field: 'openId',
+            title: '账户编号',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center',
-            formatter: this.onOffFormatter
+            headerAlign: 'center'
+          },
+          {
+            field: 'phone',
+            title: '手机号码',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'phone2',
+            title: '备用号码',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'name',
+            title: '姓名',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'photoUrl',
+            title: '头像',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'amount',
+            title: '奖金金额',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'status',
+            title: '状态',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'expirationTime',
+            title: '过期时间',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'usageStatus',
+            title: '使用状态',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'applicationTime',
+            title: '申请时间',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'verificationTime',
+            title: '核销时间',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
+            field: 'verificationUserId',
+            title: '核销人',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
           },
           {
             title: '操作',
-            width: 240,
+            width: 140,
             align: 'center',
             headerAlign: 'center',
             fixed: 'right',
@@ -486,12 +635,23 @@ export default {
   created() {
     window.addEventListener('resize', this.getHeight)
     this.getHeight()
+    const that = this
+    const lotteryInfoId = that.$route.query.lotteryInfoId
+    const lotteryRosterId = that.$route.query.lotteryRosterId
+    if (lotteryInfoId && lotteryRosterId) {
+      this.lotteryInfoId = lotteryInfoId
+      this.lotteryRosterId = lotteryRosterId
+      this.searchFormData.lotteryInfoId = lotteryInfoId
+      this.searchFormData.lotteryRosterId = lotteryRosterId
+      this.getLotteryInfo()
+      this.getLotteryRoster()
+    }
   },
   methods: {
     /* 自适应高度 */
     getHeight() {
-      this.defaultHeight = window.innerHeight - 180 + 'px'
-      this.tableHeight = window.innerHeight - 220 + 'px'
+      this.defaultHeight = window.innerHeight - 230 + 'px'
+      this.tableHeight = window.innerHeight - 240 + 'px'
     },
     importMethod({ file }) {
       return false
@@ -554,7 +714,7 @@ export default {
               }
               batchDeleteData.push(temp)
             }
-            batchDeleteSignUpInfo(batchDeleteData)
+            batchDeleteLotteryRecord(batchDeleteData)
               .then((response) => {
                 const result = response.data
                 if (result) {
@@ -592,14 +752,6 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
-    handleViewRecord(row) {
-      this.$router.push({
-        name: 'sign-up-record',
-        query: {
-          id: row.id
-        }
-      })
-    },
     initFormSafeSubmitConfig() {
       this.loadingSubmitButton = false
       this.submitButtonText = '提交'
@@ -610,7 +762,7 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.formData)
-          saveSignUpInfo(tempData)
+          saveLotteryRecord(tempData)
             .then((response) => {
               const result = response.data
               if (result) {
@@ -639,7 +791,7 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.formData)
-          updateSignUpInfo(tempData)
+          updateLotteryRecord(tempData)
             .then((response) => {
               const result = response.data
               if (result) {
@@ -675,7 +827,7 @@ export default {
             id: id,
             version: version
           })
-          deleteSignUpInfo(tempData)
+          deleteLotteryRecord(tempData)
             .then((response) => {
               const result = response.data
               if (result) {
@@ -724,18 +876,33 @@ export default {
         default:
       }
     },
-    onOffFormatter({ cellValue, row, column }) {
-      let result
-      if (!(cellValue === null || cellValue === '')) {
-        if (cellValue === 0) {
-          result = '关闭'
-        } else if (cellValue === 1) {
-          result = '开启'
-        }
-      } else {
-        result = '未知'
-      }
-      return result
+    goBack() {
+      this.$router.go(-1)
+    },
+    getLotteryInfo() {
+      getLotteryInfo({
+        id: this.lotteryInfoId
+      })
+        .then((response) => {
+          this.lotteryInfo = response.data
+          this.lotteryType = response.data.type
+          const type = response.data.type === 1 ? '普通抽奖' : response.data.type === 2 ? '超级大奖' : '抽奖'
+          this.pageTitle = '【' + type + '】' + response.data.title + ' / 抽奖名单管理'
+        })
+        .catch((e) => {
+          this.loading = false
+        })
+    },
+    getLotteryRoster() {
+      getLotteryRoster({
+        id: this.lotteryRosterId
+      })
+        .then((response) => {
+
+        })
+        .catch((e) => {
+          this.loading = false
+        })
     }
   }
 }

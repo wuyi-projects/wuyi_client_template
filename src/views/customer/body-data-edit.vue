@@ -195,7 +195,7 @@
                     disabled
                   >
                     <el-option
-                      v-for="item in solutionVersionOptions"
+                      v-for="item in dataTypeOptions"
                       :key="item.id"
                       :label="item.name"
                       :value="item.value"
@@ -327,7 +327,7 @@ export default {
       },
       pickerOptions: {
       },
-      solutionVersionOptions: [
+      dataTypeOptions: [
         { name: '实测数据',
           value: 1
         },

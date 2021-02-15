@@ -5,16 +5,32 @@
       <el-form
         ref="searchForm"
         :model="searchFormData"
-        :rules="rules"
+        :rules="searchRules"
         label-width="120px"
         size="small"
       >
         <el-col :span="8">
-          <el-form-item label="数据编号" prop="id">
-            <el-input v-model="searchFormData.id" clearable />
+          <el-form-item label="抽奖名称" prop="title">
+            <el-input v-model="searchFormData.title" clearable />
           </el-form-item>
         </el-col>
         <el-col :span="8">
+          <el-form-item label="抽奖类型" prop="type">
+            <el-select
+              v-model="formData.type"
+              placeholder="选择抽奖类型"
+              style="width:100%"
+            >
+              <el-option
+                v-for="item in typeOptions"
+                :key="item.id"
+                :label="item.name"
+                :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col v-if="folding" :span="8">
           <el-form-item label="起止时间">
             <el-col :span="11">
               <el-form-item prop="start">
@@ -43,6 +59,12 @@
             </el-col>
           </el-form-item>
         </el-col>
+        <el-col v-if="folding" :span="8">
+          <el-form-item />
+        </el-col>
+        <el-col v-if="folding" :span="8">
+          <el-form-item />
+        </el-col>
         <el-col :span="8">
           <el-form-item style="float: right" label-width="0">
             <el-button @click="resetForm('searchForm')">重 置</el-button>
@@ -50,7 +72,7 @@
               type="primary"
               @click="submitForm('searchForm')"
             >查 询</el-button>
-            <!--<el-button
+            <el-button
               v-if="folding"
               type="text"
               @click="toggleFolding()"
@@ -63,7 +85,7 @@
               @click="toggleFolding()"
             >展开<i
               class="el-icon-arrow-down el-icon--right"
-            /></el-button>-->
+            /></el-button>
           </el-form-item>
         </el-col>
       </el-form>
@@ -100,6 +122,17 @@
 
         <!--数据行操作-->
         <template v-slot:operate="{ row }">
+          <el-button
+            type="text"
+            style="color: red"
+            @click="handleSettingLottery(row)"
+          >抽奖管理</el-button>
+          <el-divider direction="vertical" />
+          <el-button
+            type="text"
+            @click="handleViewLotteryRecord(row)"
+          >抽奖记录</el-button>
+          <el-divider direction="vertical" />
           <el-button type="text" @click="handleUpdate(row)">修改</el-button>
           <!-- <el-divider direction="vertical" />
           <el-dropdown @command="handleCommand">
@@ -168,6 +201,22 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item label="签到名称" prop="signUpInfoId">
+              <el-select
+                v-model="formData.signUpInfoId"
+                placeholder="选择签到信息"
+                style="width: 100%"
+              >
+                <el-option
+                  v-for="item in currentSignUpInfoOptions"
+                  :key="item.id"
+                  :label="item.title"
+                  :value="item.id"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
             <el-form-item label="抽奖名称" prop="title">
               <el-input
                 v-model="formData.title"
@@ -176,8 +225,6 @@
               />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item
               label="奖金金额"
@@ -201,14 +248,6 @@
               />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="是否开启" prop="onOff">
-              <el-radio-group v-model="formData.onOff">
-                <el-radio :label="1">开启</el-radio>
-                <el-radio :label="0">关闭</el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
@@ -225,6 +264,16 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item label="是否开启" prop="onOff">
+              <el-radio-group v-model="formData.onOff">
+                <el-radio :label="1">开启</el-radio>
+                <el-radio :label="0">关闭</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
             <el-form-item label="抽奖截止时间" prop="deadline">
               <el-date-picker
                 v-model="formData.deadline"
@@ -237,8 +286,6 @@
               />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="奖券过期时间" prop="expirationTime">
               <el-date-picker
@@ -292,6 +339,10 @@
 import formatTableSize from '@/utils/size'
 
 import {
+  listCurrentSignUpInfo
+} from '@/api/sign-up-info'
+
+import {
   listLotteryInfo,
   saveLotteryInfo,
   deleteLotteryInfo,
@@ -302,6 +353,7 @@ import {
 export default {
   data() {
     return {
+      currentSignUpInfoOptions: [],
       defaultHeight: '500px',
       tableHeight: '460px',
       permissionGroupInfoOptions: [],
@@ -321,6 +373,7 @@ export default {
       },
       rules: {
         type: [{ required: true, message: '请选择抽奖类型', trigger: 'blur' }],
+        signUpInfoId: [{ required: true, message: '请选择签到信息', trigger: 'blur' }],
         title: [
           { required: true, message: '请选择抽奖名称', trigger: 'blur' },
           { min: 5, message: '长度不少于 5 个字符', trigger: 'blur' }
@@ -339,6 +392,7 @@ export default {
           { required: true, message: '请选择奖券过期日期', trigger: 'blur' }
         ]
       },
+      searchRules: {},
       formData: {
         id: null,
         uniqueNumber: null,
@@ -418,6 +472,8 @@ export default {
             { field: 'id' },
             { field: 'uniqueNumber' },
             { field: 'type' },
+            { field: 'signUpInfoId' },
+            { field: 'signUpName' },
             { field: 'title' },
             { field: 'amount' },
             { field: 'onOff' },
@@ -549,6 +605,21 @@ export default {
             formatter: this.typeFormatter
           },
           {
+            field: 'signUpInfoId',
+            title: '关联签到信息编号',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center',
+            visible: false
+          },
+          {
+            field: 'signUpName',
+            title: '关联签到名称',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center'
+          },
+          {
             field: 'title',
             title: '抽奖名称',
             minWidth: 120,
@@ -596,7 +667,7 @@ export default {
           },
           {
             title: '操作',
-            width: 140,
+            width: 220,
             align: 'center',
             headerAlign: 'center',
             fixed: 'right',
@@ -622,7 +693,15 @@ export default {
           highlight: true,
           range: true
         }
-      }
+      },
+      typeOptions: [
+        { name: '普通抽奖',
+          value: 1
+        },
+        { name: '终极大奖',
+          value: 2
+        }
+      ]
     }
   },
   computed: {},
@@ -659,6 +738,7 @@ export default {
       this.$refs[formName].resetFields()
     },
     handleCreate() {
+      this.listCurrentSignUpInfo()
       this.formData = Object.assign({}, this.initCreateData)
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
@@ -728,11 +808,28 @@ export default {
       }
     },
     handleUpdate(row) {
+      this.listCurrentSignUpInfo()
       this.formData = Object.assign({}, row)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
+      })
+    },
+    handleSettingLottery(row) {
+      this.$router.push({
+        name: 'lottery-roster-manage',
+        query: {
+          id: row.id
+        }
+      })
+    },
+    handleViewLotteryRecord(row) {
+      this.$router.push({
+        name: 'lottery-record-detail',
+        query: {
+          id: row.id
+        }
       })
     },
     initFormSafeSubmitConfig() {
@@ -922,6 +1019,20 @@ export default {
         result = '未知'
       }
       return result
+    },
+    listCurrentSignUpInfo() {
+      const that = this
+      listCurrentSignUpInfo({
+        page: 1,
+        size: 100
+      })
+        .then((response) => {
+          const data = response.data
+          that.currentSignUpInfoOptions = data
+        })
+        .catch((e) => {
+          that.loading = false
+        })
     }
   }
 }

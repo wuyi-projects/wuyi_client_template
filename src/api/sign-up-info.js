@@ -53,3 +53,12 @@ export function listSignUpInfo(data) {
     data
   })
 }
+
+/** 获取当前签到信息列表 */
+export function listCurrentSignUpInfo(data) {
+  return request({
+    url: '/wuyi_lottery/v1/signUpInfo/listSignUpInfo.json',
+    method: 'post',
+    data
+  })
+}

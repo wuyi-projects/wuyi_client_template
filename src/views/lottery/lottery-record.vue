@@ -199,10 +199,9 @@
               <el-input
                 v-model="formData.name"
                 placeholder="请输入姓名"
-                c
-                l
-                earable /
-              /></el-input></el-form-item>
+                clearable
+              />
+            </el-form-item>
           </el-col>
         </el-row>
         <el-row>
@@ -211,10 +210,9 @@
               <el-input
                 v-model="formData.photoUrl"
                 placeholder="请输入头像"
-                c
-                l
-                earable /
-              /></el-input></el-form-item>
+                clearable
+              />
+            </el-form-item>
           </el-col>
         </el-row>
         <el-row>
@@ -223,9 +221,9 @@
               <el-input
                 v-model="formData.amount"
                 placeholder="请输入奖金金额"
-                c
-                learable /
-              /></el-input></el-form-item>
+                clearable
+              />
+            </el-form-item>
           </el-col>
         </el-row>
         <el-row>
@@ -234,10 +232,8 @@
               <el-input
                 v-model="formData.status"
                 placeholder="请输入状态"
-                cle
-                arable
+                clearable
               />
-
             </el-form-item>
           </el-col>
         </el-row>
