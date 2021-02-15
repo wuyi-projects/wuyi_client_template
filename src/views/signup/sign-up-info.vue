@@ -100,6 +100,8 @@
 
         <!--数据行操作-->
         <template v-slot:operate="{ row }">
+          <el-button type="text" style="color:red;" @click="handleViewRecord(row)">查看签到记录</el-button>
+          <el-divider direction="vertical" />
           <el-button type="text" @click="handleUpdate(row)">修改</el-button>
           <!-- <el-divider direction="vertical" />
           <el-dropdown @command="handleCommand">
@@ -432,7 +434,7 @@ export default {
           },
           {
             title: '操作',
-            width: 140,
+            width: 240,
             align: 'center',
             headerAlign: 'center',
             fixed: 'right',
@@ -557,6 +559,14 @@ export default {
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
+      })
+    },
+    handleViewRecord(row) {
+      this.$router.push({
+        name: 'sign-up-record',
+        query: {
+          id: row.id
+        }
       })
     },
     initFormSafeSubmitConfig() {

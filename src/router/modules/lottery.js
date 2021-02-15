@@ -21,7 +21,8 @@ const lotteryRouter = {
       component: () =>
         import ('@/views/signup/sign-up-record'),
       name: 'sign-up-record',
-      meta: { title: '签到记录', roles: ['PermissionConfigAdministrator'] }
+      meta: { title: '签到记录', roles: ['PermissionConfigAdministrator'] },
+      hidden: true
     },
     {
       path: 'lottery-info',
