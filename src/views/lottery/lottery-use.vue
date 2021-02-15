@@ -10,8 +10,29 @@
         size="small"
       >
         <el-col :span="8">
-          <el-form-item label="数据编号" prop="id">
-            <el-input v-model="searchFormData.id" clearable />
+          <el-form-item label="手机号码" prop="phone">
+            <el-input v-model="searchFormData.phone" clearable />
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="姓名" prop="name">
+            <el-input v-model="searchFormData.name" clearable />
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="核销状态" prop="type">
+            <el-select
+              v-model="searchFormData.type"
+              placeholder="选择核销状态"
+              style="width:100%"
+            >
+              <el-option
+                v-for="item in typeOptions"
+                :key="item.id"
+                :label="item.name"
+                :value="item.value"
+              />
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -78,7 +99,7 @@
         :height="tableHeight"
       >
         <!--工具栏按钮-->
-        <template v-slot:buttons>
+        <!-- <template v-slot:buttons>
           <el-button-group>
             <el-button @click.native.prevent="handleCreate()">新增</el-button>
             <el-button
@@ -86,7 +107,7 @@
               @click.native.prevent="handleBatchDelete()"
             >批量删除</el-button>
           </el-button-group>
-        </template>
+        </template> -->
 
         <!--插槽使用示例:是否可用展示-->
         <!-- <template v-slot:available_default="{ row }">
@@ -100,7 +121,8 @@
 
         <!--数据行操作-->
         <template v-slot:operate="{ row }">
-          <el-button type="text" @click="handleUpdate(row)">修改</el-button>
+          <el-button v-if="row.usageStatus === 1" type="text" @click="handleCharge(row)">核销</el-button>
+          <!-- <el-button type="text" @click="handleUpdate(row)">修改</el-button>
           <el-divider direction="vertical" />
           <el-dropdown @command="handleCommand">
             <span class="el-dropdown-link">
@@ -119,7 +141,7 @@
                 详情
               </el-dropdown-item>
             </el-dropdown-menu>
-          </el-dropdown>
+          </el-dropdown> -->
         </template>
         <!--自定义空数据模板-->
         <template v-slot:empty>
@@ -327,7 +349,7 @@
 <script>
 import formatTableSize from '@/utils/size'
 
-import { listLotteryRecord, saveLotteryRecord, deleteLotteryRecord, batchDeleteLotteryRecord, updateLotteryRecord } from '@/api/lottery-record'
+import { listLotteryRecord, saveLotteryRecord, deleteLotteryRecord, batchDeleteLotteryRecord, updateLotteryRecord, lotteryCharge } from '@/api/lottery-record'
 
 export default {
   data() {
@@ -346,6 +368,7 @@ export default {
       },
       searchFormData: {
         id: '',
+        status: 1,
         start: '',
         end: ''
       },
@@ -538,10 +561,10 @@ export default {
           }
         },
         columns: [
-          { type: 'checkbox',
-            width: 40,
-            align: 'center'
-          },
+          // { type: 'checkbox',
+          //   width: 40,
+          //   align: 'center'
+          // },
           {
             field: 'id',
             title: '编号',
@@ -555,6 +578,14 @@ export default {
             title: '抽奖信息编号',
             minWidth: 120,
             align: 'center',
+            headerAlign: 'center',
+            visible: false
+          },
+          {
+            field: 'title',
+            title: '抽奖名称',
+            minWidth: 120,
+            align: 'center',
             headerAlign: 'center'
           },
           {
@@ -562,7 +593,8 @@ export default {
             title: '账户编号',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            visible: false
           },
           {
             field: 'phone',
@@ -590,7 +622,8 @@ export default {
             title: '头像',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            visible: false
           },
           {
             field: 'amount',
@@ -604,7 +637,8 @@ export default {
             title: '状态',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            formatter: this.statusFormatter
           },
           {
             field: 'expirationTime',
@@ -618,7 +652,8 @@ export default {
             title: '使用状态',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            formatter: this.usageStatusFormatter
           },
           {
             field: 'applicationTime',
@@ -669,7 +704,18 @@ export default {
           highlight: true,
           range: true
         }
-      }
+      },
+      typeOptions: [
+        { name: '未使用',
+          value: 1
+        },
+        { name: '待核销',
+          value: 2
+        },
+        { name: '已核销',
+          value: 3
+        }
+      ]
     }
   },
   computed: {
@@ -891,6 +937,78 @@ export default {
           break
         default:
       }
+    },
+    handleCharge(row) {
+      this.$confirm('永久核销该条记录吗, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        dangerouslyUseHTMLString: true,
+        type: 'warning'
+      }).then(() => {
+        const { id, version } = row
+        const tempData = Object.assign({
+          id: id,
+          version: version
+        })
+        lotteryCharge(tempData)
+          .then(response => {
+            const result = response.data
+            if (result) {
+              this.$message({
+                type: 'success',
+                message: '核销成功'
+              })
+            } else {
+              this.$message.error('核销失败')
+            }
+            this.$refs.dataGrid.commitProxy('reload')
+          })
+          .catch(e => {
+            this.loading = false
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消核销'
+        })
+      })
+    },
+    statusFormatter({ cellValue, row, column }) {
+      let result
+      if (!(cellValue === null || cellValue === '')) {
+        if (cellValue === 0) {
+          result = '未抽奖'
+        } else if (cellValue === 1) {
+          result = '已中奖'
+        }
+      } else {
+        result = '未知'
+      }
+      return result
+    },
+    usageStatusFormatter({ cellValue, row, column }) {
+      let result
+      if (!(cellValue === null || cellValue === '')) {
+        switch (cellValue) {
+          case 0:
+            result = '未使用'
+            break
+          case 1:
+            result = '待核销'
+            break
+          case 2:
+            result = '已核销'
+            break
+          case 3:
+            result = '已过期'
+            break
+          default:
+            result = ''
+        }
+      } else {
+        result = '未知'
+      }
+      return result
     }
   }
 }

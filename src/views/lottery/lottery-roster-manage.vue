@@ -536,15 +536,16 @@ export default {
             minWidth: 120,
             align: 'center',
             headerAlign: 'center'
-          },
-          {
-            title: '操作',
-            width: 140,
-            align: 'center',
-            headerAlign: 'center',
-            fixed: 'right',
-            slots: { default: 'operate' }
           }
+          // ,
+          // {
+          //   title: '操作',
+          //   width: 140,
+          //   align: 'center',
+          //   headerAlign: 'center',
+          //   fixed: 'right',
+          //   slots: { default: 'operate' }
+          // }
         ],
         importConfig: {
           remote: true,
@@ -1111,7 +1112,7 @@ export default {
         name: 'user-lottery-record',
         query: {
           lotteryInfoId: this.lotteryInfoId,
-          lotteryRosterId: row.id
+          openId: row.openId
         }
       })
     }

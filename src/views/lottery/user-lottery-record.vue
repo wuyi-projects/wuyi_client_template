@@ -74,7 +74,7 @@
       v-if="dialogFormVisible"
       :title="textMap[dialogStatus]"
       :center="true"
-      width="40%"
+      width="60%"
       :visible.sync="dialogFormVisible"
     >
       <el-form
@@ -82,150 +82,113 @@
         :rules="rules"
         :model="formData"
         label-position="right"
-        label-width="80px"
+        label-width="120px"
         style="width: 100%; padding: 10px"
       >
-        <el-row>
-          <el-col :span="24">
+        <!-- <el-row>
+          <el-col :span="12">
             <el-form-item label="抽奖信息编号" prop="lotteryInfoId">
               <el-input
                 v-model="formData.lotteryInfoId"
-                placeholder="请输入抽奖信息编
-号               "
-                clearab
-                l
-                e
+                placeholder="请输入抽奖信息编号"
+                clearable
+                disabled
               />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="账户编号" prop="openId">
               <el-input
                 v-model="formData.openId"
                 placeholder="请输入账户编号"
                 clearable
+                disabled
+              />
+            </el-form-item>
+          </el-col>
+        </el-row> -->
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="抽奖名称" prop="title">
+              <el-input
+                v-model="formData.title"
+                placeholder="请输入抽奖名称"
+                clearable
+                disabled
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="账户编号" prop="openId">
+              <el-input
+                v-model="formData.openId"
+                placeholder="请输入账户编号"
+                clearable
+                disabled
               />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="手机号码" prop="phone">
               <el-input
                 v-model="formData.phone"
                 placeholder="请输入手机号码"
                 clearable
+                disabled
               />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="备用号码" prop="phone2">
               <el-input
                 v-model="formData.phone2"
                 placeholder="请输入备用号码"
                 clearable
+                disabled
               />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="姓名" prop="name">
               <el-input
                 v-model="formData.name"
                 placeholder="请输入姓名"
                 clearable
+                disabled
               />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="头像" prop="photoUrl">
               <el-input
                 v-model="formData.photoUrl"
                 placeholder="请输入头像"
                 clearable
+                disabled
               />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="24">
-            <el-form-item label="奖金金额" prop="amount">
-              <el-input
-                v-model="formData.amount"
-                placeholder="请输入奖金金额"
-                clearable
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="状态" prop="status">
-              <el-input
-                v-model="formData.status"
-                placeholder="请输入状态"
-                clearable
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="过期时间" prop="expirationTime">
               <el-input
                 v-model="formData.expirationTime"
                 placeholder="请输入过期时间"
                 clearable
+                disabled
               />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="使用状态" prop="usageStatus">
+          <el-col :span="12">
+            <el-form-item label="奖金金额" prop="amount">
               <el-input
-                v-model="formData.usageStatus"
-                placeholder="请输入使用状态"
-                clearable
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="申请时间" prop="applicationTime">
-              <el-input
-                v-model="formData.applicationTime"
-                placeholder="请输入申请时间"
-                clearable
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="核销时间" prop="verificationTime">
-              <el-input
-                v-model="formData.verificationTime"
-                placeholder="请输入核销时间"
-                clearable
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="核销人" prop="verificationUserId">
-              <el-input
-                v-model="formData.verificationUserId"
-                placeholder="请输入核销人"
+                v-model="formData.amount"
+                placeholder="请输入奖金金额"
                 clearable
               />
             </el-form-item>
@@ -268,14 +231,13 @@ import formatTableSize from '@/utils/size'
 
 import { getLotteryInfo } from '@/api/lottery-info'
 
-import { getLotteryRoster } from '@/api/lottery-roster'
+import { getLotteryRosterByLotteryAndOpenId } from '@/api/lottery-roster'
 
 import {
   listLotteryRecord,
-  saveLotteryRecord,
+  lotterySetting,
   deleteLotteryRecord,
-  batchDeleteLotteryRecord,
-  updateLotteryRecord
+  batchDeleteLotteryRecord
 } from '@/api/lottery-record'
 
 export default {
@@ -295,8 +257,8 @@ export default {
       },
       searchFormData: {
         id: '',
-        lotteryRosterId: null,
         lotteryInfoId: null,
+        openId: null,
         start: '',
         end: ''
       },
@@ -309,6 +271,7 @@ export default {
       formData: {
         id: null,
         lotteryInfoId: null,
+        title: null,
         openId: null,
         phone: null,
         phone2: null,
@@ -317,15 +280,12 @@ export default {
         amount: null,
         status: null,
         expirationTime: null,
-        usageStatus: null,
-        applicationTime: null,
-        verificationTime: null,
-        verificationUserId: null,
         version: 0
       },
       initCreateData: {
         id: null,
         lotteryInfoId: null,
+        title: null,
         openId: null,
         phone: null,
         phone2: null,
@@ -334,10 +294,6 @@ export default {
         amount: null,
         status: null,
         expirationTime: null,
-        usageStatus: null,
-        applicationTime: null,
-        verificationTime: null,
-        verificationUserId: null,
         version: 0
       },
       pickerOptions: {
@@ -514,11 +470,20 @@ export default {
             title: '抽奖信息编号',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            visible: false
           },
           {
             field: 'openId',
             title: '账户编号',
+            minWidth: 120,
+            align: 'center',
+            headerAlign: 'center',
+            visible: false
+          },
+          {
+            field: 'name',
+            title: '姓名',
             minWidth: 120,
             align: 'center',
             headerAlign: 'center'
@@ -538,18 +503,12 @@ export default {
             headerAlign: 'center'
           },
           {
-            field: 'name',
-            title: '姓名',
-            minWidth: 120,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
             field: 'photoUrl',
             title: '头像',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            visible: false
           },
           {
             field: 'amount',
@@ -563,42 +522,17 @@ export default {
             title: '状态',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            formatter: this.statusFormatter,
+            visible: false
           },
           {
             field: 'expirationTime',
             title: '过期时间',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'usageStatus',
-            title: '使用状态',
-            minWidth: 120,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'applicationTime',
-            title: '申请时间',
-            minWidth: 120,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'verificationTime',
-            title: '核销时间',
-            minWidth: 120,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'verificationUserId',
-            title: '核销人',
-            minWidth: 120,
-            align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            visible: false
           },
           {
             title: '操作',
@@ -637,14 +571,14 @@ export default {
     this.getHeight()
     const that = this
     const lotteryInfoId = that.$route.query.lotteryInfoId
-    const lotteryRosterId = that.$route.query.lotteryRosterId
-    if (lotteryInfoId && lotteryRosterId) {
+    const openId = that.$route.query.openId
+    if (lotteryInfoId && openId) {
       this.lotteryInfoId = lotteryInfoId
-      this.lotteryRosterId = lotteryRosterId
+      this.openId = openId
       this.searchFormData.lotteryInfoId = lotteryInfoId
-      this.searchFormData.lotteryRosterId = lotteryRosterId
+      this.searchFormData.openId = openId
       this.getLotteryInfo()
-      this.getLotteryRoster()
+      this.getLotteryRosterByLotteryAndOpenId()
     }
   },
   methods: {
@@ -762,7 +696,7 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.formData)
-          saveLotteryRecord(tempData)
+          lotterySetting(tempData)
             .then((response) => {
               const result = response.data
               if (result) {
@@ -791,7 +725,7 @@ export default {
           this.loadingSubmitButton = true
           this.submitButtonText = '执行中...'
           const tempData = Object.assign({}, this.formData)
-          updateLotteryRecord(tempData)
+          lotterySetting(tempData)
             .then((response) => {
               const result = response.data
               if (result) {
@@ -888,21 +822,42 @@ export default {
           this.lotteryType = response.data.type
           const type = response.data.type === 1 ? '普通抽奖' : response.data.type === 2 ? '超级大奖' : '抽奖'
           this.pageTitle = '【' + type + '】' + response.data.title + ' / 抽奖名单管理'
+          this.initCreateData.lotteryInfoId = response.data.id
+          this.initCreateData.expirationTime = response.data.expirationTime
+          this.initCreateData.title = response.data.title
         })
         .catch((e) => {
           this.loading = false
         })
     },
-    getLotteryRoster() {
-      getLotteryRoster({
-        id: this.lotteryRosterId
+    getLotteryRosterByLotteryAndOpenId() {
+      getLotteryRosterByLotteryAndOpenId({
+        lotteryInfoId: this.lotteryInfoId,
+        openId: this.openId
       })
         .then((response) => {
-
+          this.initCreateData.openId = response.data.openId
+          this.initCreateData.phone = response.data.phone
+          this.initCreateData.phone2 = response.data.phone2
+          this.initCreateData.name = response.data.name
+          this.initCreateData.photoUrl = response.data.photoUrl
         })
         .catch((e) => {
           this.loading = false
         })
+    },
+    statusFormatter({ cellValue, row, column }) {
+      let result
+      if (!(cellValue === null || cellValue === '')) {
+        if (cellValue === 0) {
+          result = '未抽奖'
+        } else if (cellValue === 1) {
+          result = '已中奖'
+        }
+      } else {
+        result = '未知'
+      }
+      return result
     }
   }
 }

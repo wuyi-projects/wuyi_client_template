@@ -71,3 +71,12 @@ export function batchLinkRoster(data) {
     data
   })
 }
+
+/** 查询抽奖人员详情 */
+export function getLotteryRosterByLotteryAndOpenId(data) {
+  return request({
+    url: '/wuyi_lottery/v1/lotteryRoster/getByLotteryAndOpenId.json',
+    method: 'post',
+    data
+  })
+}

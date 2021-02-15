@@ -36,7 +36,8 @@ const lotteryRouter = {
       component: () =>
         import ('@/views/lottery/lottery-record'),
       name: 'lottery-record',
-      meta: { title: '抽奖记录', roles: ['PermissionConfigAdministrator'] }
+      meta: { title: '抽奖记录', roles: ['PermissionConfigAdministrator'] },
+      hidden: true
     },
     {
       path: 'user-lottery-record',

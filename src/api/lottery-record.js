@@ -53,3 +53,21 @@ export function listLotteryRecord(data) {
     data
   })
 }
+
+/** 个人奖券设置 */
+export function lotterySetting(data) {
+  return request({
+    url: '/wuyi_lottery/v1/lotteryRecord/lotterySetting.json',
+    method: 'post',
+    data
+  })
+}
+
+/** 核销奖券 */
+export function lotteryCharge(data) {
+  return request({
+    url: '/wuyi_lottery/v1/lotteryRecord/charge.json',
+    method: 'post',
+    data
+  })
+}

@@ -12,38 +12,36 @@
         size="small"
       >
         <el-col :span="8">
-          <el-form-item label="数据编号" prop="id">
-            <el-input v-model="searchFormData.id" clearable />
+          <el-form-item label="手机号码" prop="phone">
+            <el-input v-model="searchFormData.phone" clearable />
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="起止时间">
-            <el-col :span="11">
-              <el-form-item prop="start">
-                <el-date-picker
-                  v-model="searchFormData.start"
-                  type="date"
-                  placeholder="起始日期"
-                  style="width: 100%;"
-                  :picker-options="pickerOptions"
-                  value-format="yyyy-MM-dd"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col style="text-align: center;" :span="2">-</el-col>
-            <el-col :span="11">
-              <el-form-item prop="end">
-                <el-date-picker
-                  v-model="searchFormData.end"
-                  type="date"
-                  placeholder="结束时间"
-                  style="width: 100%;"
-                  :picker-options="pickerOptions"
-                  value-format="yyyy-MM-dd"
-                />
-              </el-form-item>
-            </el-col>
+          <el-form-item label="姓名" prop="name">
+            <el-input v-model="searchFormData.name" clearable />
           </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="状态" prop="status">
+            <el-select
+              v-model="searchFormData.status"
+              placeholder="选择状态"
+              style="width:100%"
+            >
+              <el-option
+                v-for="item in statusOptions"
+                :key="item.id"
+                :label="item.name"
+                :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item />
+        </el-col>
+        <el-col :span="8">
+          <el-form-item />
         </el-col>
         <el-col :span="8">
           <el-form-item style="float: right;" label-width="0">
@@ -80,7 +78,7 @@
         :height="tableHeight"
       >
         <!--工具栏按钮-->
-        <template v-slot:buttons>
+        <!-- <template v-slot:buttons>
           <el-button-group>
             <el-button @click.native.prevent="handleCreate()">新增</el-button>
             <el-button
@@ -88,7 +86,7 @@
               @click.native.prevent="handleBatchDelete()"
             >批量删除</el-button>
           </el-button-group>
-        </template>
+        </template> -->
 
         <!--插槽使用示例:是否可用展示-->
         <!-- <template v-slot:available_default="{ row }">
@@ -101,7 +99,7 @@
         </template> -->
 
         <!--数据行操作-->
-        <template v-slot:operate="{ row }">
+        <!-- <template v-slot:operate="{ row }">
           <el-button type="text" @click="handleUpdate(row)">修改</el-button>
           <el-divider direction="vertical" />
           <el-dropdown @command="handleCommand">
@@ -122,7 +120,7 @@
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-        </template>
+        </template> -->
         <!--自定义空数据模板-->
         <template v-slot:empty>
           <span>
@@ -201,10 +199,9 @@
               <el-input
                 v-model="formData.name"
                 placeholder="请输入姓名"
-                c
-                l
-                earable /
-              /></el-input></el-form-item>
+                clearable
+              />
+            </el-form-item>
           </el-col>
         </el-row>
         <el-row>
@@ -213,10 +210,9 @@
               <el-input
                 v-model="formData.photoUrl"
                 placeholder="请输入头像"
-                c
-                l
-                earable /
-              /></el-input></el-form-item>
+                clearable
+              />
+            </el-form-item>
           </el-col>
         </el-row>
         <el-row>
@@ -225,9 +221,9 @@
               <el-input
                 v-model="formData.amount"
                 placeholder="请输入奖金金额"
-                c
-                learable /
-              /></el-input></el-form-item>
+                clearable
+              />
+            </el-form-item>
           </el-col>
         </el-row>
         <el-row>
@@ -236,10 +232,8 @@
               <el-input
                 v-model="formData.status"
                 placeholder="请输入状态"
-                cle
-                arable
+                clearable
               />
-
             </el-form-item>
           </el-col>
         </el-row>
@@ -563,14 +557,16 @@ export default {
             title: '抽奖信息编号',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            visible: false
           },
           {
             field: 'openId',
             title: '账户编号',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            visible: false
           },
           {
             field: 'phone',
@@ -612,7 +608,8 @@ export default {
             title: '状态',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            formatter: this.statusFormatter
           },
           {
             field: 'expirationTime',
@@ -620,43 +617,44 @@ export default {
             minWidth: 120,
             align: 'center',
             headerAlign: 'center'
-          },
-          {
-            field: 'usageStatus',
-            title: '使用状态',
-            minWidth: 120,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'applicationTime',
-            title: '申请时间',
-            minWidth: 120,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'verificationTime',
-            title: '核销时间',
-            minWidth: 120,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'verificationUserId',
-            title: '核销人',
-            minWidth: 120,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            title: '操作',
-            width: 140,
-            align: 'center',
-            headerAlign: 'center',
-            fixed: 'right',
-            slots: { default: 'operate' }
           }
+          // ,
+          // {
+          //   field: 'usageStatus',
+          //   title: '使用状态',
+          //   minWidth: 120,
+          //   align: 'center',
+          //   headerAlign: 'center'
+          // },
+          // {
+          //   field: 'applicationTime',
+          //   title: '申请时间',
+          //   minWidth: 120,
+          //   align: 'center',
+          //   headerAlign: 'center'
+          // },
+          // {
+          //   field: 'verificationTime',
+          //   title: '核销时间',
+          //   minWidth: 120,
+          //   align: 'center',
+          //   headerAlign: 'center'
+          // },
+          // {
+          //   field: 'verificationUserId',
+          //   title: '核销人',
+          //   minWidth: 120,
+          //   align: 'center',
+          //   headerAlign: 'center'
+          // },
+          // {
+          //   title: '操作',
+          //   width: 140,
+          //   align: 'center',
+          //   headerAlign: 'center',
+          //   fixed: 'right',
+          //   slots: { default: 'operate' }
+          // }
         ],
         importConfig: {
           remote: true,
@@ -677,7 +675,15 @@ export default {
           highlight: true,
           range: true
         }
-      }
+      },
+      statusOptions: [
+        { name: '未抽奖',
+          value: 0
+        },
+        { name: '已中奖',
+          value: 1
+        }
+      ]
     }
   },
   computed: {
@@ -694,8 +700,8 @@ export default {
   methods: {
     /* 自适应高度 */
     getHeight() {
-      this.defaultHeight = window.innerHeight - 180 + 'px'
-      this.tableHeight = window.innerHeight - 220 + 'px'
+      this.defaultHeight = window.innerHeight - 320 + 'px'
+      this.tableHeight = window.innerHeight - 360 + 'px'
     },
     importMethod({ file }) {
       return false
@@ -907,6 +913,19 @@ export default {
     },
     goBack() {
       this.$router.go(-1)
+    },
+    statusFormatter({ cellValue, row, column }) {
+      let result
+      if (!(cellValue === null || cellValue === '')) {
+        if (cellValue === 0) {
+          result = '未抽奖'
+        } else if (cellValue === 1) {
+          result = '已中奖'
+        }
+      } else {
+        result = '未知'
+      }
+      return result
     }
   }
 }

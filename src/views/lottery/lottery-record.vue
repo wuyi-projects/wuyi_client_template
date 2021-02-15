@@ -78,7 +78,7 @@
         :height="tableHeight"
       >
         <!--工具栏按钮-->
-        <template v-slot:buttons>
+        <!-- <template v-slot:buttons>
           <el-button-group>
             <el-button @click.native.prevent="handleCreate()">新增</el-button>
             <el-button
@@ -86,7 +86,7 @@
               @click.native.prevent="handleBatchDelete()"
             >批量删除</el-button>
           </el-button-group>
-        </template>
+        </template> -->
 
         <!--插槽使用示例:是否可用展示-->
         <!-- <template v-slot:available_default="{ row }">
@@ -99,7 +99,7 @@
         </template> -->
 
         <!--数据行操作-->
-        <template v-slot:operate="{ row }">
+        <!-- <template v-slot:operate="{ row }">
           <el-button type="text" @click="handleUpdate(row)">修改</el-button>
           <el-divider direction="vertical" />
           <el-dropdown @command="handleCommand">
@@ -120,7 +120,7 @@
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-        </template>
+        </template> -->
         <!--自定义空数据模板-->
         <template v-slot:empty>
           <span>
@@ -606,7 +606,8 @@ export default {
             title: '状态',
             minWidth: 120,
             align: 'center',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            formatter: this.statusFormatter
           },
           {
             field: 'expirationTime',
@@ -614,43 +615,45 @@ export default {
             minWidth: 120,
             align: 'center',
             headerAlign: 'center'
-          },
-          {
-            field: 'usageStatus',
-            title: '使用状态',
-            minWidth: 120,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'applicationTime',
-            title: '申请时间',
-            minWidth: 120,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'verificationTime',
-            title: '核销时间',
-            minWidth: 120,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            field: 'verificationUserId',
-            title: '核销人',
-            minWidth: 120,
-            align: 'center',
-            headerAlign: 'center'
-          },
-          {
-            title: '操作',
-            width: 140,
-            align: 'center',
-            headerAlign: 'center',
-            fixed: 'right',
-            slots: { default: 'operate' }
           }
+          // ,
+          // {
+          //   field: 'usageStatus',
+          //   title: '使用状态',
+          //   minWidth: 120,
+          //   align: 'center',
+          //   headerAlign: 'center'
+          // },
+          // {
+          //   field: 'applicationTime',
+          //   title: '申请时间',
+          //   minWidth: 120,
+          //   align: 'center',
+          //   headerAlign: 'center'
+          // },
+          // {
+          //   field: 'verificationTime',
+          //   title: '核销时间',
+          //   minWidth: 120,
+          //   align: 'center',
+          //   headerAlign: 'center'
+          // },
+          // {
+          //   field: 'verificationUserId',
+          //   title: '核销人',
+          //   minWidth: 120,
+          //   align: 'center',
+          //   headerAlign: 'center'
+          // }
+          // ,
+          // {
+          //   title: '操作',
+          //   width: 140,
+          //   align: 'center',
+          //   headerAlign: 'center',
+          //   fixed: 'right',
+          //   slots: { default: 'operate' }
+          // }
         ],
         importConfig: {
           remote: true,
@@ -893,6 +896,19 @@ export default {
           break
         default:
       }
+    },
+    statusFormatter({ cellValue, row, column }) {
+      let result
+      if (!(cellValue === null || cellValue === '')) {
+        if (cellValue === 0) {
+          result = '未抽奖'
+        } else if (cellValue === 1) {
+          result = '已中奖'
+        }
+      } else {
+        result = '未知'
+      }
+      return result
     }
   }
 }
