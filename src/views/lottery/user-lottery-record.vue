@@ -523,8 +523,7 @@ export default {
             minWidth: 120,
             align: 'center',
             headerAlign: 'center',
-            formatter: this.statusFormatter,
-            visible: false
+            formatter: this.statusFormatter
           },
           {
             field: 'expirationTime',
@@ -536,7 +535,7 @@ export default {
           },
           {
             title: '操作',
-            width: 140,
+            width: 220,
             align: 'center',
             headerAlign: 'center',
             fixed: 'right',

@@ -35,7 +35,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <!-- <el-col :span="8">
           <el-form-item label="起止时间">
             <el-col :span="11">
               <el-form-item prop="start">
@@ -63,6 +63,12 @@
               </el-form-item>
             </el-col>
           </el-form-item>
+        </el-col> -->
+        <el-col :span="8">
+          <el-form-item />
+        </el-col>
+        <el-col :span="8">
+          <el-form-item />
         </el-col>
         <el-col :span="8">
           <el-form-item style="float: right;" label-width="0">
