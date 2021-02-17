@@ -53,3 +53,22 @@ export function listLotteryInfo(data) {
     data
   })
 }
+
+/** 获取超级大奖全部参与人员名单 */
+export function listAllSuperdrawRoster(data) {
+  return request({
+    url: '/wuyi_lottery/v1/lotteryInfo/listAllSuperdrawRoster.json',
+    method: 'post',
+    data
+  })
+}
+
+/** 上传超级大奖中奖信息 */
+export function uploadSuperdrawInfo(data) {
+  return request({
+    url: '/wuyi_lottery/v1/lotteryInfo/uploadSuperdrawInfo.json',
+    method: 'post',
+    data
+  })
+}
+

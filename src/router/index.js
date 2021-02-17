@@ -22,40 +22,48 @@ import operationCenterRouter from './modules/operation-center'
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
-export const constantRoutes = [{
-  path: '/redirect',
-  component: Layout,
-  hidden: true,
-  children: [{
-    path: '/redirect/:path(.*)',
-    component: () =>
-      import ('@/views/redirect/index')
-  }]
-},
-{
-  path: '/login',
-  component: () =>
-    import ('@/views/login/index'),
-  hidden: true
-},
-{
-  path: '/404',
-  component: () =>
-    import ('@/views/error-page/404'),
-  hidden: true
-},
-{
-  path: '/',
-  component: Layout,
-  redirect: '/dashboard',
-  children: [{
-    path: 'dashboard',
-    name: 'Dashboard',
-    component: () =>
-      import ('@/views/dashboard/index'),
-    meta: { title: '首页', icon: 'dashboard' }
-  }]
-}
+export const constantRoutes = [
+  {
+    path: '/redirect',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: '/redirect/:path(.*)',
+        component: () => import('@/views/redirect/index')
+      }
+    ]
+  },
+  {
+    path: '/login',
+    component: () => import('@/views/login/index'),
+    hidden: true
+  },
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/dashboard',
+    children: [
+      {
+        path: 'dashboard',
+        name: 'Dashboard',
+        component: () => import('@/views/dashboard/index'),
+        meta: { title: '首页', icon: 'dashboard' }
+      }
+    ]
+  },
+  {
+    path: '/superdraw',
+    component: () => import('@/views/lottery/superdraw'),
+    name: 'superdraw',
+    meta: { title: '超级大奖', icon: 'dashboard', roles: ['PermissionConfigAdministrator'] },
+    hidden: true
+  },
+  {
+    path: '/404',
+    component: () => import('@/views/error-page/404'),
+    hidden: true
+  }
 ]
 
 export const asyncRoutes = [

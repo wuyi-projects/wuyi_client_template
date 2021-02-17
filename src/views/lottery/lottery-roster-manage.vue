@@ -88,9 +88,17 @@
                       @click.native.prevent="handleCreate()"
                     >新增</el-button> -->
                     <el-button
-                      type="primary"
+                      plain
                       @click.native.prevent="handleBatchDelete()"
                     >批量删除</el-button>
+                  </el-button-group>
+                  <el-button-group style="margin-left:10px;">
+                    <el-button
+                      :disabled="lotteryInfo.onOff === 0"
+                      type="danger"
+                      round
+                      @click.native.prevent="handleSuperdraw()"
+                    >超级大奖入口</el-button>
                   </el-button-group>
                 </template>
 
@@ -1113,6 +1121,14 @@ export default {
         query: {
           lotteryInfoId: this.lotteryInfoId,
           openId: row.openId
+        }
+      })
+    },
+    handleSuperdraw() {
+      this.$router.push({
+        name: 'superdraw',
+        query: {
+          id: this.lotteryInfoId
         }
       })
     }

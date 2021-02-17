@@ -13,6 +13,10 @@ import '@/styles/vxe-table-variable.scss' // global css
 import '@/plugins/vxe-table/utils'
 import '@/plugins/vxe-table/table'
 
+// lottery used
+import '@/assets/style/index.scss'
+import '@/assets/lib/tagcanvas.js'
+
 import App from './App'
 import store from './store'
 import router from './router'

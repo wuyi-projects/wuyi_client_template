@@ -667,7 +667,7 @@ export default {
           },
           {
             title: '操作',
-            width: 220,
+            width: 260,
             align: 'center',
             headerAlign: 'center',
             fixed: 'right',
