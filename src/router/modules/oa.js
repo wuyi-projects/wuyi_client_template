@@ -10,12 +10,6 @@ const oaRouter = {
   },
   children: [
     {
-      path: 'regional',
-      component: () => import('@/views/regional/regional'),
-      name: 'regional',
-      meta: { title: '区域管理', roles: ['PermissionConfigAdministrator', 'SuperAdministrator', 'HumanAdministrator'] }
-    },
-    {
       path: 'department',
       component: () => import('@/views/oa/department'),
       name: 'department',
@@ -32,13 +26,6 @@ const oaRouter = {
       component: () => import('@/views/oa/person'),
       name: 'person',
       meta: { title: '人员管理', roles: ['PermissionConfigAdministrator', 'SuperAdministrator', 'HumanAdministrator'] }
-    },
-    {
-      path: 'user-regional-manage',
-      component: () => import('@/views/regional/user-regional-manage'),
-      name: 'user-regional-manage',
-      meta: { title: '人员区域管理', roles: ['PermissionConfigAdministrator', 'SuperAdministrator', 'HumanAdministrator'] },
-      hidden: true
     }
 
   ]
