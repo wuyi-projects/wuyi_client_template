@@ -57,7 +57,6 @@ import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
 
 import { setTeamNumber } from '@/utils/auth'
-import { listAll4Me } from '@/api/company'
 
 export default {
   components: {
